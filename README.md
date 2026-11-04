@@ -20,12 +20,20 @@ Open http://localhost:3000. No environment variables or backend are required.
 cd frontend
 npm run lint
 npm run build
-npm start
 ```
 
 After the first installation, use `npm ci` for reproducible installs from the lockfile.
-For hosting, set the project root to `frontend`, build with `npm run build`, and
-start with `npm start`.
+The build produces a static site in `frontend/out`; serve that directory with a
+static web server. `npm start` is not supported with static export.
+
+Local development and default builds use `/`. The GitHub Pages workflow sets
+`NEXT_PUBLIC_BASE_PATH=/WFA-Assurance-Website` at build time so the deployed site
+and its assets use the repository path. To reproduce that build locally:
+
+```sh
+cd frontend
+NEXT_PUBLIC_BASE_PATH=/WFA-Assurance-Website npm run build
+```
 
 ## Structure
 
@@ -39,16 +47,3 @@ start with `npm start`.
 - `frontend/public/Assets/`: images, served at `/Assets/...`.
 - `Archive/`: historical standalone HTML snapshots.
 
-## Migration scope
-
-The page now runs through Next.js and React. The existing interactive views still
-use imperative DOM rendering, hash navigation, and browser localStorage. They
-remain separate browser scripts to preserve current behavior, including the 3D
-stadium and guided demos. This is a framework migration, not a complete rewrite
-of every view as a React component. Use full reloads when editing legacy scripts;
-Fast Refresh does not reinitialize scripts already loaded by Next.js.
-
-For future React work, migrate one view at a time and remove its corresponding
-legacy DOM rendering and event handlers. Do not render React children inside a
-root still owned by the legacy scripts. Sample data is stored per browser origin;
-existing data from a `file://` version does not transfer to localhost automatically.
