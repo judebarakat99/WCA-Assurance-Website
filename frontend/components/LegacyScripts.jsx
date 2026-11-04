@@ -6,11 +6,11 @@ import { useState } from "react";
 // Preserve the original dependency order. The existing demo owns the contents
 // of #view and the overlay roots; React owns the surrounding page shell.
 const sources = [
-  "/vendor/three.min.js",
-  "/vendor/OrbitControls.js",
-  "/scripts/stadium-twin.js",
-  "/scripts/assurance.js",
-  "/scripts/menus.js",
+  "/WFA-Assurance-Website/vendor/three.min.js",
+  "/WFA-Assurance-Website/vendor/OrbitControls.js",
+  "/WFA-Assurance-Website/scripts/stadium-twin.js",
+  "/WFA-Assurance-Website/scripts/assurance.js",
+  "/WFA-Assurance-Website/scripts/menus.js",
 ];
 
 export default function LegacyScripts() {

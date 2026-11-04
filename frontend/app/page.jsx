@@ -7,8 +7,14 @@ export default function Home() {
   <div className="wrap">
     <div className="bar">
       <div className="brand">
-        <img className="logo" src="frontend/public/Assets/Logo_Green.jpg" alt="Logo" width="48" height="48" />        
-        <div className="brand-text">
+          <img
+            className="logo"
+            src="/WFA-Assurance-Website/Assets/Logo_Green.jpg"
+            alt="Logo"
+            width="48"
+            height="48"
+          />        
+          <div className="brand-text">
           <h1>Compliance Assurance Engine</h1>
           <span className="sub">FIFA World Cup 2034 · PoC, sample data</span>
           </div>
