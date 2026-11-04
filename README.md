@@ -1,4 +1,4 @@
-# WFA Assurance Website
+# WCA Assurance Website
 
 The active application is a Next.js App Router project in `frontend/`.
 
@@ -27,12 +27,12 @@ The build produces a static site in `frontend/out`; serve that directory with a
 static web server. `npm start` is not supported with static export.
 
 Local development and default builds use `/`. The GitHub Pages workflow sets
-`NEXT_PUBLIC_BASE_PATH=/WFA-Assurance-Website` at build time so the deployed site
+`NEXT_PUBLIC_BASE_PATH=/WCA-Assurance-Website` at build time so the deployed site
 and its assets use the repository path. To reproduce that build locally:
 
 ```sh
 cd frontend
-NEXT_PUBLIC_BASE_PATH=/WFA-Assurance-Website npm run build
+NEXT_PUBLIC_BASE_PATH=/WCA-Assurance-Website npm run build
 ```
 
 ## Structure

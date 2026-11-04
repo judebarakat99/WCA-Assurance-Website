@@ -42,7 +42,7 @@ jobs:
       - name: Build Next.js
         working-directory: frontend
         env:
-          NEXT_PUBLIC_BASE_PATH: /WFA-Assurance-Website
+          NEXT_PUBLIC_BASE_PATH: /WCA-Assurance-Website
         run: npm run build
 
       - name: Upload GitHub Pages artifact
