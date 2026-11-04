@@ -1,0 +1,23 @@
+{
+  "name": "wfa-assurance-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "eslint": "^9",
+    "eslint-config-next": "latest"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}
