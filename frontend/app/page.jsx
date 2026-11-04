@@ -7,7 +7,11 @@ export default function Home() {
   <div className="wrap">
     <div className="bar">
       <div className="brand">
-        <img className="logo" src="/Assets/شعار_الهيئة_العليا_لاستضافة_كأس_العالم_2034.svg.png" alt="Logo" width="48" height="48" />        <div className="brand-text"><h1>Compliance Assurance Engine</h1><span className="sub">FIFA World Cup 2034 · PoC, sample data</span></div>
+        <img className="logo" src="frontend/public/Assets/Logo_Green.jpg" alt="Logo" width="48" height="48" />        
+        <div className="brand-text">
+          <h1>Compliance Assurance Engine</h1>
+          <span className="sub">FIFA World Cup 2034 · PoC, sample data</span>
+          </div>
       </div>
       <nav className="tabs" id="tabs" aria-label="Views"></nav>
       <div className="right">
