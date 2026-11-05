@@ -1396,3 +1396,18 @@ body.touring .ai-fab,body.touring .ai-panel{display:none}
   border-color:#075b34;
   transform:translateY(-2px);
 }
+
+/* Evidence intake fields: one per row */
+.evidence-fields{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+}
+
+.evidence-fields .f{
+  width:100%;
+}
+
+.evidence-fields select{
+  width:100%;
+}

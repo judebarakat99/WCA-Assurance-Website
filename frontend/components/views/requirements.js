@@ -97,17 +97,75 @@ export function evidenceIntakePanel(){
   }
   return `<div class="panel" id="evIntake"><div class="eyebrow">Evidence intake · PoC simulation</div><h3>Submit evidence against a requirement</h3>
   <p class="muted" style="margin:0 0 14px;font-size:13.5px">No backend and no real upload: the document is read in the browser and the extraction is simulated. The result, however, is real: adding it updates the live register, corrective actions, readiness and gates. Tip: include “fail” in the file name to simulate failing evidence.</p>
-  <div class="formrow">
-    <label class="f" for="evVenueSel">Venue<select id="evVenueSel">${VENUES.map(v=>`<option value="${v.id}" ${v.id===ui.intake.venue?"selected":""}>${esc(v.name)}</option>`).join("")}</select></label>
-    <label class="f" for="evTargetSel">Obligation or corrective action<select id="evTargetSel"><option value="">Choose…</option>${iss.length?`<optgroup label="Open corrective actions">${iss.map(i=>`<option value="iss:${i.id}" ${ui.intake.target==="iss:"+i.id?"selected":""}>${i.id} · ${esc(i.title)}</option>`).join("")}</optgroup>`:""}<optgroup label="Obligations">${obls.map(x=>`<option value="obl:${x.id}" ${ui.intake.target==="obl:"+x.id?"selected":""}>${x.code} · ${esc(x.text)}</option>`).join("")}</optgroup></select></label>
-    <label class="f" for="evTypeSel">Evidence type<select id="evTypeSel">${EV_TYPES.map(([t],i)=>`<option value="${i}" ${i===ui.intake.etype?"selected":""}>${t}</option>`).join("")}</select></label>
-  </div>
+<div class="formrow evidence-fields">
+
+  <label class="f" for="evVenueSel">
+    Venue
+    <select id="evVenueSel">
+      ${VENUES.map(v=>`
+        <option
+          value="${v.id}"
+          ${v.id===ui.intake.venue?"selected":""}
+        >
+          ${esc(v.name)}
+        </option>
+      `).join("")}
+    </select>
+  </label>
+
+  <label class="f" for="evTargetSel">
+    Obligation or corrective action
+    <select id="evTargetSel">
+      <option value="">Choose…</option>
+
+      ${iss.length ? `
+        <optgroup label="Open corrective actions">
+          ${iss.map(i=>`
+            <option
+              value="iss:${i.id}"
+              ${ui.intake.target==="iss:"+i.id?"selected":""}
+            >
+              ${i.id} · ${esc(i.title)}
+            </option>
+          `).join("")}
+        </optgroup>
+      ` : ""}
+
+      <optgroup label="Obligations">
+        ${obls.map(x=>`
+          <option
+            value="obl:${x.id}"
+            ${ui.intake.target==="obl:"+x.id?"selected":""}
+          >
+            ${x.code} · ${esc(x.text)}
+          </option>
+        `).join("")}
+      </optgroup>
+
+    </select>
+  </label>
+
+  <label class="f" for="evTypeSel">
+    Evidence type
+    <select id="evTypeSel">
+      ${EV_TYPES.map(([t],i)=>`
+        <option
+          value="${i}"
+          ${i===ui.intake.etype?"selected":""}
+        >
+          ${t}
+        </option>
+      `).join("")}
+    </select>
+  </label>
+
+</div>
   ${o?`<div class="criterion" style="margin-top:12px">${esc(critText(o))}</div>`:""}
   <div class="dropzone${ui.intake.fileName?" has":""}" id="evDrop" role="button" tabindex="0" aria-label="Choose or drop a document">
     <input type="file" id="evUpFile" hidden>
     ${ui.intake.fileName?`<b>${esc(ui.intake.fileName)}</b><span>Click to choose a different document</span>`:`<b>Drop a document here</b><span>or click to choose a file · nothing is uploaded</span>`}
   </div>
-  <div class="flex" style="margin-top:14px"><button class="primary" id="evProcess" ${ui.intake.running?"disabled":""}>${ui.intake.running?"Processing…":"Process document"}</button></div>
+  <div class="flex" style="margin-top:40px"><button class="primary" id="evProcess" ${ui.intake.running?"disabled":""}>${ui.intake.running?"Processing…":"Process document"}</button></div>
   ${steps}${result}</div>`;
 }
 export function viewRequirements(){
