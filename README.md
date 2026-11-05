@@ -37,11 +37,26 @@ NEXT_PUBLIC_BASE_PATH=/WCA-Assurance-Website npm run build
 
 ## Structure
 
-- `frontend/app/page.jsx`: React page shell and demo mount points.
-- `frontend/app/layout.jsx`: document metadata and viewport.
+- `frontend/app/`: one App Router page per view — `/readiness`, `/control-tower`
+  (with `/control-tower/register`, `/control-tower/gates`, and a
+  `/control-tower/[venueId]` detail page per venue), `/decisions-actions`,
+  `/design-review`, `/requirements-evidence`, and `/dossiers`. The home page
+  shows the Readiness Room and redirects legacy `#hash` bookmarks.
+- `frontend/app/layout.jsx`: document metadata, shared header, and overlay roots.
 - `frontend/app/globals.css`: original styling, with local font files.
-- `frontend/components/LegacyScripts.jsx`: ordered browser-only script loading.
-- `frontend/public/scripts/`: stadium twin, assurance application, and menu logic.
+- `frontend/lib/`: shared modules split from the original `assurance.js` —
+  `data.js` (reference data and helpers), `state.js` (store with localStorage
+  persistence), `scoring.js`, `forecast.js` (Monte Carlo), `actions.js`
+  (validation, escalation, decisions, change impact), and `engine.js`
+  (client runtime: rendering, routing bridge, delegated events).
+- `frontend/components/Header.jsx`: shared navigation header with route tabs.
+- `frontend/components/AppView.jsx` / `Home.jsx`: client mount points per page.
+- `frontend/components/views/`: page-specific view modules (tower, readiness,
+  register, gates, venue detail, actions, requirements, dossier) plus shared
+  cards, the obligation drawer, the guided demos, and the AI assistant.
+- `frontend/components/LegacyScripts.jsx`: ordered browser-only script loading
+  for the 3D twin.
+- `frontend/public/scripts/`: stadium twin and menu logic.
 - `frontend/public/vendor/`: original Three.js r128 and OrbitControls, retaining licenses.
 - `frontend/public/fonts/`: fonts extracted from the original HTML; original SIL Open Font License notice retained in CSS.
 - `frontend/public/Assets/`: images, served at `/Assets/...`.

@@ -1,4 +1,6 @@
 import "./globals.css";
+import Header from "../components/Header";
+import LegacyScripts from "../components/LegacyScripts";
 
 export const metadata = {
   title: "Compliance Assurance Suite",
@@ -12,5 +14,19 @@ export const viewport = {
 };
 
 export default function RootLayout({ children }) {
-  return <html lang="en"><body>{children}</body></html>;
+  return (
+    <html lang="en">
+      <body>
+        <Header />
+        {children}
+        {/* Hidden target for the simulated-clock writer; not shown in the header. */}
+        <b id="today" hidden></b>
+        <div id="drawerRoot"></div>
+        <div id="toastRoot"></div>
+        <div id="tourRoot"></div>
+        <div id="aiRoot"></div>
+        <LegacyScripts />
+      </body>
+    </html>
+  );
 }
