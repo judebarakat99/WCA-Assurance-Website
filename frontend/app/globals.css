@@ -1411,3 +1411,6 @@ body.touring .ai-fab,body.touring .ai-panel{display:none}
 .evidence-fields select{
   width:100%;
 }
+/* Azure assistant: plain-text answers and inspectable source excerpts. */
+.ai-head small{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:3px}
+.ai-answer{white-space:pre-wrap;overflow-wrap:anywhere}.ai-source{font-size:11px;margin-top:10px;border-top:1px solid var(--line);padding-top:8px}.ai-source summary{cursor:pointer;font-weight:600}.ai-source p{white-space:pre-wrap;max-height:180px;overflow:auto;padding:8px;overflow-wrap:anywhere}.ai-warning{font-size:11px;color:var(--warn);margin-top:8px}.ai-reference{padding:10px 16px;border-bottom:1px solid var(--line);font-size:11px;max-height:220px;overflow:auto;flex-shrink:0}.ai-reference summary{cursor:pointer;font-weight:600}.ai-reference p{margin:8px 0}.ai-reference input{max-width:100%;font-size:11px}.ai-reference>button{margin-top:8px}.ai-document{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}.ai-document span{min-width:0;overflow-wrap:anywhere}.ai-document small{display:block;color:var(--muted)}.ai-document button{font-size:10px;padding:4px 7px}.ai-panel .ai-msgs{min-height:100px}.ai-panel button:disabled{opacity:.55;cursor:wait}

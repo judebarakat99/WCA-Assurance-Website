@@ -110,7 +110,7 @@ document.addEventListener("click",ev=>{
 if(!t) return;
   if(t.id==="evDrop"){if(ev.target.id!=="evUpFile"){const f=document.getElementById("evUpFile");if(f)f.click();}return}
   if(t.id==="aiFab"){ai.open=!ai.open;const p=document.getElementById("aiPanel");if(p)p.hidden=!ai.open;t.setAttribute("aria-expanded",String(ai.open));
-    if(ai.open&&!ai.msgs.length){ai.msgs.push({who:"a",html:"Hi — I'm the <b>AI Assistant</b>. Ask a question or tap a suggestion."});renderAIMsgs();}
+    if(ai.open&&!ai.msgs.length){ai.msgs.push({who:"a",html:"Ask about the current demo or add reference documents. Programme metrics are illustrative; answers include supporting references.",greeting:true});renderAIMsgs();}
     if(ai.open){const i=document.getElementById("aiInput");if(i)i.focus();}return}
   if(t.id==="aiClose" || t.hasAttribute("data-ai-close")){
     ev.preventDefault();

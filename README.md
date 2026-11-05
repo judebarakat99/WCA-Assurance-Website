@@ -62,3 +62,11 @@ NEXT_PUBLIC_BASE_PATH=/WCA-Assurance-Website npm run build
 - `frontend/public/Assets/`: images, served at `/Assets/...`.
 - `Archive/`: historical standalone HTML snapshots.
 
+
+## Azure-backed assistant
+
+See [backend/README.md](backend/README.md) for Poetry installation, local API
+startup, document upload limits, and the data flow. Run the backend on port 8000
+alongside Next.js on port 3000. The chatbot no longer substitutes canned answers
+when the backend is unavailable; it displays an actionable error instead.
+`NEXT_PUBLIC_API_BASE_URL` is the public backend URL only, never an API key.

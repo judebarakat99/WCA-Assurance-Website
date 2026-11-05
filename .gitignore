@@ -5,3 +5,15 @@ frontend/out/
 .DS_Store
 frontend/.env*
 !frontend/.env.example
+
+# Python backend secrets, environment, and local document data
+backend/.env*
+!backend/.env.example
+backend/.venv/
+backend/__pycache__/
+backend/data/
+
+# Python runtime artifacts
+**/__pycache__/
+backend/.pytest_cache/
+backend/.ruff_cache/
