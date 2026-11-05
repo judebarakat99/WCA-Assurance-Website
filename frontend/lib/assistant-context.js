@@ -17,4 +17,4 @@ export function buildAssistantContext(){
  };
 }
 
-function gateSummary(id){const gate=gateEval(id);return gate?{id:gate.gate.id,name:gate.gate.name,pass:gate.pass,rules:gate.rules.map(rule=>({met:rule.ok,text:rule.text,blockers:rule.blockers.map(o=>o.id)}))}:null;}
+function gateSummary(id){const gate=gateEval(id);return gate?{id:gate.gate.id,name:gate.gate.name,pass:gate.pass,assured_readiness:gate.sc.assured,required_assured_readiness:0.9,scope_size:gate.scope.length,rules:gate.rules.map(rule=>({met:rule.ok,text:rule.text,blockers:rule.blockers.map(o=>o.id)}))}:null;}

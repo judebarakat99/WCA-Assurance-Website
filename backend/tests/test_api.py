@@ -31,7 +31,9 @@ class FakeModels:
         self.last_prompt = kwargs
         return SimpleNamespace(
             output_parsed=ModelAnswer(
-                reply="The demo reports 54% assured readiness.", source_ids=["P", "D1", "invented"]
+                reply="The demo reports 54% assured readiness.",
+                source_ids=["P", "D1", "invented"],
+                claims=[{"source_id": "P", "metric": "programme_assured_pct", "value": 54}],
             )
         )
 
@@ -153,3 +155,48 @@ def test_milestone_risk_ranks_probability_not_readiness():
     )
     sections, _ = build_context(context)
     assert [r["id"] for r in sections["milestone_risk_ranking"]] == ["JED", "RUH", "NEO"]
+
+
+def test_numerical_validation_retries_once_and_rejects_bad_answers(environment):
+    client, models, _ = environment
+    calls = []
+
+    async def invalid_answer(**kwargs):
+        calls.append(kwargs)
+        return SimpleNamespace(
+            output_parsed=ModelAnswer(
+                reply="Assured readiness is 99%.",
+                source_ids=["P"],
+                claims=[{"source_id": "P", "metric": "programme_assured_pct", "value": 99}],
+            )
+        )
+
+    models.parse = invalid_answer
+    response = client.post("/chat", json=request_body())
+    assert response.status_code == 200
+    assert "supplied demo facts" in response.json()["reply"]
+    assert "99%" not in response.json()["reply"]
+    assert len(calls) == 2
+    assert response.json()["warnings"]
+
+
+def test_numerical_validation_accepts_a_corrected_retry(environment):
+    client, models, _ = environment
+    calls = []
+
+    async def corrected_answer(**kwargs):
+        calls.append(kwargs)
+        value = 99 if len(calls) == 1 else 54
+        return SimpleNamespace(
+            output_parsed=ModelAnswer(
+                reply=f"Assured readiness is {value}%.",
+                source_ids=["P"],
+                claims=[{"source_id": "P", "metric": "programme_assured_pct", "value": value}],
+            )
+        )
+
+    models.parse = corrected_answer
+    response = client.post("/chat", json=request_body())
+    assert response.status_code == 200
+    assert response.json()["reply"] == "Assured readiness is 54%."
+    assert len(calls) == 2

@@ -50,3 +50,28 @@ poetry run pytest
 poetry run python -m scripts.check_azure  # makes small paid Azure requests
 poetry run ruff check app tests
 ```
+
+## Answer presentation and grounding
+
+The chat opens at a wider desktop size and supports Expand/Restore. On mobile it
+uses the available viewport. Supporting sources are typed cards: forecast dates,
+probabilities and schedule margins; separate overall/gate readiness; met/unmet
+conditions; or document excerpts with page numbers. Programme sources no longer
+send raw JSON as an excerpt.
+
+The model receives a labelled metric catalogue. Its structured numeric claims
+are checked against the cited scope. Explicit percentages and day counts are
+checked against cited metrics, allowing normal display rounding, or quoted
+numbers in a cited document excerpt. A rejected draft gets one correction retry;
+if that also fails, the response shows labelled source facts and a warning.
+This is a narrow numerical safeguard, not verification of every sentence, date,
+document interpretation, or causal explanation. Instructions distinguish observed
+gate blockers from causal forecast drivers; a narrow guard also rejects the
+unsupported readiness/float-causality pattern found during testing.
+
+
+Explicit English questions of the form “Why is [venue] at risk/late/behind?”
+receive a source-based summary composed from that venue's current forecast and
+gate records. This read-only workflow intentionally does not ask the model to
+infer physical delivery progress, obligation criticality, or causal drivers.
+Other questions continue through Azure with the numerical checks described above.

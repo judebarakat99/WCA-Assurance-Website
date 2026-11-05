@@ -28,7 +28,7 @@ async def main():
             reply = await answer_question(
                 ChatRequest(
                     message="What assured readiness does the supplied demo report?",
-                    context={"as_of": "2026-11-05", "summary": {"assured_readiness_percent": 54}},
+                    context={"as_of": "2026-11-05", "summary": {"assured": 0.54}},
                 ),
                 models,
                 DocumentStore(Path(directory)),

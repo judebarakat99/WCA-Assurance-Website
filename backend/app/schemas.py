@@ -41,9 +41,30 @@ class ChatRequest(BaseModel):
         return value
 
 
+class NumericClaim(BaseModel):
+    source_id: str
+    metric: str
+    value: float
+
+
+class SourceFact(BaseModel):
+    label: str
+    value: str
+    metric: str | None = None
+    numeric_value: float | None = None
+    unit: Literal["percent", "days"] | None = None
+
+
+class SourceCheck(BaseModel):
+    label: str
+    met: bool
+    blockers: list[str] = Field(default_factory=list)
+
+
 class ModelAnswer(BaseModel):
     reply: str
     source_ids: list[str]
+    claims: list[NumericClaim] = Field(default_factory=list)
 
 
 class Source(BaseModel):
@@ -53,6 +74,10 @@ class Source(BaseModel):
     document_id: str | None = None
     page: int | None = None
     excerpt: str | None = None
+    category: str | None = None
+    as_of: str | None = None
+    facts: list[SourceFact] = Field(default_factory=list)
+    checks: list[SourceCheck] = Field(default_factory=list)
 
 
 class ChatResponse(BaseModel):

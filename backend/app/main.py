@@ -158,7 +158,8 @@ def create_app(settings=None, models=None, store=None):
                 return await answer_question(request, models, store)
             except RuntimeError as exc:
                 raise HTTPException(
-                    502, "The assistant could not produce a usable response. Try again."
+                    502,
+                    "The assistant could not verify this answer against the supplied data. Please try again or ask a narrower question.",
                 ) from exc
 
     return app
