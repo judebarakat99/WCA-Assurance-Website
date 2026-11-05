@@ -75,3 +75,11 @@ receive a source-based summary composed from that venue's current forecast and
 gate records. This read-only workflow intentionally does not ask the model to
 infer physical delivery progress, obligation criticality, or causal drivers.
 Other questions continue through Azure with the numerical checks described above.
+
+
+The English quick questions “Which venue is highest risk?” and “Which critical
+obligations are unverified?” use exact snapshot queries before retrieval or model
+generation. Risk ranks by on-time probability, then greatest P80 delay, reporting
+exact ties. Unverified Critical obligations filter the actual classification and
+status, not gate blocker lists. Named venue scopes use the venue name, city or ID.
+These answers are repeatable for the same snapshot and do not spend model tokens.

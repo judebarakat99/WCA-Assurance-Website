@@ -200,3 +200,24 @@ def test_numerical_validation_accepts_a_corrected_retry(environment):
     assert response.status_code == 200
     assert response.json()["reply"] == "Assured readiness is 54%."
     assert len(calls) == 2
+
+
+@pytest.mark.parametrize("question", [
+    "Which venue is highest risk?", "Which critical obligations are unverified?"
+])
+def test_programme_queries_are_repeatable_without_model_or_retrieval(environment, question):
+    from test_programme_queries import snapshot
+
+    client, models, _ = environment
+    # Uploaded references must not make exact current-state answers depend on RAG.
+    client.post("/documents", files={"file": ("note.txt", b"Reference requirements.")})
+    embedding_calls = models.embedding_calls
+    body = {"message": question, "context": snapshot().model_dump()}
+    first = client.post("/chat", json=body)
+    body["history"] = [{"role": "assistant", "content": "Previously RUH was highest risk."}]
+    second = client.post("/chat", json=body)
+    assert first.status_code == second.status_code == 200
+    assert first.json() == second.json()
+    assert not first.json()["warnings"]
+    assert models.last_prompt is None
+    assert models.embedding_calls == embedding_calls

@@ -1,10 +1,10 @@
 import json
 import re
 
+from .programme_queries import milestone_ranking, programme_answer
 from .schemas import ChatRequest, ChatResponse, ModelAnswer, Source
 from .source_cards import (
     programme_source,
-    risk_explanation,
     source_facts_reply,
     validate_claims,
     validate_explanation,
@@ -58,26 +58,7 @@ def build_context(snapshot):
             identifier = f"{prefix}{index + 1}"
             sources[identifier] = programme_source(identifier, key, record, snapshot.as_of, names)
             sections[key].append({"source_id": identifier, "record": record})
-    ranked = []
-    for index, record in enumerate(snapshot.forecasts):
-        probability = record.get("on_time_probability")
-        delay = record.get("days_beyond_milestone")
-        if (
-            isinstance(probability, (int, float))
-            and 0 <= probability <= 1
-            and isinstance(delay, (int, float))
-        ):
-            ranked.append(
-                {
-                    "id": record.get("id"),
-                    "source_id": f"F{index + 1}",
-                    "on_time_probability": probability,
-                    "days_beyond_milestone": delay,
-                }
-            )
-    sections["milestone_risk_ranking"] = sorted(
-        ranked, key=lambda row: (row["on_time_probability"], -row["days_beyond_milestone"])
-    )
+    sections["milestone_risk_ranking"] = milestone_ranking(snapshot)
     sources["P"].category = "summary"
     sources["P"].as_of = snapshot.as_of
     from .source_cards import numeric_fact
@@ -115,7 +96,7 @@ def build_context(snapshot):
 
 async def answer_question(request: ChatRequest, models, store) -> ChatResponse:
     context, sources = build_context(request.context)
-    brief = risk_explanation(request.message, request.context, sources)
+    brief = programme_answer(request.message, request.context, sources)
     if brief:
         reply, references = brief
         return ChatResponse(reply=reply, sources=references)
@@ -194,6 +175,20 @@ async def answer_question(request: ChatRequest, models, store) -> ChatResponse:
     reply = (
         source_facts_reply(selected)
         if fallback
-        else re.sub(r"(?im)^source\s+ids?:.*$", "", parsed.reply).strip()
+        else clean_reply(parsed.reply)
     )
     return ChatResponse(reply=reply, sources=selected, warnings=warnings)
+
+
+def clean_reply(reply):
+    """Keep internal citation scaffolding in source cards, outside the explanation."""
+    reply = re.sub(r"\s*\(source_id:\s*(?:[VOIAFD]\d+|P)\)", "", reply, flags=re.I)
+    lines = []
+    for line in reply.splitlines():
+        match = re.fullmatch(r"\s*(?:sources?|source ids?):\s*(.*?)\s*", line, re.I)
+        if match:
+            tokens = re.split(r"[,;\s]+", match[1].strip().rstrip("."))
+            if tokens and all(re.fullmatch(r"(?:[VOIAFD]\d+|P|metric_catalog)", t) for t in tokens):
+                continue
+        lines.append(line)
+    return "\n".join(lines).strip()
