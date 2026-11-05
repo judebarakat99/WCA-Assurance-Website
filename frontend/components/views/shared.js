@@ -1,3 +1,4 @@
+import {decisionOptionLabel,hasDecisionForecast} from "../../lib/decision-records.mjs";
 // ---------- visual helpers & shared cards (used by several pages) ----------
 import {GATES,LEVELS,esc,fmtN,fmtD,pct,sn,dd,daysBetween,stateCls,venueMeta} from "../../lib/data";
 import {S} from "../../lib/state";
@@ -58,10 +59,10 @@ export function decisionCardV(d,f){
   const r=decRec(d.id),x=f.find(y=>y.id===d.venue),left=daysBetween(S.today,d.lrm),open=r.status==="Open";
     const c=!open?"mute":left<21?"bad":left<90?"warn":"good";
     const badge=open?`<div class="dday lg ${c}"><b>${Math.abs(left)}</b><span>${left<0?"days over":"days left"}</span></div>`:`<div class="dday lg mute"><b>✓</b><span>decided</span></div>`;
-    const stat=open?(left<0?`Last responsible moment passed ${dd(left)} ago`:`Decide by ${fmtD(d.lrm)}`):`Decided ${fmtD(r.t)}`;
+    const stat=open?(left<0?`Last responsible moment passed ${dd(left)} ago`:`Decide by ${fmtD(d.lrm)}`):(r.t?`Decided ${fmtD(r.t)}`:"Decision recorded · date unavailable");
     const vis=open?(x?`<div class="dvis"><div class="dv-l"><span>Chance of meeting the ${fmtD(x.gateDate)} milestone</span><b>${pct(x.prob)}%</b></div>${barV(pct(x.prob),probCls(x.prob))}<div class="flex"><span class="pill ${x.cls}">P80 ${fmtD(x.d80)}</span><span class="pill ${x.late80>0?"p-bad":"p-good"}">${x.late80>0?dd(x.late80)+" late":"inside milestone"}</span></div></div>`:""):
-      `<div class="vs">${vsV("Before",r.beforeProb,r.before,r.beforeLate)}<div class="vs-ar" aria-hidden="true">→</div>${vsV("After",r.afterProb,r.after,r.afterLate,true)}</div>`;
-    const opts=open?`<div class="opts">${d.options.map((o,i)=>`<button class="opt ${i===0?"primary":""}" data-decide="${d.id}" data-opt="${i}"><b>${esc(o.t)}</b>${DEC_HINT[o.fx]&&!/recover/i.test(o.t)?`<small>${DEC_HINT[o.fx]}</small>`:""}</button>`).join("")}</div>`:`<div class="done"><span class="eyebrow">Option taken</span><b>${esc(d.options[r.choice].t)}</b></div>`;
+      (hasDecisionForecast(r)?`<div class="vs">${vsV("Before",r.beforeProb,r.before,r.beforeLate)}<div class="vs-ar" aria-hidden="true">→</div>${vsV("After",r.afterProb,r.after,r.afterLate,true)}</div>`:`<p class="muted">Historical forecast comparison was not stored with this decision.</p>`);
+    const opts=open?`<div class="opts">${d.options.map((o,i)=>`<button class="opt ${i===0?"primary":""}" data-decide="${d.id}" data-opt="${i}"><b>${esc(o.t)}</b>${DEC_HINT[o.fx]&&!/recover/i.test(o.t)?`<small>${DEC_HINT[o.fx]}</small>`:""}</button>`).join("")}</div>`:`<div class="done"><span class="eyebrow">Option taken</span><b>${esc(decisionOptionLabel(d,r))}</b></div>`;
     return `<article class="dec ${open?"":"isdone"}" id="dec-${d.id}">
       <div class="dec-top">${badge}<div class="dec-main"><div class="mono muted" style="font-size:12px">${d.id} · ${esc(sn(d.venue))} · owner ${esc(d.owner)}</div><h3>${esc(d.title)}</h3><p>${esc(d.q)}</p><div class="flex"><span class="pill ${open?(left<21?"p-bad":left<90?"p-warn":"p-info"):"p-mute"}">${stat}</span></div></div></div>
       ${vis?`<div class="dec-vis">${vis}</div>`:""}${opts}</article>`;

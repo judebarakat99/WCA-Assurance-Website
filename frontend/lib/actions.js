@@ -35,7 +35,8 @@ export function advance(){
 export const decRec=id=>S.decisions.find(d=>d.id===id);
 export function decide(id,idx){
   const d=decMeta(id),r=decRec(id); if(!d||!r||r.status!=="Open") return;
-  const before=forecast(d.venue), opt=d.options[idx];
+  const opt=d.options[idx]; if(!opt) return;
+  const before=forecast(d.venue); if(!before) return;
   if(opt.fx==="recover"&&!S.scn.recovery.includes(d.venue)) S.scn.recovery.push(d.venue);
   if(opt.fx==="rebase"){const v=venueState(d.venue);v.gateDate=addDays(v.gateDate,90);}
   const after=forecast(d.venue);

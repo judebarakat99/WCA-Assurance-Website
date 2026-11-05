@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import {publicAssetUrl} from "../lib/assets.mjs";
 import {usePathname} from "next/navigation";
 
 const TABS=[
@@ -32,7 +33,7 @@ export default function Header(){
           <div className="brand">
             <img
               className="logo"
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/Assets/شعار_الهيئة_العليا_لاستضافة_كأس_العالم_2034.svg.png`}
+              src={publicAssetUrl("/Assets/شعار_الهيئة_العليا_لاستضافة_كأس_العالم_2034.svg.png",process.env.NEXT_PUBLIC_BASE_PATH || "")}
               alt="Logo"
               width="48"
               height="48"

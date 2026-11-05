@@ -1,3 +1,4 @@
+import {normalizeDecisionRecords} from "./decision-records.mjs";
 // ---------- client-side state & store (localStorage persistence) ----------
 import {VENUES,TEMPLATES,CAMP_TEMPLATES,DECISIONS,ISSUERS,SAMPLE_CLAUSE,goodValue,addDays,gateNum} from "./data";
 
@@ -40,7 +41,7 @@ export function seed(){
   st.audit.sort((a,b)=>a.t<b.t?-1:1);
   return st;
 }
-export function load(){try{const r=localStorage.getItem(KEY);if(r){S=JSON.parse(r);return}}catch(e){} S=seed();}
+export function load(){try{const r=localStorage.getItem(KEY);if(r){S=JSON.parse(r);S.decisions=normalizeDecisionRecords(S.decisions,DECISIONS);return}}catch(e){} S=seed();}
 export function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 export function resetS(){S=seed();save();}
 export function log(actor,action,obl){S.audit.push({t:S.today,actor,action,obl});}
