@@ -781,7 +781,7 @@ nav.tabs summary .lbl{display:inline-block;max-width:160px;overflow:hidden;text-
 .dossier{max-width:none}
 .dsum .mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 
-/* ---------- IA refactor: breadcrumbs, venue detail, requirements & evidence, AI ---------- */
+/* ---------- IA refactor: breadcrumbs, venue detail, Compliance intake, AI ---------- */
 .crumbs{display:flex;align-items:center;gap:10px;font-size:13px;margin:0 0 18px;color:var(--muted)}
 .crumbs a{color:var(--accent);text-decoration:none;font-weight:600}
 .crumbs a:hover{text-decoration:underline}
@@ -801,7 +801,7 @@ nav.tabs summary .lbl{display:inline-block;max-width:160px;overflow:hidden;text-
 .ai-exec p{margin:0 0 10px;font-size:13.5px;line-height:1.55;max-width:100ch}
 .ai-exec p:last-child{margin-bottom:0}
 
-/* Requirements & evidence */
+/* Compliance intake */
 .req-cols{grid-template-columns:repeat(auto-fit,minmax(380px,1fr));align-items:start;margin-bottom:28px}
 .dropzone{margin-top:14px;border:2px dashed var(--line);border-radius:10px;padding:22px 16px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;cursor:pointer;background:var(--sunk);transition:border-color .15s,background .15s}
 .dropzone:hover,.dropzone.drag{border-color:var(--accent);background:var(--accent-soft)}

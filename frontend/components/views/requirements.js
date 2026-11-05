@@ -1,4 +1,4 @@
-// ---------- Requirements & Evidence page view ----------
+// ---------- Compliance intake page view ----------
 // Left: local evidence upload tied to venue and obligation/action (simulated
 // processing, functional state updates). Right: requirement decomposition.
 // Below: full Change Impact simulation.
@@ -169,7 +169,7 @@ export function evidenceIntakePanel(){
   ${steps}${result}</div>`;
 }
 export function viewRequirements(){
-  return headV("Requirements & evidence · intake PoC","Requirements & evidence","Requirements enter the system on the right; evidence proving or disproving them enters on the left. Both feed the same live register, so what happens here changes readiness, corrective actions and gates everywhere else.")+`
+  return headV("Compliance intake · intake PoC","Compliance intake","Requirements enter the system on the right; evidence proving or disproving them enters on the left. Both feed the same live register, so what happens here changes readiness, corrective actions and gates everywhere else.")+`
   <div class="grid req-cols">${evidenceIntakePanel()}${requirementIntakePanel()}</div>
   ${changeSection()}`;
 }
