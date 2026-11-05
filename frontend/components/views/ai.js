@@ -89,7 +89,7 @@ export function mountAI(){
   r.dataset.mounted="1";
   r.innerHTML=`<button class="ai-fab" id="aiFab" type="button" aria-haspopup="dialog" aria-expanded="false">✦ Ask AI</button>
   <section class="ai-panel" id="aiPanel" hidden role="dialog" aria-label="AI Assistant, PoC simulation">
-    <header class="ai-head"><div><b>AI Assistant</b><span>PoC simulation · answers computed from the live demo state</span></div><button type="button" class="ghost ai-close" id="aiClose" data-ai-close aria-label="Close AI Assistant">✕</button></header>
+    <header class="ai-head"><div><b>AI Assistant</b></div><button type="button" class="ghost ai-close" id="aiClose" data-ai-close aria-label="Close AI Assistant">✕</button></header>
     <div class="ai-msgs" id="aiMsgs"></div>
     <div class="ai-chips">${AI_CHIPS.map(c=>`<button type="button" class="ai-chipq" data-aiq="${esc(c)}">${esc(c)}</button>`).join("")}</div>
     <form id="aiForm" class="ai-form"><input id="aiInput" type="text" placeholder="Ask about readiness, risks, gates, evidence…" autocomplete="off" aria-label="Question"><button class="primary" type="submit">Ask</button></form>
