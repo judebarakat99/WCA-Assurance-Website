@@ -103,12 +103,33 @@ document.addEventListener("click",ev=>{
   const link=ev.target.closest&&ev.target.closest('a[href^="#"]');
   if(link){const h=link.getAttribute("href").slice(1);
     if(PATHS[h]||ALIAS[h]||(/^venue-/.test(h)&&venueMeta(h.slice(6)))){ev.preventDefault();goView(h);return;}}
-  const t=ev.target.closest("button,[data-obl],[data-close],#evDrop"); if(!t) return;
+  const t=ev.target.closest(
+  "button,[data-obl],[data-close],[data-ai-close],#evDrop"
+);
+
+if(!t) return;
   if(t.id==="evDrop"){if(ev.target.id!=="evUpFile"){const f=document.getElementById("evUpFile");if(f)f.click();}return}
   if(t.id==="aiFab"){ai.open=!ai.open;const p=document.getElementById("aiPanel");if(p)p.hidden=!ai.open;t.setAttribute("aria-expanded",String(ai.open));
     if(ai.open&&!ai.msgs.length){ai.msgs.push({who:"a",html:"Hi — I'm the <b>AI Assistant · PoC simulation</b>. No backend or model sits behind me yet: answers are computed from the live demo state with deterministic rules, so they change as the demo changes. Ask a question or tap a suggestion."});renderAIMsgs();}
     if(ai.open){const i=document.getElementById("aiInput");if(i)i.focus();}return}
-  if(t.id==="aiClose"){ai.open=false;const p=document.getElementById("aiPanel");if(p)p.hidden=true;const fb=document.getElementById("aiFab");if(fb)fb.setAttribute("aria-expanded","false");return}
+  if(t.id==="aiClose" || t.hasAttribute("data-ai-close")){
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    ai.open=false;
+
+    const panel=document.getElementById("aiPanel");
+    if(panel){
+      panel.hidden=true;
+    }
+
+    const fab=document.getElementById("aiFab");
+    if(fab){
+      fab.setAttribute("aria-expanded","false");
+    }
+
+    return;
+  }
   if(t.dataset.aiq){aiAsk(t.dataset.aiq);return}
   if(t.dataset.venueDetail){goView("venue-"+t.dataset.venueDetail);return}
   if(t.id==="evProcess"){intakeRun();return}

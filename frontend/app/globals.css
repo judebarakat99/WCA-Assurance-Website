@@ -1357,3 +1357,42 @@ body.touring .ai-fab,body.touring .ai-panel{display:none}
     margin-left:0;
   }
 }
+
+
+.ai-panel[hidden]{
+  display:none !important;
+}
+
+.ai-close{
+  width:34px;
+  height:34px;
+  min-width:34px;
+  padding:0;
+
+  display:grid;
+  place-items:center;
+  flex:none;
+
+  border:0;
+  border-radius:50%;
+
+  background:transparent;
+  color:var(--muted);
+
+  font-size:18px;
+  line-height:1;
+  cursor:pointer;
+}
+
+.ai-close:hover{
+  background:var(--surface);
+  color:var(--ink);
+  border:0;
+}
+
+.ai-fab:hover{
+  background:#075b34;
+  color:#fff;
+  border-color:#075b34;
+  transform:translateY(-2px);
+}
