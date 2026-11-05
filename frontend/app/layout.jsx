@@ -4,7 +4,7 @@ import LegacyScripts from "../components/LegacyScripts";
 
 export const metadata = {
   title: "Compliance Assurance Suite",
-  description: "FIFA World Cup 2034 compliance assurance demo with sample data.",
+  description: "FIFA World Cup 2034 assurance demo",
 };
 
 export const viewport = {

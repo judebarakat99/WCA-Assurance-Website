@@ -4,11 +4,11 @@ import Link from "next/link";
 import {usePathname} from "next/navigation";
 
 const TABS=[
-  ["/readiness","Readiness Room"],
+  ["/readiness","Readiness"],
   ["/control-tower","Control Tower"],
-  ["/decisions-actions","Decisions & Actions"],
-  ["/design-review","Design Review"],
-  ["/requirements-evidence","Requirements & Evidence"],
+  ["/decisions-actions","Actions"],
+  ["/design-review","Design"],
+  ["/requirements-evidence","Compliance Intake"],
   ["/dossiers","Dossiers"],
 ];
 

@@ -48,29 +48,323 @@ export function qcard(n,q,vis,ans,rows,conf,basis,btn){
     <div class="qvis">${vis}</div><p class="ans">${ans}</p>${rows?`<div class="qrows">${rows}</div>`:""}
     <div class="qfoot"><span class="conf ${conf}">${cc}</span><span>${basis}</span><span class="spacer"></span>${btn||""}</div></article>`;
 }
-export function aiExecSummary(){
-  const f=forecasts(), sc=scores(S.obligations);
-  const on80=f.filter(x=>x.late80<=0), risky=f.filter(x=>x.late80>0).slice().sort((a,b)=>a.prob-b.prob);
-  const worst=risky[0];
-  const claims=S.obligations.filter(o=>o.claim&&!isProven(o));
-  const overturned=claims.filter(o=>o.state==="Rejected");
-  const critUnv=S.obligations.filter(o=>o.crit==="Critical"&&o.state!=="Verified");
-  const openD=S.decisions.filter(d=>d.status==="Open").map(d=>Object.assign({},decMeta(d.id),{left:daysBetween(S.today,decMeta(d.id).lrm)})).sort((a,b)=>a.left-b.left);
-  const openI=S.issues.filter(i=>i.status==="Open"), overdue=openI.filter(i=>S.today>i.due);
-  const ext=S.obligations.filter(o=>EXTERNAL.includes(o.owner)&&!isProven(o)&&o.crit==="Critical");
-  const blockedGates=VENUES.map(m=>({m,e:gateEval(m.id)})).filter(x=>x.e&&!x.e.pass);
-  const focus=[];
-  if(worst) focus.push(`recover <b>${esc(sn(worst.id))}</b> (${pct(worst.prob)}% chance of making ${worst.gate.id}, P80 ${dd(worst.late80)} late)`);
-  if(openD.length) focus.push(`take <b>${openD[0].id}</b> by ${fmtD(openD[0].lrm)}${openD[0].left<0?` (already ${dd(openD[0].left)} over)`:` (${dd(openD[0].left)} left)`}`);
-  if(overturned.length) focus.push(`close out the ${overturned.length} owner declaration${overturned.length===1?"":"s"} overturned by evidence`);
-  if(ext.length) focus.push(`chase the ${ext.length} Critical obligation${ext.length===1?"":"s"} held by parties outside the programme`);
-  return `<section class="panel ai-exec" id="aiExec"><div class="ai-exec-head"><span class="ai-chip">✦ AI Executive Summary · PoC simulation</span><span class="muted" style="font-size:12px">Generated from the live demo state · ${fmtD(S.today)} · no model calls, deterministic rules</span></div>
-    <p><b>Portfolio readiness.</b> Owners declare ${pct(sc.declared)}% readiness; validated evidence proves ${pct(sc.assured)}%, an assurance gap of ${pct(sc.declared-sc.assured)} points. ${on80.length} of ${f.length} venues make their next FIFA gate at 80% confidence.</p>
-    <p><b>Highest risk.</b> ${worst?`${esc(sn(worst.id))} carries the greatest risk: ${pct(worst.prob)}% chance of meeting its ${worst.gate.id} milestone on ${fmtD(worst.gateDate)}, with P80 ${dd(worst.late80)} late${worst.pmcLate<=0?" while the PMC schedule still shows it on time":""}.${risky.length>1?` ${risky.slice(1).map(x=>esc(sn(x.id))).join(" and ")} ${risky.length===2?"is":"are"} also late at P80.`:""}`:"No venue is late at P80 under the current scenario."} ${blockedGates.length?`${blockedGates.length} venue${blockedGates.length===1?" is":"s are"} currently blocked at their next gate (${blockedGates.map(x=>esc(sn(x.m.id))).join(", ")}).`:""}</p>
-    <p><b>Evidence risk.</b> ${claims.length} obligation${claims.length===1?"":"s"} declared complete by owners ${claims.length===1?"is":"are"} not yet proven — ${overturned.length} ${overturned.length===1?"was":"were"} overturned by evidence (false greens). ${critUnv.length} Critical obligation${critUnv.length===1?"":"s"} remain${critUnv.length===1?"s":""} unverified by the second line.</p>
-    <p><b>Decisions & actions.</b> ${openD.length?`${openD.length} executive decision${openD.length===1?"":"s"} open; the next last responsible moment is ${openD[0].id} on ${fmtD(openD[0].lrm)}.`:"No executive decisions are waiting."} ${openI.length} corrective action${openI.length===1?"":"s"} open, ${overdue.length} past SLA.</p>
-    <p><b>Recommended leadership focus.</b> ${focus.length?focus.join("; ")+".":"Maintain the current cadence; nothing demands intervention this week."}</p>
-  </section>`;
+export function aiExecSummary() {
+  const f = forecasts();
+  const sc = scores(S.obligations);
+
+  const onTrack = f.filter((x) => x.late80 <= 0).length;
+
+  const worst = f
+    .slice()
+    .sort((a, b) => a.prob - b.prob || b.late80 - a.late80)[0];
+
+  const criticalUnverified = S.obligations.filter(
+    (o) => o.crit === "Critical" && o.state !== "Verified"
+  ).length;
+
+  const falseGreens = S.obligations.filter(
+    (o) => o.claim && o.state === "Rejected"
+  ).length;
+
+  const unprovenClaims = S.obligations.filter(
+    (o) =>
+      o.claim &&
+      o.state !== "Validated" &&
+      o.state !== "Verified"
+  ).length;
+
+  const openIssues = S.issues.filter(
+    (i) => i.status === "Open"
+  );
+
+  const overdueIssues = openIssues.filter(
+    (i) => S.today > i.due
+  ).length;
+
+  const openDecisions = S.decisions
+    .filter((record) => record.status === "Open")
+    .map((record) => decMeta(record.id))
+    .filter(Boolean)
+    .sort(
+      (a, b) =>
+        daysBetween(S.today, a.lrm) -
+        daysBetween(S.today, b.lrm)
+    );
+
+  const nextDecision = openDecisions[0];
+
+  const worstName = worst
+    ? sn(worst.id)
+    : "No venue currently at risk";
+
+  const worstVenue = worst
+    ? venueMeta(worst.id)
+    : null;
+
+  const pmcConflict =
+    worst &&
+    worst.pmcLate <= 0 &&
+    worst.late80 > 0;
+
+  const decisionDays = nextDecision
+    ? daysBetween(S.today, nextDecision.lrm)
+    : null;
+
+  return `
+    <section class="exec-brief" id="aiExec">
+
+      <div class="exec-brief-head">
+        <div>
+          <span class="exec-ai-label">
+            ✦ AI Executive Brief
+          </span>
+
+          <h2>What leadership needs to know</h2>
+
+          <p>
+            Generated from the current programme state ·
+            ${fmtD(S.today)}
+          </p>
+        </div>
+
+        <span class="exec-sim-label">
+          PoC simulation
+        </span>
+      </div>
+
+      <div class="exec-kpis">
+
+        <div class="exec-kpi">
+          <strong>${pct(sc.assured)}%</strong>
+          <span>Assured readiness</span>
+          <small>
+            ${pct(sc.declared)}% owner-declared
+          </small>
+        </div>
+
+        <div class="exec-kpi">
+          <strong>${onTrack}/${f.length}</strong>
+          <span>Next gates on track</span>
+          <small>at P80 confidence</small>
+        </div>
+
+        <div class="exec-kpi ${
+          criticalUnverified ? "risk" : ""
+        }">
+          <strong>${criticalUnverified}</strong>
+          <span>Critical unverified</span>
+          <small>awaiting second-line verification</small>
+        </div>
+
+        <div class="exec-kpi ${
+          openDecisions.length ? "warn" : ""
+        }">
+          <strong>${openDecisions.length}</strong>
+          <span>Decisions open</span>
+          <small>
+            ${
+              nextDecision
+                ? `next due ${fmtD(nextDecision.lrm)}`
+                : "none outstanding"
+            }
+          </small>
+        </div>
+
+      </div>
+
+      ${
+        worst
+          ? `
+            <div class="exec-priority">
+
+              <div class="exec-priority-top">
+                <span class="exec-priority-label">
+                  Priority attention
+                </span>
+
+                <span class="pill ${worst.cls}">
+                  ${esc(worst.status)}
+                </span>
+              </div>
+
+              <div class="exec-priority-main">
+
+                <div>
+                  <h3>${esc(worstName)}</h3>
+
+                  <p>
+                    ${esc(worstVenue?.city || "")}
+                    · ${worst.gate.id}
+                    ${esc(worst.gate.name)}
+                    · milestone ${fmtD(worst.gateDate)}
+                  </p>
+                </div>
+
+                <div class="exec-risk-metrics">
+
+                  <div>
+                    <strong>${pct(worst.prob)}%</strong>
+                    <span>on-time probability</span>
+                  </div>
+
+                  <div>
+                    <strong>
+                      ${
+                        worst.late80 > 0
+                          ? `+${worst.late80}`
+                          : Math.abs(worst.late80)
+                      }
+                    </strong>
+
+                    <span>
+                      ${
+                        worst.late80 > 0
+                          ? "days late at P80"
+                          : "days inside P80"
+                      }
+                    </span>
+                  </div>
+
+                  <div>
+                    <strong>${falseGreens}</strong>
+                    <span>
+                      false green${falseGreens === 1 ? "" : "s"}
+                    </span>
+                  </div>
+
+                </div>
+              </div>
+
+              ${
+                pmcConflict
+                  ? `
+                    <div class="exec-insight">
+                      <span>✦</span>
+
+                      <p>
+                        <strong>Assurance signal:</strong>
+                        the PMC schedule shows this milestone on time,
+                        but the evidence-based P80 forecast shows it late.
+                        Leadership should resolve this discrepancy before
+                        relying on the reported programme status.
+                      </p>
+                    </div>
+                  `
+                  : ""
+              }
+
+            </div>
+          `
+          : ""
+      }
+
+      <div class="exec-bottom">
+
+        <div class="exec-watch">
+          <span class="eyebrow">
+            Programme watchlist
+          </span>
+
+          <ul>
+            <li>
+              <strong>${unprovenClaims}</strong>
+              owner-declared item${
+                unprovenClaims === 1 ? "" : "s"
+              } not yet proven by evidence
+            </li>
+
+            <li>
+              <strong>${criticalUnverified}</strong>
+              Critical obligation${
+                criticalUnverified === 1 ? "" : "s"
+              } remain unverified
+            </li>
+
+            <li>
+              <strong>${openIssues.length}</strong>
+              corrective action${
+                openIssues.length === 1 ? "" : "s"
+              } remain open
+            </li>
+
+            ${
+              overdueIssues
+                ? `
+                  <li class="exec-danger">
+                    <strong>${overdueIssues}</strong>
+                    action${overdueIssues === 1 ? " is" : "s are"}
+                    past SLA
+                  </li>
+                `
+                : ""
+            }
+          </ul>
+        </div>
+
+        <div class="exec-action">
+          <span class="eyebrow">
+            Leadership action
+          </span>
+
+          ${
+            nextDecision
+              ? `
+                <strong class="exec-action-id">
+                  ${esc(nextDecision.id)}
+                </strong>
+
+                <h3>
+                  ${esc(nextDecision.title)}
+                </h3>
+
+                <p>
+                  Decide by
+                  <strong>${fmtD(nextDecision.lrm)}</strong>
+                  ·
+                  ${
+                    decisionDays < 0
+                      ? `${dd(decisionDays)} overdue`
+                      : `${dd(decisionDays)} remaining`
+                  }
+                </p>
+
+                <button
+                  class="primary"
+                  data-goto="actions"
+                >
+                  Review decision
+                </button>
+              `
+              : `
+                <div class="exec-ok">
+                  ✓ No executive decision currently outstanding
+                </div>
+              `
+          }
+        </div>
+
+      </div>
+
+      <div class="exec-footer">
+
+        <button
+          class="exec-ai-question"
+          data-ai-question="Why is the highest-risk venue at risk?"
+        >
+          ✦ Ask AI why
+        </button>
+
+        <button
+          class="linkish"
+          data-goto="tower"
+        >
+          View Control Tower →
+        </button>
+
+      </div>
+
+    </section>
+  `;
 }
 export function viewReadiness(){
   const f=forecasts(), on80=f.filter(x=>x.late80<=0), on50=f.filter(x=>x.late50<=0);
@@ -131,7 +425,11 @@ export function viewReadiness(){
   const recChips=scn.recovery.map(id=>`<span class="chipx">Recovery: ${esc(sn(id))}<button data-unrecover="${id}" aria-label="Remove recovery at ${esc(sn(id))}">×</button></span>`).join("");
   const sc=scores(S.obligations);
   const worstTxt=worst&&worst.late80>0?`<b>${esc(sn(worst.id))}</b> is the biggest risk: a ${pct(worst.prob)}% chance of meeting its milestone and a P80 ${dd(worst.late80)} late${pmcSaysOk?", while the PMC schedule shows it on time":""}.`:"No venue is late at P80 under this scenario.";
-  return aiExecSummary()+headV(`Readiness Room · ${f.length} venues · sample data`,"Three signals that decide whether we make the next FIFA gate.","Answers come from validated evidence and an evidence-based forecast. Owner reports and the PMC schedule are inputs, not answers. Forecast durations are illustrative until calibrated on the PMC's schedule data.")+`
+  return headV(
+  `Readiness Room · ${f.length} venues · sample data`,
+  "Three signals that decide whether we make the next FIFA gate.",
+  "Answers come from validated evidence and an evidence-based forecast. Owner reports and the PMC schedule are inputs, not answers. Forecast durations are illustrative until calibrated on the PMC's schedule data."
+) + aiExecSummary() + `
   <section class="rr-hero"><div class="sig-grid">
     <article class="sig s1"><div class="sig-k"><i>1</i>GATE CONFIDENCE</div><div class="sig-v">${on80.length}<small>of ${f.length} venues</small></div><div class="sig-t">make their next FIFA gate at 80% confidence${on50.length>on80.length?` (${on50.length} at 50%)`:""}</div>
       ${f.map(x=>`<div class="mb"><span>${esc(sn(x.id))}</span><div class="mb-tr"><i class="${x.cls}" style="width:${pct(x.prob)}%"></i></div><b>${pct(x.prob)}%</b></div>`).join("")}</article>
