@@ -118,18 +118,7 @@ export function aiExecSummary() {
           <span class="exec-ai-label">
             ✦ AI Executive Brief
           </span>
-
-          <h2>What leadership needs to know</h2>
-
-          <p>
-            Generated from the current programme state ·
-            ${fmtD(S.today)}
-          </p>
         </div>
-
-        <span class="exec-sim-label">
-          PoC simulation
-        </span>
       </div>
 
       <div class="exec-kpis">
@@ -428,9 +417,11 @@ export function viewReadiness(){
   return headV(
   `Readiness Room · ${f.length} venues · sample data`,
   "Three signals that decide whether we make the next FIFA gate.",
-  "Answers come from validated evidence and an evidence-based forecast. Owner reports and the PMC schedule are inputs, not answers. Forecast durations are illustrative until calibrated on the PMC's schedule data."
+  "Answers come from validated evidence-based forecast."
 ) + aiExecSummary() + `
-  <section class="rr-hero"><div class="sig-grid">
+  
+<!--
+<section class="rr-hero"><div class="sig-grid">
     <article class="sig s1"><div class="sig-k"><i>1</i>GATE CONFIDENCE</div><div class="sig-v">${on80.length}<small>of ${f.length} venues</small></div><div class="sig-t">make their next FIFA gate at 80% confidence${on50.length>on80.length?` (${on50.length} at 50%)`:""}</div>
       ${f.map(x=>`<div class="mb"><span>${esc(sn(x.id))}</span><div class="mb-tr"><i class="${x.cls}" style="width:${pct(x.prob)}%"></i></div><b>${pct(x.prob)}%</b></div>`).join("")}</article>
     <article class="sig s2"><div class="sig-k"><i>2</i>ASSURANCE GAP</div><div class="sig-v">${pct(sc.declared-sc.assured)}<small>points</small></div><div class="sig-t">between what owners declare and what evidence proves</div>
@@ -441,6 +432,8 @@ export function viewReadiness(){
       <ul class="dlist">${openD.slice(0,3).map(d=>`<li><b>${d.id} · ${esc(d.title)}</b><span>Decide by ${fmtD(d.lrm)}</span></li>`).join("")}</ul></article>
   </div>
   <div class="means"><b class="k">✧ What this means</b>${on80.length} of ${f.length} venues make their next gate with 80% confidence. ${worstTxt}</div></section>
+-->
+  
   <section class="panel" id="fcPanel"><div class="eyebrow">✧ AI forecast · 1,000 simulated runs</div><div class="qhead"><span class="qnum">1</span><h3>Will we make our next FIFA gates, and how confident are we?</h3></div>
     <p class="muted" style="margin:0 0 18px;max-width:84ch">Each bar runs from P50 to P80: the dates by which the gate rules are met in 50% and 80% of 1,000 simulated runs. The runs start from what evidence has proven, not from reported percent complete. The hollow circle is the PMC's deterministic finish.</p>
     <div class="scn" role="group" aria-label="Scenario"><b>Scenario</b>
