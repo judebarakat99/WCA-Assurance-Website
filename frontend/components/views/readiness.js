@@ -116,7 +116,7 @@ export function aiExecSummary() {
       <div class="exec-brief-head">
         <div>
           <span class="exec-ai-label">
-            ✦ AI Executive Brief
+            ✦ Nabd Executive Brief
           </span>
         </div>
       </div>
@@ -338,9 +338,9 @@ export function aiExecSummary() {
 
         <button
           class="exec-ai-question"
-          data-ai-question="Why is the highest-risk venue at risk?"
+          data-aiq="Which venue is highest risk, and why?"
         >
-          ✦ Ask AI why
+          ✦ Ask Nabd why
         </button>
 
         <button

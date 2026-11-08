@@ -19,25 +19,26 @@ import {openDrawer,closeDrawer,renderDrawer} from "../components/views/drawer";
 import {applyHL,startTour,handleTourClick,setTourVoice,setTourVoiceName,EXEC} from "../components/views/tour";
 import {mountAI,renderAIMsgs,aiAsk} from "../components/views/ai";
 import {ai} from "./state";
+import {viewOverview,ovSelect} from "../components/views/overview";
 
 const $=s=>document.querySelector(s);
+export const PATHS={overview:"/overview",readiness:"/readiness",tower:"/control-tower",register:"/control-tower/register",gates:"/control-tower/gates",actions:"/decisions-actions",twin:"/design-review",requirements:"/requirements-evidence",dossier:"/dossiers"};
 
 // Legacy hash keys mapped to App Router paths. "register" and "gates" stay as
 // full subpages under the Control Tower; old keys are aliased so the demos and
 // in-content links keep working.
-export const PATHS={readiness:"/readiness",tower:"/control-tower",register:"/control-tower/register",gates:"/control-tower/gates",actions:"/decisions-actions",twin:"/design-review",requirements:"/requirements-evidence",dossier:"/dossiers"};
 const ALIAS={issues:"actions",decisions:"actions",change:"requirements",decompose:"requirements"};
 export function pathFor(h){
   if(ALIAS[h]) h=ALIAS[h];
   if(/^venue-/.test(h)) return "/control-tower/"+h.slice(6);
-  return PATHS[h]||"/readiness";
+  return PATHS[h]||"/overview";
 }
 function viewKeyFor(h){
   if(ALIAS[h]) h=ALIAS[h];
   return h;
 }
 
-const current={view:"readiness",param:null};
+const current={view:"overview",param:null};
 let routerPush=null;
 let booted=false;
 
@@ -51,7 +52,7 @@ function navigate(h){
   if(routerPush) routerPush(pathFor(h),{scroll:false});
 }
 
-const VIEW_FNS={readiness:viewReadiness,tower:viewTower,actions:viewActions,requirements:viewRequirements,dossier:viewDossier,register:viewRegister,gates:viewGates};
+const VIEW_FNS={overview:viewOverview,readiness:viewReadiness,tower:viewTower,actions:viewActions,requirements:viewRequirements,dossier:viewDossier,register:viewRegister,gates:viewGates};
 
 export function render(){
   const v=document.getElementById("view"); if(!v||!S) return;
@@ -110,7 +111,7 @@ document.addEventListener("click",ev=>{
 if(!t) return;
   if(t.id==="evDrop"){if(ev.target.id!=="evUpFile"){const f=document.getElementById("evUpFile");if(f)f.click();}return}
   if(t.id==="aiFab"){ai.open=!ai.open;const p=document.getElementById("aiPanel");if(p)p.hidden=!ai.open;t.setAttribute("aria-expanded",String(ai.open));
-    if(ai.open&&!ai.msgs.length){ai.msgs.push({who:"a",html:"Ask about the current demo or add reference documents. Programme metrics are illustrative; answers include supporting references.",greeting:true});renderAIMsgs();}
+    if(ai.open&&!ai.msgs.length){ai.msgs.push({who:"a",html:"Hi, I'm Nabd. Ask me about programme readiness, stadiums, gates, decisions or your reference documents. Programme metrics are illustrative; answers include supporting references.",greeting:true});renderAIMsgs();}
     if(ai.open){const i=document.getElementById("aiInput");if(i)i.focus();}return}
   if(t.id==="aiClose" || t.hasAttribute("data-ai-close")){
     ev.preventDefault();
@@ -130,6 +131,8 @@ if(!t) return;
 
     return;
   }
+  if(t.dataset.ovVenue){ovSelect(t.dataset.ovVenue);render();return}
+  if(t.hasAttribute("data-ov-clear")){ovSelect(null);render();return}
   if(t.dataset.aiq){aiAsk(t.dataset.aiq);return}
   if(t.dataset.venueDetail){goView("venue-"+t.dataset.venueDetail);return}
   if(t.id==="evProcess"){intakeRun();return}

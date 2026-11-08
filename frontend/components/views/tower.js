@@ -45,9 +45,7 @@ export function viewTower(){
   return headV(`Control tower · ${VENUES.length} venues and base camps · ${all.length} obligations`,"Programme readiness","Assured readiness counts only obligations backed by validated evidence. The gap to what owners declare is the risk a status report would hide.")+`
   <div class="grid tiles">${tiles}</div>
   <section class="block"><div class="block-head"><div><div class="eyebrow">Where we stand</div><h3>Venues and base camps</h3></div><div class="legend"><span><i style="background:var(--brand-deep)"></i>Assured</span><span><i style="background:color-mix(in srgb,var(--warn) 55%,var(--surface))"></i>Declared, not yet proven</span></div></div>
-    <div class="grid venues">${cards}</div></section>
-  <div class="split">${intakeCard()}<div class="panel"><div class="eyebrow">Audit trail</div><h3>Latest activity</h3><div class="tl">${act}</div></div></div>
-  <section class="block"><div class="block-head"><div><div class="eyebrow">✧ Guided scenarios</div><h3>See the engine work</h3></div></div><div class="scenarios">${scn}</div></section>`;
+    <div class="grid venues">${cards}</div></section>`;
 }
 
 

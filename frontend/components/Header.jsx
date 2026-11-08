@@ -1,10 +1,10 @@
 "use client";
-
 import Link from "next/link";
 import {publicAssetUrl} from "../lib/assets.mjs";
 import {usePathname} from "next/navigation";
 
 const TABS=[
+  ["/overview","Overview"],
   ["/readiness","Readiness"],
   ["/control-tower","Control Tower"],
   ["/decisions-actions","Actions"],
@@ -15,7 +15,7 @@ const TABS=[
 
 function activeTab(pathname){
   const p=(pathname||"/").replace(/\/+$/,"")||"/";
-  if(p==="/") return "/readiness";
+  if(p==="/") return "/overview";
   const hit=TABS.find(([href])=>p===href||p.startsWith(href+"/"));
   return hit?hit[0]:null;
 }
@@ -34,6 +34,7 @@ export default function Header(){
             <img
               className="logo"
               src={publicAssetUrl("/Assets/شعار_الهيئة_العليا_لاستضافة_كأس_العالم_2034.svg.png",process.env.NEXT_PUBLIC_BASE_PATH || "")}
+              //src={publicAssetUrl("/Assets/Logo_Green.jpg",process.env.NEXT_PUBLIC_BASE_PATH || "")}
               alt="Logo"
               width="48"
               height="48"
