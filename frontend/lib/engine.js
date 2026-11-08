@@ -15,6 +15,7 @@ import {viewVenueDetail} from "../components/views/venueDetail";
 import {viewActions} from "../components/views/actionsView";
 import {viewRequirements,paintIntake,intakeRun,intakeAdd,decoAdd} from "../components/views/requirements";
 import {viewDossier,dossierText} from "../components/views/dossier";
+import {viewCompliance} from "../components/views/compliance";
 import {openDrawer,closeDrawer,renderDrawer} from "../components/views/drawer";
 import {applyHL,startTour,handleTourClick,setTourVoice,setTourVoiceName,EXEC} from "../components/views/tour";
 import {mountAI,renderAIMsgs,aiAsk} from "../components/views/ai";
@@ -22,7 +23,7 @@ import {ai} from "./state";
 import {viewOverview,ovSelect} from "../components/views/overview";
 
 const $=s=>document.querySelector(s);
-export const PATHS={overview:"/overview",readiness:"/readiness",tower:"/control-tower",register:"/control-tower/register",gates:"/control-tower/gates",actions:"/decisions-actions",twin:"/design-review",requirements:"/requirements-evidence",dossier:"/dossiers"};
+export const PATHS={overview:"/overview",readiness:"/readiness",tower:"/control-tower",register:"/control-tower/register",gates:"/control-tower/gates",actions:"/decisions-actions",twin:"/design-review",requirements:"/requirements-evidence",dossier:"/dossiers",compliance:"/compliance"};
 
 // Legacy hash keys mapped to App Router paths. "register" and "gates" stay as
 // full subpages under the Control Tower; old keys are aliased so the demos and
@@ -52,7 +53,7 @@ function navigate(h){
   if(routerPush) routerPush(pathFor(h),{scroll:false});
 }
 
-const VIEW_FNS={overview:viewOverview,readiness:viewReadiness,tower:viewTower,actions:viewActions,requirements:viewRequirements,dossier:viewDossier,register:viewRegister,gates:viewGates};
+const VIEW_FNS={overview:viewOverview,readiness:viewReadiness,tower:viewTower,actions:viewActions,requirements:viewRequirements,dossier:viewDossier,compliance:viewCompliance,register:viewRegister,gates:viewGates};
 
 export function render(){
   const v=document.getElementById("view"); if(!v||!S) return;
@@ -146,6 +147,61 @@ if(!t) return;
   if(t.hasAttribute("data-validate")&&o){const ok=validate(o);const e=o.evidence[o.evidence.length-1];ui.lastResult={ok,msg:ok?`Pass: ${showVal(o,e.value)} meets the criterion.`:`Fail: ${showVal(o,e.value)} does not meet ${critText(o)}. The owner's "complete" is overturned, status set to Rejected, corrective action opened with a ${SLA[o.crit]}-day SLA.`};save();render();renderDrawer();return}
   if(t.hasAttribute("data-verify")&&o){verify(o);ui.lastResult={ok:true,msg:"Verified by the compliance office. This obligation now counts fully toward assured readiness."};save();render();renderDrawer();return}
   if(t.dataset.obl){openDrawer(t.dataset.obl);return}
+
+  if(t.dataset.compAuthority){
+    ui.compliance.authority=
+      ui.compliance.authority===t.dataset.compAuthority
+        ?"all"
+        :t.dataset.compAuthority;
+    render();
+    return;
+  }
+
+  if(t.dataset.compFamily){
+    ui.compliance.family=t.dataset.compFamily;
+    ui.compliance.venue=null;
+    render();
+    window.scrollTo(0,0);
+    return;
+  }
+
+  if(t.dataset.compVenue){
+    ui.compliance.venue=t.dataset.compVenue;
+    render();
+    window.scrollTo(0,0);
+    return;
+  }
+
+  if(t.hasAttribute("data-comp-back")){
+    ui.compliance.family=null;
+    ui.compliance.venue=null;
+    render();
+    window.scrollTo(0,0);
+    return;
+  }
+
+  if(t.dataset.complianceIntake){
+    const target=t.dataset.complianceIntake;
+
+    goView("requirements");
+
+    setTimeout(()=>{
+      const el=document.getElementById(
+        target==="evidence"
+          ?"evIntake"
+          :"reqIntake"
+      );
+
+      if(el){
+        el.scrollIntoView({
+          block:"start",
+          behavior:"smooth"
+        });
+      }
+    },60);
+
+    return;
+  }
   if(t.dataset.goto){ui.filters.venue=t.dataset.venue||"all";ui.filters.family="all";ui.filters.state="all";ui.filters.q="";goView(t.dataset.goto);if(t.dataset.goto==="gates")setTimeout(()=>{const el=document.getElementById("gate-"+t.dataset.venue);if(el)el.scrollIntoView({block:"start"})},30);return}
   if(t.dataset.gate){requestGatePass(t.dataset.gate);return}
   if(t.dataset.escalateGate){escalateGateBlockers(t.dataset.escalateGate);return}

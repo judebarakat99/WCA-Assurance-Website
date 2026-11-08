@@ -10,7 +10,7 @@ const TABS=[
   ["/decisions-actions","Actions"],
   ["/design-review","Design"],
   ["/requirements-evidence","Compliance Intake"],
-  ["/dossiers","Dossiers"],
+  ["/compliance","Compliance"],
 ];
 
 function activeTab(pathname){

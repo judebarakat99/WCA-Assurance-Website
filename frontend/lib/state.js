@@ -51,6 +51,11 @@ export const ui={
   filters:{venue:"all",family:"all",state:"all",q:""},
   selChange:"lux",
   dossierVenue:"KHO",
+  compliance:{
+    authority:"all",
+    family:null,
+    venue:null
+  },
   decoInput:SAMPLE_CLAUSE,
   decoOut:null,
   decoVenue:"RUH",
