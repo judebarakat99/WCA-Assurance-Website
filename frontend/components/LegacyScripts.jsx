@@ -20,7 +20,9 @@ export default function LegacyScripts() {
 
   return (
     <>
-      {failed && <p role="alert">The 3D demo could not load. Please reload the page.</p>}
+      {failed && (
+        <p role="alert">The 3D demo could not load. Please reload the page.</p>
+      )}
       {sources.slice(0, loaded + 1).map((src, index) => (
         <Script
           key={src}

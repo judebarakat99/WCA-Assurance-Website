@@ -1,19 +1,19 @@
 import AppView from "../../../components/AppView";
-import {VENUES, venueMeta} from "../../../lib/data";
+import { VENUES, venueMeta } from "../../../lib/data";
 
-export const dynamicParams=false;
+export const dynamicParams = false;
 
-export function generateStaticParams(){
-  return VENUES.map(v=>({venueId:v.id}));
+export function generateStaticParams() {
+  return VENUES.map((v) => ({ venueId: v.id }));
 }
 
-export async function generateMetadata({params}){
-  const {venueId}=await params;
-  const m=venueMeta(venueId);
-  return {title:`${m?m.name:"Venue"} · Compliance Assurance Suite`};
+export async function generateMetadata({ params }) {
+  const { venueId } = await params;
+  const m = venueMeta(venueId);
+  return { title: `${m ? m.name : "Venue"} · Compliance Assurance Suite` };
 }
 
-export default async function VenueDetailPage({params}){
-  const {venueId}=await params;
+export default async function VenueDetailPage({ params }) {
+  const { venueId } = await params;
   return <AppView view="venue" param={venueId} />;
 }

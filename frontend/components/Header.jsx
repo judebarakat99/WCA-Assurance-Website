@@ -1,30 +1,36 @@
 "use client";
 import Link from "next/link";
-import {publicAssetUrl} from "../lib/assets.mjs";
-import {usePathname} from "next/navigation";
+import { publicAssetUrl } from "../lib/assets.mjs";
+import { usePathname } from "next/navigation";
 
-const TABS=[
-  ["/overview","Overview"],
-  ["/readiness","Readiness"],
-  ["/control-tower","Control Tower"],
-  ["/decisions-actions","Actions"],
-  ["/design-review","Design"],
-  ["/requirements-evidence","Compliance Intake"],
-  ["/compliance","Compliance"],
+const TABS = [
+  ["/overview", "Overview"],
+  ["/readiness", "Readiness"],
+  ["/control-tower", "Control Tower"],
+  ["/decisions-actions", "Actions"],
+  ["/design-review", "Design"],
+  ["/requirements-evidence", "Compliance Intake"],
+  ["/compliance", "Compliance"],
 ];
 
-function activeTab(pathname){
-  const p=(pathname||"/").replace(/\/+$/,"")||"/";
-  if(p==="/") return "/overview";
-  const hit=TABS.find(([href])=>p===href||p.startsWith(href+"/"));
-  return hit?hit[0]:null;
+function activeTab(pathname) {
+  const p = (pathname || "/").replace(/\/+$/, "") || "/";
+  if (p === "/") return "/overview";
+  const hit = TABS.find(([href]) => p === href || p.startsWith(href + "/"));
+  return hit ? hit[0] : null;
 }
 
-export default function Header(){
-  const pathname=usePathname();
-  const cur=activeTab(pathname);
-  const links=TABS.map(([href,label])=>(
-    <Link key={href} href={href} aria-current={cur===href?"page":undefined}>{label}</Link>
+export default function Header() {
+  const pathname = usePathname();
+  const cur = activeTab(pathname);
+  const links = TABS.map(([href, label]) => (
+    <Link
+      key={href}
+      href={href}
+      aria-current={cur === href ? "page" : undefined}
+    >
+      {label}
+    </Link>
   ));
   return (
     <header className="top">
@@ -33,7 +39,10 @@ export default function Header(){
           <div className="brand">
             <img
               className="logo"
-              src={publicAssetUrl("/Assets/شعار_الهيئة_العليا_لاستضافة_كأس_العالم_2034.svg.png",process.env.NEXT_PUBLIC_BASE_PATH || "")}
+              src={publicAssetUrl(
+                "/Assets/شعار_الهيئة_العليا_لاستضافة_كأس_العالم_2034.svg.png",
+                process.env.NEXT_PUBLIC_BASE_PATH || "",
+              )}
               //src={publicAssetUrl("/Assets/Logo_Green.jpg",process.env.NEXT_PUBLIC_BASE_PATH || "")}
               alt="Logo"
               width="48"
@@ -44,21 +53,34 @@ export default function Header(){
               <span className="sub">World Cup 2034</span>
             </div>
           </div>
-          <nav className="tabs" id="tabs" aria-label="Views">{links}</nav>
+          <nav className="tabs" id="tabs" aria-label="Views">
+            {links}
+          </nav>
           <div className="right">
             <details className="menu nav-menu" id="navMenu">
-              <summary className="nav-toggle" aria-label="Open navigation menu">Menu</summary>
-              <div className="pop r" id="tabsMenu">{links}</div>
+              <summary className="nav-toggle" aria-label="Open navigation menu">
+                Menu
+              </summary>
+              <div className="pop r" id="tabsMenu">
+                {links}
+              </div>
             </details>
             <details className="menu" id="demoMenu">
               <summary className="btn">Demo</summary>
               <div className="pop r">
                 <small>Guided</small>
-                <button id="execStart" className="tourbtn">Executive demo · 3 min</button>
+                <button id="execStart" className="tourbtn">
+                  Executive demo · 3 min
+                </button>
                 <button id="tourStart">Full guided demo</button>
                 <hr />
                 <small>Simulation</small>
-                <button id="advance" title="Move the simulated clock forward and run escalation rules">Advance 7 days</button>
+                <button
+                  id="advance"
+                  title="Move the simulated clock forward and run escalation rules"
+                >
+                  Advance 7 days
+                </button>
                 <button id="reset">Reset demo</button>
               </div>
             </details>
