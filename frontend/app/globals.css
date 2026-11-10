@@ -95,6 +95,23 @@
   --panel-bad: #ff9a8c;
   --panel-gold: #ffd84a;
 
+  /* raw dark-panel values for .hero (cards remap the --panel-* tokens) */
+  --dark-on: var(--on-dark);
+  --dark-on-muted: var(--on-dark-muted);
+  --dark-1: var(--panel-1);
+  --dark-2: var(--panel-2);
+  --dark-sunk: var(--panel-sunk);
+  --dark-deep: var(--panel-deep);
+  --dark-ink: var(--panel-ink);
+  --dark-muted: var(--panel-muted);
+  --dark-line: var(--panel-line);
+  --dark-accent: var(--panel-accent);
+  --dark-accent-ink: var(--panel-accent-ink);
+  --dark-good: var(--panel-good);
+  --dark-warn: var(--panel-warn);
+  --dark-bad: var(--panel-bad);
+  --dark-gold: var(--panel-gold);
+
   /* legacy aliases used by the map panel */
   --g1: var(--panel-deep);
   --g2: var(--panel-2);
@@ -832,7 +849,12 @@ nav.tabs summary .lbl {
   color: var(--bad);
 }
 
-/* ---------- Cards (green) ---------- */
+/* ---------- Cards ----------
+   Cards are light surfaces by default. One block per page may opt in to
+   the Innovative Blue panel with `.hero` (the executive brief is always
+   one). Many component rules were written for dark panels and use the
+   --panel-* / --on-dark tokens directly, so a light card maps those
+   tokens back to page tokens and a hero restores the dark values. */
 .tile,
 .panel,
 .venue,
@@ -842,12 +864,52 @@ nav.tabs summary .lbl {
 .dec,
 .tablewrap,
 .tw-main,
-.sig,
 .issue,
 .gcard,
-.sumcard,
-.rr-hero,
-.exec-brief {
+.sumcard {
+  --on-dark: var(--ink);
+  --on-dark-muted: var(--muted);
+  --panel-1: var(--surface);
+  --panel-2: var(--surface);
+  --panel-sunk: var(--sunk);
+  --panel-deep: var(--sunk);
+  --panel-ink: var(--ink);
+  --panel-muted: var(--muted);
+  --panel-line: var(--line);
+  --panel-accent: var(--highlight);
+  --panel-accent-ink: var(--accent-ink);
+  --panel-good: var(--good);
+  --panel-warn: var(--warn);
+  --panel-bad: var(--bad);
+  --panel-gold: var(--gold);
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--shadow-color) 5%, transparent),
+    0 10px 28px -20px color-mix(in srgb, var(--shadow-color) 28%, transparent);
+  min-width: 0;
+}
+.hero,
+.exec-brief,
+:is(.hero, .exec-brief)
+  :is(.tile, .panel, .venue, .dossier, .rung, .qcard, .dec, .tablewrap, .tw-main, .issue, .gcard, .sumcard) {
+  --on-dark: var(--dark-on);
+  --on-dark-muted: var(--dark-on-muted);
+  --panel-1: var(--dark-1);
+  --panel-2: var(--dark-2);
+  --panel-sunk: var(--dark-sunk);
+  --panel-deep: var(--dark-deep);
+  --panel-ink: var(--dark-ink);
+  --panel-muted: var(--dark-muted);
+  --panel-line: var(--dark-line);
+  --panel-accent: var(--dark-accent);
+  --panel-accent-ink: var(--dark-accent-ink);
+  --panel-good: var(--dark-good);
+  --panel-warn: var(--dark-warn);
+  --panel-bad: var(--dark-bad);
+  --panel-gold: var(--dark-gold);
   --surface: var(--panel-2);
   --sunk: var(--panel-sunk);
   --ink: var(--panel-ink);
@@ -856,6 +918,7 @@ nav.tabs summary .lbl {
   --accent: var(--panel-accent);
   --accent-ink: var(--panel-accent-ink);
   --accent-soft: color-mix(in srgb, var(--panel-accent) 16%, transparent);
+  --highlight: var(--panel-accent);
   --brand-deep: var(--panel-ink);
   --mint: var(--panel-accent);
   --good: var(--panel-good);
@@ -866,18 +929,24 @@ nav.tabs summary .lbl {
   --bad-soft: color-mix(in srgb, var(--panel-bad) 16%, transparent);
   --gold: var(--panel-gold);
   --gold-soft: color-mix(in srgb, var(--panel-gold) 16%, transparent);
-  background: linear-gradient(160deg, var(--panel-1), var(--panel-2));
   color: var(--ink);
-  border: 1px solid color-mix(in srgb, var(--panel-accent) 22%, transparent);
+}
+.hero,
+.exec-brief {
+  background: linear-gradient(160deg, var(--panel-1), var(--panel-2));
+  border: 1px solid color-mix(in srgb, var(--panel-accent) 18%, transparent);
   border-radius: 20px;
-  box-shadow:
-    0 1px 2px color-mix(in srgb, var(--shadow-color) 6%, transparent),
-    0 16px 34px -20px color-mix(in srgb, var(--shadow-color) 55%, transparent);
+  box-shadow: 0 18px 40px -24px color-mix(in srgb, var(--shadow-color) 55%, transparent);
   min-width: 0;
 }
-.rr-hero .sig,
+:is(.hero, .exec-brief)
+  :is(.tile, .panel, .venue, .dossier, .rung, .qcard, .dec, .tablewrap, .tw-main, .issue, .gcard, .sumcard) {
+  background: color-mix(in srgb, var(--panel-deep) 55%, transparent);
+  border-color: var(--panel-line);
+  box-shadow: none;
+}
 .exec-brief .exec-action {
-  background: linear-gradient(160deg, var(--panel-2), var(--panel-deep));
+  background: color-mix(in srgb, var(--panel-deep) 55%, transparent);
 }
 .tile.alert,
 .issue.late {
@@ -885,6 +954,19 @@ nav.tabs summary .lbl {
 }
 .tile.warn {
   border-color: color-mix(in srgb, var(--panel-warn) 45%, transparent);
+}
+
+/* Control Tower programme summary (the page's hero) */
+.ct-summary {
+  padding: 20px;
+  margin-bottom: 48px;
+}
+.ct-summary .tiles {
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  gap: 14px;
+}
+.ct-summary .tile {
+  padding: 18px 18px;
 }
 
 /* tiles */
@@ -972,46 +1054,7 @@ nav.tabs summary .lbl {
 .dual i.a {
   background: var(--brand-deep);
 }
-.gapbar {
-  position: relative;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--sunk);
-  overflow: hidden;
-}
-.gapbar .decl {
-  position: absolute;
-  inset: 0 auto 0 0;
-  background: repeating-linear-gradient(
-    135deg,
-    var(--warn-soft) 0 4px,
-    transparent 4px 8px
-  );
-  border-right: 2px solid var(--warn);
-}
-.gapbar .assu {
-  position: absolute;
-  inset: 0 auto 0 0;
-  background: var(--accent);
-}
-.mb {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 84px 38px;
-  gap: 10px;
-  align-items: center;
-  font-size: 12.5px;
-  padding: 4px 0;
-}
-.mb span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.mb b {
-  text-align: right;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
+
 .mb-tr {
   height: 7px;
   border-radius: 999px;
@@ -1116,37 +1159,6 @@ nav.tabs summary .lbl {
   text-align: right;
   font-variant-numeric: tabular-nums;
   min-width: 22px;
-}
-.bar2 {
-  display: grid;
-  gap: 5px;
-  margin-bottom: 12px;
-  font-size: 12.5px;
-}
-.bar2 .row {
-  display: flex;
-  justify-content: space-between;
-  color: var(--muted);
-}
-.bar2 .row b {
-  color: var(--ink);
-}
-.bar2 .tr {
-  height: 10px;
-  border-radius: 999px;
-  background: var(--sunk);
-  overflow: hidden;
-}
-.bar2 .tr i {
-  display: block;
-  height: 100%;
-  border-radius: 999px;
-}
-.bar2 .tr i.d {
-  background: var(--warn);
-}
-.bar2 .tr i.a {
-  background: var(--brand-deep);
 }
 
 /* rings & small metrics */
@@ -2648,109 +2660,7 @@ body.touring .ai-panel {
 }
 
 /* ---------- Readiness Room ---------- */
-.rr-hero {
-  border-radius: 28px;
-  padding: 36px;
-}
-.rr-hero .ans {
-  font-family: var(--f-display);
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.3;
-  margin: 0 0 8px;
-  text-wrap: balance;
-}
-.rr-hero .sig-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-}
-@media (max-width: 980px) {
-  .rr-hero .sig-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-.sig {
-  padding: 26px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.sig-k {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  margin-bottom: 10px;
-}
-.sig-k i {
-  font-style: normal;
-  display: grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 7px;
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-family: var(--f-mono);
-  font-size: 11.5px;
-}
-.sig.s2 .sig-k {
-  color: var(--warn);
-}
-.sig.s2 .sig-k i {
-  background: var(--warn-soft);
-  color: var(--warn);
-}
-.sig-v {
-  font-family: var(--f-display);
-  font-weight: 700;
-  font-size: 56px;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: var(--accent);
-}
-.sig.s2 .sig-v {
-  color: var(--warn);
-}
-.sig-v small {
-  font-size: 17px;
-  font-weight: 500;
-  letter-spacing: 0;
-  color: var(--muted);
-  margin-left: 8px;
-}
-.sig-t {
-  font-size: 13.5px;
-  color: var(--muted);
-  margin-bottom: 14px;
-}
-.dlist {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-size: 13px;
-}
-.dlist li {
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--surface) 70%, transparent);
-  border: 1px solid var(--line);
-}
-.dlist li b {
-  display: block;
-  font-weight: 600;
-}
-.dlist li span {
-  color: var(--muted);
-  font-size: 12px;
-}
+
 .means {
   margin-top: 24px;
   padding: 18px 22px;

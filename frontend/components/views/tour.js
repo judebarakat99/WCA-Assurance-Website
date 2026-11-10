@@ -40,7 +40,7 @@ const RR_STEPS = [
     run: () => {
       closeDrawer();
       go("readiness");
-      return ".rr-hero";
+      return "#aiExec";
     },
     say: () => {
       const f = forecasts(),
@@ -262,7 +262,7 @@ const TOUR = [
     title: "Assurance, not reporting",
     run: () => {
       go("readiness");
-      return ".rr-hero";
+      return "#aiExec";
     },
     say: "That is the difference. Readiness questions answered with a confidence level. Designs checked before they are built. Status earned by evidence. Gates that hold. Escalation that runs itself. And proof for FIFA at any moment. This is the compliance backbone of the programme control tower.",
   },
@@ -333,7 +333,7 @@ const EXEC = [
     title: "One control tower",
     run: () => {
       go("readiness");
-      return ".rr-hero";
+      return "#aiExec";
     },
     say: "One control tower. Every readiness question answered with a confidence level. Every requirement owned, proven and enforced, from the first drawing to the final whistle. We propose a twelve-week proof of concept to deliver it.",
   },

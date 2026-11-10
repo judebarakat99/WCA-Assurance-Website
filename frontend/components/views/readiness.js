@@ -3,7 +3,6 @@ import {
   GATES,
   DECISIONS,
   EXTERNAL,
-  VENUES,
   MONTHS,
   REQMAT,
   esc,
@@ -18,17 +17,16 @@ import {
   decMeta,
   stateCls,
 } from "../../lib/data";
-import { S, ui, rerender, goView } from "../../lib/state";
+import { S } from "../../lib/state";
 import {
   scores,
   oblsOf,
   venueState,
   gateEval,
   matOf,
-  isProven,
 } from "../../lib/scoring";
 import { forecast, forecasts } from "../../lib/forecast";
-import { segV, legV, ringV, rowV, kpiV, hbV, barV, headV } from "./shared";
+import { segV, legV, ringV, rowV, kpiV, hbV, headV } from "./shared";
 
 export function fcChart(f) {
   const W = 1100,
@@ -392,13 +390,10 @@ export function aiExecSummary() {
   `;
 }
 export function viewReadiness() {
-  const f = forecasts(),
-    on80 = f.filter((x) => x.late80 <= 0),
-    on50 = f.filter((x) => x.late50 <= 0);
+  const f = forecasts();
   const worst = f
     .slice()
     .sort((a, b) => a.prob - b.prob || b.late80 - a.late80)[0];
-  const pmcSaysOk = worst && worst.pmcLate <= 0;
   const scn = S.scn;
   // Q2 false greens
   const claims = S.obligations.filter(
@@ -663,11 +658,6 @@ export function viewReadiness() {
         `<span class="chipx">Recovery: ${esc(sn(id))}<button data-unrecover="${id}" aria-label="Remove recovery at ${esc(sn(id))}">×</button></span>`,
     )
     .join("");
-  const sc = scores(S.obligations);
-  const worstTxt =
-    worst && worst.late80 > 0
-      ? `<b>${esc(sn(worst.id))}</b> is the biggest risk: a ${pct(worst.prob)}% chance of meeting its milestone and a P80 ${dd(worst.late80)} late${pmcSaysOk ? ", while the PMC schedule shows it on time" : ""}.`
-      : "No venue is late at P80 under this scenario.";
   return (
     headV(
       `Readiness Room · ${f.length} venues · sample data`,
@@ -677,25 +667,6 @@ export function viewReadiness() {
     aiExecSummary() +
     `
   
-<!--
-<section class="rr-hero"><div class="sig-grid">
-    <article class="sig s1"><div class="sig-k"><i>1</i>GATE CONFIDENCE</div><div class="sig-v">${on80.length}<small>of ${f.length} venues</small></div><div class="sig-t">make their next FIFA gate at 80% confidence${on50.length > on80.length ? ` (${on50.length} at 50%)` : ""}</div>
-      ${f.map((x) => `<div class="mb"><span>${esc(sn(x.id))}</span><div class="mb-tr"><i class="${x.cls}" style="width:${pct(x.prob)}%"></i></div><b>${pct(x.prob)}%</b></div>`).join("")}</article>
-    <article class="sig s2"><div class="sig-k"><i>2</i>ASSURANCE GAP</div><div class="sig-v">${pct(sc.declared - sc.assured)}<small>points</small></div><div class="sig-t">between what owners declare and what evidence proves</div>
-      <div class="bar2"><div class="row"><span>Declared by owners</span><b>${pct(sc.declared)}%</b></div><div class="tr"><i class="d" style="width:${pct(sc.declared)}%"></i></div></div>
-      <div class="bar2"><div class="row"><span>Proven by evidence</span><b>${pct(sc.assured)}%</b></div><div class="tr"><i class="a" style="width:${pct(sc.assured)}%"></i></div></div>
-      <span class="pill ${claims.length ? "p-warn" : "p-good"}" style="align-self:flex-start;margin-top:6px">${claims.length} declared, not proven</span></article>
-    <article class="sig s3"><div class="sig-k"><i>3</i>DECISIONS</div><div class="sig-v">${openD.length}<small>open</small></div><div class="sig-t">${openD[0] ? `Next decision due ${fmtD(openD[0].lrm)}` : "Nothing is waiting on you"}</div>
-      <ul class="dlist">${openD
-        .slice(0, 3)
-        .map(
-          (d) =>
-            `<li><b>${d.id} · ${esc(d.title)}</b><span>Decide by ${fmtD(d.lrm)}</span></li>`,
-        )
-        .join("")}</ul></article>
-  </div>
-  <div class="means"><b class="k">✧ What this means</b>${on80.length} of ${f.length} venues make their next gate with 80% confidence. ${worstTxt}</div></section>
--->
   
   <section class="panel" id="fcPanel"><div class="eyebrow">✧ AI forecast · 1,000 simulated runs</div><div class="qhead"><span class="qnum">1</span><h3>Will we make our next FIFA gates, and how confident are we?</h3></div>
     <p class="muted" style="margin:0 0 18px;max-width:84ch">Each bar runs from P50 to P80: the dates by which the gate rules are met in 50% and 80% of 1,000 simulated runs. The runs start from what evidence has proven, not from reported percent complete. The hollow circle is the PMC's deterministic finish.</p>
