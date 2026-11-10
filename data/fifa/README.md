@@ -37,3 +37,14 @@ Legacy `LGT-01` and `LGT-02` metrics have incompatible plane/threshold definitio
 ## Extending the catalogue
 
 Check the primary publication and table qualifications, preserve source links and page references, distinguish mandatory text from recommendations, and record any unresolved applicability. Add regression coverage for conditional requirements. Avoid inferring criticality, official domains, or compliance status from a source title.
+
+## Change scenarios (hypothetical)
+
+`change-scenarios.json` holds requirement changes used to demonstrate change
+impact on the assurance map. **None has been announced by FIFA.** Each names a
+catalogue requirement and a replacement criterion. Applying one (in the app)
+moves that requirement to its next version and re-checks every stadium's
+evidence against the new criterion; compliant items that no longer pass are
+reopened for review. Applied changes are kept in the browser
+(`wca-requirement-changes-v1`) and cleared by "Reset demo" or by reloading the
+sample assessments.

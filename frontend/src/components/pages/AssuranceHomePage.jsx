@@ -5,11 +5,38 @@ import AskBar from "@/components/molecules/AskBar";
 import DeliveryTimeline from "@/components/molecules/DeliveryTimeline";
 import AssuranceBriefing from "@/components/organisms/AssuranceBriefing";
 import AssuranceMap from "@/components/organisms/AssuranceMap";
+import ChangeImpactPanel from "@/components/organisms/ChangeImpactPanel";
 import PillarRail from "@/components/organisms/PillarRail";
 import PageTemplate from "@/components/templates/PageTemplate";
 import { assuranceMap } from "@/lib/domain/cityAssurance.mjs";
+import { changeImpact, withImpact } from "@/lib/domain/requirementChange.mjs";
+import { scenarioById } from "@/lib/domain/requirementVersions.mjs";
+import { reviewQueue } from "@/lib/domain/reviewQueue.mjs";
 import { getAssessments, hasSampleAssessments } from "@/lib/store/assessments";
 import { updateMap } from "@/lib/store/state";
+
+function ImpactLegend() {
+  return (
+    <div className="alegend" aria-label="Legend">
+      <b>If the change is applied</b>
+      <span>
+        <i className="bad" /> compliant items reopen
+      </span>
+      <span>
+        <i className="warn" /> evidence in review would fail
+      </span>
+      <span>
+        <i className="good" /> still compliant
+      </span>
+      <span>
+        <i className="mute" /> no evidence yet, or not affected
+      </span>
+      <span>
+        <i className="badge">3</i> items reopened
+      </span>
+    </div>
+  );
+}
 
 function Legend() {
   return (
@@ -47,8 +74,12 @@ const setYear = (year) => updateMap({ year });
 
 function AssuranceHome({ ui }) {
   const router = useRouter();
-  const { city: selected, pillar, year, recenter } = ui.map;
-  const map = assuranceMap(getAssessments(), pillar, year);
+  const { city: selected, pillar, year, recenter, change } = ui.map;
+  const records = getAssessments();
+  const base = assuranceMap(records, pillar, year);
+  const scenario = scenarioById(change);
+  const map = scenario ? withImpact(base, changeImpact(scenario, records), pillar) : base;
+  const reopened = reviewQueue(records, { status: "reopened" }).length;
   return (
     <div className="ahome">
       <PillarRail active={pillar} onChange={setPillar} />
@@ -62,14 +93,19 @@ function AssuranceHome({ ui }) {
           recenterSignal={recenter}
         />
         <DeliveryTimeline year={year} due={map.due} total={map.stadiumCount} onChange={setYear} />
-        <AssuranceBriefing
-          map={map}
-          selected={selected}
-          pillar={pillar}
-          sample={hasSampleAssessments()}
-          onSelect={setSelected}
-        />
-        <Legend />
+        {change ? (
+          <ChangeImpactPanel view={map} onSelect={setSelected} />
+        ) : (
+          <AssuranceBriefing
+            map={map}
+            selected={selected}
+            pillar={pillar}
+            sample={hasSampleAssessments()}
+            reopened={reopened}
+            onSelect={setSelected}
+          />
+        )}
+        {scenario ? <ImpactLegend /> : <Legend />}
         <div className="abottom">
           <button
             type="button"

@@ -6,7 +6,9 @@ import Ring from "@/components/atoms/Ring";
 import StatusPill from "@/components/atoms/StatusPill";
 import { pct } from "@/lib/domain/data";
 import { TIMELINE } from "@/lib/domain/cityAssurance.mjs";
+import { ReopenedLink } from "@/components/organisms/ChangeImpactPanel";
 import { loadSampleAssessments, resetAssessments } from "@/lib/store/assessments";
+import { updateMap } from "@/lib/store/state";
 
 const TONE_COLOR = { good: "var(--good)", warn: "var(--warn)", bad: "var(--bad)", mute: "var(--muted)" };
 
@@ -76,7 +78,7 @@ function queueHref({ cityId, pillar, year }) {
   return s ? `/review?${s}` : "/review";
 }
 
-function Programme({ map, pillar, sample, onSelect }) {
+function Programme({ map, pillar, sample, reopened, onSelect }) {
   const a = map.programme;
   const focus = map.cities
     .filter((c) => c.assurance.needsAttention > 0)
@@ -108,6 +110,11 @@ function Programme({ map, pillar, sample, onSelect }) {
           </button>
         </div>
       )}
+      <ReopenedLink count={reopened} />
+      <button type="button" className="abrief-change" onClick={() => updateMap({ change: "pick" })}>
+        <b>What if FIFA changes a requirement?</b>
+        <span>Preview the impact on the map before applying it</span>
+      </button>
       <SampleControl sample={sample} />
     </>
   );
@@ -171,14 +178,14 @@ function City({ city, year, pillar, sample, onSelect }) {
 }
 
 /** The briefing card over the map: programme or the selected city. */
-export default function AssuranceBriefing({ map, selected, pillar, sample, onSelect }) {
+export default function AssuranceBriefing({ map, selected, pillar, sample, reopened = 0, onSelect }) {
   const city = map.cities.find((c) => c.id === selected);
   return (
     <aside className="abrief" aria-live="polite">
       {city ? (
         <City city={city} year={map.year} pillar={pillar} sample={sample} onSelect={onSelect} />
       ) : (
-        <Programme map={map} pillar={pillar} sample={sample} onSelect={onSelect} />
+        <Programme map={map} pillar={pillar} sample={sample} reopened={reopened} onSelect={onSelect} />
       )}
     </aside>
   );

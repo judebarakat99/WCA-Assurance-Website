@@ -2,7 +2,7 @@
 // This module is pure: it decides which catalogue requirements apply to a
 // facility, evaluates submitted values against a criterion, and summarises a
 // facility's assessments. The records themselves live in lib/store/assessments.
-import { FIFA_CATALOGUE } from "@/lib/domain/fifa-catalogue.mjs";
+import { currentRequirements } from "@/lib/domain/requirementVersions.mjs";
 import { FACILITY_REGISTER, capacityRequirement } from "@/lib/domain/facilities.mjs";
 
 export const APPLICABILITY = {
@@ -49,9 +49,9 @@ export function stadiumApplicability(stadium, requirement) {
   return { value: "applicable", reason: requirement.condition };
 }
 
-/** Catalogue requirements with their applicability for one stadium. */
-export function stadiumRequirements(stadium) {
-  return FIFA_CATALOGUE.requirements.map((requirement) => ({
+/** Current requirements (after any applied changes) with their applicability for one stadium. */
+export function stadiumRequirements(stadium, requirements = currentRequirements()) {
+  return requirements.map((requirement) => ({
     requirement,
     key: assessmentKey(stadium.id, requirement),
     applicability: stadiumApplicability(stadium, requirement),

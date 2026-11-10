@@ -2,6 +2,7 @@
 // goView() to the Next router, keeps the tour highlight in step with state
 // changes, and records the 3D twin's events in the audit log.
 import { venueMeta } from "@/lib/domain/data";
+import { getAssessments } from "@/lib/store/assessments";
 import { bridge, ensureLoaded, log, notify, save, tour } from "@/lib/store/state";
 import { applyHL } from "@/lib/tour/highlight";
 
@@ -72,6 +73,7 @@ export function bootRuntime() {
   if (booted) return;
   booted = true;
   ensureLoaded();
+  getAssessments(); // loads requirement versions too
   bridge.render = () => applyHL(false);
   bridge.navigate = navigate;
   connectTwin();

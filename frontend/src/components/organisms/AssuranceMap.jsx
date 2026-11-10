@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import regions from "../../../../data/geo/sa-regions.geo.json" with { type: "json" };
 import { fmtN, pct } from "@/lib/domain/data";
 import { STATUS_LABEL } from "@/lib/domain/facilities.mjs";
+import { OUTCOME_LABEL } from "@/lib/domain/requirementChange.mjs";
 
 // Saudi Arabia's extent ([west, south], [east, north]), from the region data.
 const BOUNDS = [
@@ -70,25 +71,38 @@ const reviewedLine = (a) =>
 
 function paintCityPin(el, city, selected) {
   const a = city.assurance;
+  const imp = city.impact; // set while a requirement change is previewed
+  const count = imp ? imp.reopened : a.needsAttention;
   el.dataset.tone = city.tone;
-  el.dataset.alert = String(a["non-compliant"] > 0);
+  el.dataset.alert = String(imp ? imp.reopened > 0 : a["non-compliant"] > 0);
   el.classList.toggle("sel", selected);
   el.setAttribute("aria-pressed", String(selected));
   el.setAttribute(
     "aria-label",
-    `${city.name}: ${pct(a.assured)}% assured, ${pct(a.coverage)}% assessed, ${a.needsAttention} need attention`,
+    imp
+      ? `${city.name}: ${imp.reopened} would reopen, assured ${pct(imp.assuredBefore)}% to ${pct(imp.assuredAfter)}%`
+      : `${city.name}: ${pct(a.assured)}% assured, ${pct(a.coverage)}% assessed, ${a.needsAttention} need attention`,
   );
   el.querySelector("b").textContent = city.name;
-  el.querySelector("small").textContent = city.dueCount ? reviewedLine(a) : "None due yet";
+  el.querySelector("small").textContent = imp
+    ? imp.reopened
+      ? `${pct(imp.assuredBefore)}% → ${pct(imp.assuredAfter)}%`
+      : imp.stadiums
+        ? "No reopened items"
+        : "Not affected"
+    : city.dueCount
+      ? reviewedLine(a)
+      : "None due yet";
   const badge = el.querySelector(".amap-badge");
-  badge.textContent = a.needsAttention ? String(a.needsAttention) : "";
-  badge.hidden = !a.needsAttention;
+  badge.textContent = count ? String(count) : "";
+  badge.hidden = !count;
 }
 
 function paintStadiumPin(el, s) {
   el.dataset.tone = s.tone;
   el.dataset.due = String(s.due);
-  el.dataset.alert = String(s.due && s.assurance["non-compliant"] > 0);
+  const imp = s.impact; // set (or null) while a requirement change is previewed
+  el.dataset.alert = String(s.due && (imp !== undefined ? imp?.outcome === "reopened" : s.assurance["non-compliant"] > 0));
   el.dataset.approx = String(s.location.accuracy === "approximate");
   el.setAttribute(
     "aria-label",
@@ -115,6 +129,14 @@ function card(title, lines) {
 
 function cityCard(city, year) {
   const a = city.assurance;
+  const imp = city.impact;
+  if (imp)
+    return card(city.name, [
+      [imp.stadiums ? `${imp.reopened} compliant would reopen` : "No stadium affected", imp.reopened ? "bad" : "muted"],
+      [imp.flipped ? `${imp.flipped} in review would now fail` : null, "warn"],
+      [imp.stadiums ? `Assured ${pct(imp.assuredBefore)}% → ${pct(imp.assuredAfter)}%` : null],
+      [year ? `${city.dueCount} of ${city.stadiums.length} stadiums due by ${year}` : null, "muted"],
+    ]);
   return card(city.name, [
     [`${reviewedLine(a)} · ${pct(a.coverage)}% assessed`],
     [a["non-compliant"] ? `${a["non-compliant"]} non-compliant` : null, "bad"],
@@ -126,6 +148,16 @@ function cityCard(city, year) {
 function stadiumCard(s, year) {
   const a = s.assurance;
   const approx = s.location.accuracy === "approximate";
+  if (s.impact !== undefined) {
+    const r = s.impact;
+    return card(s.name, [
+      [`${STATUS_LABEL[s.status]} · due ${s.completionYear}`, "muted"],
+      [!s.due ? `Not due complete by ${year}` : null, "muted"],
+      [r ? OUTCOME_LABEL[r.outcome] : "Not affected by this change", r?.outcome === "reopened" ? "bad" : r?.flipped ? "warn" : null],
+      [r?.value != null ? `Value on record ${r.value}: ${r.oldCheck} before, ${r.newCheck} after` : null, "muted"],
+      [approx ? "Approximate location" : "Location from OpenStreetMap", "fine muted"],
+    ]);
+  }
   return card(s.name, [
     [`${STATUS_LABEL[s.status]} · due ${s.completionYear} · ${fmtN(s.grossCapacity)} seats`, "muted"],
     [!s.due ? `Not due complete by ${year}` : null, "muted"],

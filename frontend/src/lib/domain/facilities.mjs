@@ -3,7 +3,7 @@
 // that applies to its highest match, and checks the declared capacity
 // against it. A declared check is not an assessment: evidence is still pending.
 import register from "../../../../data/facilities/register.json" with { type: "json" };
-import { FIFA_CATALOGUE } from "@/lib/domain/fifa-catalogue.mjs";
+import { currentRequirement } from "@/lib/domain/requirementVersions.mjs";
 
 export const FACILITY_REGISTER = register;
 
@@ -32,7 +32,7 @@ const CAPACITY_REQUIREMENT = {
   "round-of-32": "F34-ST-CAP-01",
 };
 
-const requirementById = (id) => FIFA_CATALOGUE.requirements.find((r) => r.id === id);
+const requirementById = (id) => currentRequirement(id);
 const cityById = (id) => register.hostCities.find((c) => c.id === id);
 
 /** The capacity requirement that applies to a stadium, from its highest match. */

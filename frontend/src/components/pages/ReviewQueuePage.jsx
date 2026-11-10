@@ -23,6 +23,7 @@ const STATUS_OPTIONS = [
   ["", "Everything"],
   ["evidence-submitted", "Awaiting review"],
   ["non-compliant", "Non-compliant"],
+  ["reopened", "Reopened by a change"],
 ];
 
 // City, area and year are shared with the assurance map (ui.map), so a filter
@@ -146,6 +147,12 @@ function Item({ item }) {
       <div className="rq-what">
         <div>
           <span className="mono small">{requirement.id}</span> <b>{requirement.title}</b>
+          {item.reopenedBy && (
+            <>
+              {" "}
+              <StatusPill tone="bad">Reopened by {item.reopenedBy}</StatusPill>
+            </>
+          )}
           {item.applicability.value === "provisional" && (
             <>
               {" "}

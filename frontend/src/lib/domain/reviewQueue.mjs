@@ -27,7 +27,9 @@ function reasonOf(record) {
 
 /**
  * Items needing attention, filtered. Every filter is optional:
- * cityId, category, year (stadiums due complete by then), status.
+ * cityId, category, year (stadiums due complete by then), status
+ * ("evidence-submitted", "non-compliant", or "reopened": back in review
+ * because a requirement change made compliant evidence fail).
  */
 export function reviewQueue(records, { cityId = null, category = null, year = null, status = null } = {}) {
   const cities = Object.fromEntries(FACILITY_REGISTER.hostCities.map((c) => [c.id, c]));
@@ -40,7 +42,8 @@ export function reviewQueue(records, { cityId = null, category = null, year = nu
       if (category && row.requirement.category !== category) continue;
       const record = records[row.key];
       if (!record || !QUEUE_STATUSES.includes(record.status)) continue;
-      if (status && record.status !== status) continue;
+      if (status === "reopened" ? !(record.reopenedBy && record.status === "evidence-submitted") : status && record.status !== status)
+        continue;
       const reason = reasonOf(record);
       items.push({
         key: row.key,
@@ -51,6 +54,7 @@ export function reviewQueue(records, { cityId = null, category = null, year = nu
         record,
         evidence: record.evidence.at(-1) || null,
         reason,
+        reopenedBy: record.status === "evidence-submitted" ? record.reopenedBy || null : null,
       });
     }
   }
