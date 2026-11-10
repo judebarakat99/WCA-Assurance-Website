@@ -37,34 +37,32 @@ NEXT_PUBLIC_BASE_PATH=/WCA-Assurance-Website npm run build
 
 ## Structure
 
-- `frontend/app/`: one App Router page per view — `/readiness`, `/control-tower`
-  (with `/control-tower/register`, `/control-tower/gates`, and a
-  `/control-tower/[venueId]` detail page per venue), `/decisions-actions`,
-  `/design-review`, `/requirements-evidence`, and `/dossiers`. The home page
-  shows the Readiness Room and redirects legacy `#hash` bookmarks.
-- `frontend/app/layout.jsx`: document metadata, shared header, and overlay roots.
-- `frontend/app/globals.css`: styling. Saudi 2034 brand tokens (light and dark)
-  sit at the top; every rule below uses the tokens, not colour literals. The
-  header toggle (`components/ThemeToggle.jsx`, `lib/theme.mjs`) saves the
-  choice; without one the site follows the OS setting.
-- `frontend/lib/`: shared modules split from the original `assurance.js` —
-  `data.js` (reference data and helpers), `state.js` (store with localStorage
-  persistence), `scoring.js`, `forecast.js` (Monte Carlo), `actions.js`
-  (validation, escalation, decisions, change impact), and `engine.js`
-  (client runtime: rendering, routing bridge, delegated events).
-- `frontend/components/Header.jsx`: shared navigation header with route tabs.
-- `frontend/components/AppView.jsx` / `Home.jsx`: client mount points per page.
-- `frontend/components/views/`: page-specific view modules (tower, readiness,
-  register, gates, venue detail, actions, requirements, dossier) plus shared
-  cards, the obligation drawer, the guided demos, and the AI assistant.
-- `frontend/components/LegacyScripts.jsx`: ordered browser-only script loading
-  for the 3D twin.
-- `frontend/public/scripts/`: stadium twin and menu logic.
-- `frontend/public/vendor/`: original Three.js r128 and OrbitControls, retaining licenses.
+Application code lives in `frontend/src/` and is imported through the `@/`
+alias (`frontend/jsconfig.json`). Components follow atomic design.
+
+- `src/app/`: App Router routes only (thin `page.jsx` files, `layout.jsx`,
+  metadata). Routes: `/overview`, `/readiness`, `/control-tower` (with
+  `/register`, `/gates` and `/[venueId]`), `/decisions-actions`,
+  `/design-review`, `/requirements-evidence`, `/dossiers`, `/compliance`.
+- `src/components/atoms/`, `molecules/`, `organisms/`, `templates/`: React
+  components, smallest to largest. Pages compose templates and organisms.
+- `src/lib/domain/`: pure programme logic — reference data, scoring, the
+  Monte Carlo forecast, actions (validation, escalation, decisions, change
+  impact) and the sourced FIFA catalogue.
+- `src/lib/store/`: client state with localStorage persistence.
+- `src/lib/assistant/`: assistant API client and context builder.
+- `src/legacy/`: the original string-template views and the runtime that
+  renders them (`engine.js`). Pages move out of here as they are rebuilt as
+  React components; the folder is deleted when the last one moves.
+- `src/app/globals.css`: Saudi 2034 brand tokens (light and dark) at the top;
+  rules below use tokens, not colour literals. The header toggle saves the
+  theme; without a saved choice the site follows the OS setting.
+- `public/scripts/`, `public/vendor/`: 3D stadium twin, menu logic, Three.js
+  r128 and OrbitControls (licenses retained).
 - Fonts: Barlow (brand typeface) from `@fontsource/barlow`; IBM Plex Mono in
-  `frontend/public/fonts/` (SIL Open Font License).
-- `frontend/public/Assets/`: images, served at `/Assets/...`, including the
-  Saudi 2034 logo (`saudi-2034-logo.svg`, viewBox cropped to the artwork).
+  `public/fonts/` (SIL Open Font License).
+- `public/Assets/`: images, including the Saudi 2034 logo.
+- `tests/`: Node test runner; `tests/resolve.mjs` mirrors the `@/` alias.
 - `Archive/`: historical standalone HTML snapshots.
 
 

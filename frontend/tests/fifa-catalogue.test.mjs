@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { FIFA_CATALOGUE, fifaRequirementRecords, criterionLabel } from "../lib/fifa-catalogue.mjs";
-import { fifaLibrary } from "../components/views/fifaLibrary.js";
+import { FIFA_CATALOGUE, fifaRequirementRecords, criterionLabel } from "../src/lib/domain/fifa-catalogue.mjs";
+import { fifaLibrary } from "../src/legacy/views/fifaLibrary.js";
 
 test("catalogue references resolve to official sources and explicit applicability", () => {
   const records = fifaRequirementRecords();

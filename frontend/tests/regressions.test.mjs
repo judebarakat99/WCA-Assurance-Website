@@ -1,17 +1,17 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { validateHeaderValue } from "node:http";
-import { publicAssetUrl } from "../lib/assets.mjs";
+import { publicAssetUrl } from "../src/lib/assets.mjs";
 import {
   normalizeDecisionRecords,
   decisionOptionLabel,
   hasDecisionForecast,
-} from "../lib/decision-records.mjs";
-import { DECISIONS } from "../lib/data.js";
-import { load, S, seed } from "../lib/state.js";
-import { viewActions } from "../components/views/actionsView.js";
-import { invalidateForecasts } from "../lib/forecast.js";
-import { decide } from "../lib/actions.js";
+} from "../src/lib/domain/decision-records.mjs";
+import { DECISIONS } from "../src/lib/domain/data.js";
+import { load, S, seed } from "../src/lib/store/state.js";
+import { viewActions } from "../src/legacy/views/actionsView.js";
+import { invalidateForecasts } from "../src/lib/domain/forecast.js";
+import { decide } from "../src/lib/domain/actions.js";
 
 function loadSnapshot(snapshot) {
   const serialized = JSON.stringify(snapshot);
