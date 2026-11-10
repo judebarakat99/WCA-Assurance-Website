@@ -7,6 +7,7 @@ import "@/styles/tokens.css";
 import "@/styles/base.css";
 import "@/styles/components.css";
 import Header from "@/components/organisms/Header";
+import AppRuntime from "@/components/providers/AppRuntime";
 import LegacyScripts from "@/legacy/LegacyScripts";
 import { themeInitScript } from "@/lib/theme.mjs";
 
@@ -41,6 +42,7 @@ export default function RootLayout({ children }) {
         <div id="toastRoot"></div>
         <div id="tourRoot"></div>
         <div id="aiRoot"></div>
+        <AppRuntime />
         <LegacyScripts />
       </body>
     </html>

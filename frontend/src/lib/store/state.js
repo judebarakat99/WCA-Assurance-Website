@@ -224,11 +224,34 @@ export const tour = {
 // AI assistant runtime state (logic lives in components/views/ai.js).
 export const ai = { open: false, msgs: [] };
 
-// ---------- render & navigation bridge (set by lib/engine.js) ----------
-// Views and actions call rerender()/goView() instead of touching the router
-// directly, which keeps these modules free of framework dependencies.
+// ---------- subscriptions ----------
+// The programme model is a mutable object changed in place by the domain
+// actions. It is exposed to React as an external store: every change bumps a
+// version number, and useProgramme() (useSyncExternalStore) re-renders the
+// components that read it. Domain code calls rerender() after a change.
+let version = 0;
+const listeners = new Set();
+export function subscribe(listener) {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+export function getVersion() {
+  return version;
+}
+export function ensureLoaded() {
+  if (!S) load();
+}
+export function notify() {
+  version++;
+  listeners.forEach((listener) => listener());
+}
+
+// ---------- render & navigation bridge ----------
+// bridge.render repaints pages still rendered by src/legacy/engine.js;
+// bridge.navigate is set by the app runtime to the Next router.
 export const bridge = { render: null, navigate: null };
 export function rerender() {
+  notify();
   if (bridge.render) bridge.render();
 }
 // goView accepts the legacy hash keys ("tower", "register", "venue-RUH", ...)

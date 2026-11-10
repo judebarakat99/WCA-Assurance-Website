@@ -11,7 +11,7 @@ import {
   addDays,
   daysBetween,
 } from "@/lib/domain/data";
-import { S } from "@/lib/store/state";
+import { S, getVersion } from "@/lib/store/state";
 import { venueState, gateScope, matOf, issueFor } from "@/lib/domain/scoring";
 
 export function rng(seed) {
@@ -132,12 +132,17 @@ export function forecast(id, scn, runs) {
   res.cls = res.late50 > 0 ? "p-bad" : res.late80 > 0 ? "p-warn" : "p-good";
   return res;
 }
+// Cached per store version, so any rerender() recomputes the forecasts.
 let FC = null;
+let FCversion = -1;
 export function invalidateForecasts() {
   FC = null;
 }
 export function forecasts() {
-  if (!FC) FC = VENUES.map((m) => forecast(m.id)).filter(Boolean);
+  if (!FC || FCversion !== getVersion()) {
+    FC = VENUES.map((m) => forecast(m.id)).filter(Boolean);
+    FCversion = getVersion();
+  }
   return FC;
 }
 export function projection(id) {

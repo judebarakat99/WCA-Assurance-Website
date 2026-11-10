@@ -1,16 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { mountView } from "@/legacy/engine";
 
-// Thin client mount point: each App Router page renders this with its view key.
-// The legacy-style engine renders the view's HTML synchronously into #view and
-// keeps the URL in sync through the Next router (basePath-safe).
+// Mount point for pages not yet rebuilt in React: the legacy engine renders
+// the view's HTML into #view. Delete this file when src/legacy is gone.
 export default function AppView({ view, param = null }) {
-  const router = useRouter();
   useEffect(() => {
-    mountView(view, param, (path, opts) => router.push(path, opts));
-  }, [view, param, router]);
+    mountView(view, param);
+  }, [view, param]);
   return <main className="wrap" id="view"></main>;
 }

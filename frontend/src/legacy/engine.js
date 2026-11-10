@@ -1,7 +1,9 @@
-// ---------- client runtime: routing bridge, render loop, delegated events ----------
-// Each App Router page mounts its view here. Rendering stays synchronous so the
-// guided demos and scenario buttons behave exactly as in the original SPA; the
-// Next router is only asked to keep the URL in sync afterwards.
+// ---------- legacy runtime: string-template views and delegated events ----------
+// Pages not yet rebuilt as React components are rendered here into <main id="view">.
+// bootRuntime() runs once (from components/templates/AppRuntime) and installs
+// the document-level listeners, the assistant and the 3D twin hooks. State
+// changes go through rerender(), which notifies React and repaints the legacy
+// page if one is showing. Remove a view from LEGACY_VIEWS when it moves to React.
 import {
   GATES,
   LEVELS,
@@ -16,7 +18,6 @@ import {
 } from "@/lib/domain/data";
 import {
   S,
-  load,
   save,
   log,
   resetS,
@@ -25,6 +26,7 @@ import {
   bridge,
   rerender,
   goView,
+  ensureLoaded,
 } from "@/lib/store/state";
 import { venueState, gateEval } from "@/lib/domain/scoring";
 import { invalidateForecasts } from "@/lib/domain/forecast";
@@ -105,7 +107,7 @@ function viewKeyFor(h) {
   return h;
 }
 
-const current = { view: "overview", param: null };
+const current = { view: null, param: null };
 let routerPush = null;
 let booted = false;
 
@@ -115,13 +117,19 @@ function navigate(h) {
     navigate("tower");
     return;
   }
-  current.view = /^venue-/.test(key) ? "venue" : key;
-  current.param = /^venue-/.test(key) ? key.slice(6) : null;
-  render();
+  const view = /^venue-/.test(key) ? "venue" : key;
+  if (LEGACY_VIEWS.has(view)) {
+    current.view = view;
+    current.param = /^venue-/.test(key) ? key.slice(6) : null;
+    renderLegacy();
+  } else {
+    current.view = null;
+  }
   if (!tour.active) window.scrollTo(0, 0);
   if (routerPush) routerPush(pathFor(h), { scroll: false });
 }
 
+// Views still rendered from HTML strings. "twin" and "venue" are handled below.
 const VIEW_FNS = {
   overview: viewOverview,
   readiness: viewReadiness,
@@ -133,10 +141,14 @@ const VIEW_FNS = {
   register: viewRegister,
   gates: viewGates,
 };
+const LEGACY_VIEWS = new Set([...Object.keys(VIEW_FNS), "twin", "venue"]);
 
-export function render() {
+function renderLegacy() {
   const v = document.getElementById("view");
-  if (!v || !S) return;
+  if (!v || !S || !LEGACY_VIEWS.has(current.view)) {
+    applyHL(false);
+    return;
+  }
   invalidateForecasts();
   const today = $("#today");
   if (today) today.textContent = fmtD(S.today);
@@ -156,8 +168,7 @@ export function render() {
     applyHL(false);
     return;
   }
-  const fn = VIEW_FNS[current.view] || viewReadiness;
-  v.innerHTML = fn();
+  v.innerHTML = VIEW_FNS[current.view]();
   applyHL(false);
 }
 
@@ -174,27 +185,44 @@ function waitForTwin() {
         if (el) el.outerHTML = intakeCard();
       },
     });
-    if (current.view === "twin" || current.view === "tower") render();
+    if (current.view === "twin" || current.view === "tower") renderLegacy();
     return;
   }
   setTimeout(waitForTwin, 200);
 }
 
-export function mountView(viewKey, param, push) {
+// Boots the shared runtime once per page load. Safe to call repeatedly.
+export function bootRuntime() {
+  if (booted) return;
+  booted = true;
+  ensureLoaded();
+  bridge.render = renderLegacy;
+  bridge.navigate = navigate;
+  installListeners();
+  mountAI();
+  waitForTwin();
+  renderDrawer();
+}
+
+export function setRouterPush(push) {
   routerPush = push;
+}
+
+// Called by legacy/AppView when a page still rendered here mounts.
+export function mountView(viewKey, param) {
+  bootRuntime();
   current.view = viewKey;
   current.param = param || null;
-  if (!booted) {
-    booted = true;
-    load();
-    bridge.render = render;
-    bridge.navigate = navigate;
-    installListeners();
-    mountAI();
-    waitForTwin();
-  }
-  render();
+  renderLegacy();
   renderDrawer();
+}
+
+// Called by React pages so the legacy renderer leaves the page alone.
+export function mountReactView() {
+  bootRuntime();
+  current.view = null;
+  current.param = null;
+  applyHL(false);
 }
 
 // ---------- delegated events (behaviour preserved from the original app) ----------
@@ -267,12 +295,12 @@ function installListeners() {
     }
     if (t.dataset.ovVenue) {
       ovSelect(t.dataset.ovVenue);
-      render();
+      rerender();
       return;
     }
     if (t.hasAttribute("data-ov-clear")) {
       ovSelect(null);
-      render();
+      rerender();
       return;
     }
     if (t.dataset.aiq) {
@@ -327,7 +355,7 @@ function installListeners() {
           : `Fail: ${showVal(o, e.value)} does not meet ${critText(o)}. The owner's "complete" is overturned, status set to Rejected, corrective action opened with a ${SLA[o.crit]}-day SLA.`,
       };
       save();
-      render();
+      rerender();
       renderDrawer();
       return;
     }
@@ -338,7 +366,7 @@ function installListeners() {
         msg: "Verified by the compliance office. This obligation now counts fully toward assured readiness.",
       };
       save();
-      render();
+      rerender();
       renderDrawer();
       return;
     }
@@ -352,21 +380,21 @@ function installListeners() {
         ui.compliance.authority === t.dataset.compAuthority
           ? "all"
           : t.dataset.compAuthority;
-      render();
+      rerender();
       return;
     }
 
     if (t.dataset.compFamily) {
       ui.compliance.family = t.dataset.compFamily;
       ui.compliance.venue = null;
-      render();
+      rerender();
       window.scrollTo(0, 0);
       return;
     }
 
     if (t.dataset.compVenue) {
       ui.compliance.venue = t.dataset.compVenue;
-      render();
+      rerender();
       window.scrollTo(0, 0);
       return;
     }
@@ -374,7 +402,7 @@ function installListeners() {
     if (t.hasAttribute("data-comp-back")) {
       ui.compliance.family = null;
       ui.compliance.venue = null;
-      render();
+      rerender();
       window.scrollTo(0, 0);
       return;
     }
@@ -431,13 +459,13 @@ function installListeners() {
     if (t.dataset.unrecover) {
       S.scn.recovery = S.scn.recovery.filter((x) => x !== t.dataset.unrecover);
       save();
-      render();
+      rerender();
       return;
     }
     if (t.id === "scReset") {
       S.scn = { prod: 1, fifa: false, recovery: [] };
       save();
-      render();
+      rerender();
       return;
     }
     if (t.dataset.dossier) {
@@ -480,7 +508,7 @@ function installListeners() {
         closeDrawer();
         window.WNSTwin && window.WNSTwin.reset();
         ui.filters = { venue: "all", family: "all", state: "all", q: "" };
-        render();
+        rerender();
         toast("Sample data restored.");
       } else {
         t.dataset.confirm = "1";
@@ -518,13 +546,13 @@ function installListeners() {
     if (t.id === "decoRun") {
       ui.decoInput = $("#decoIn").value;
       ui.decoOut = decompose(ui.decoInput);
-      render();
+      rerender();
       return;
     }
     if (t.id === "decoSample") {
       ui.decoInput = SAMPLE_CLAUSE;
       ui.decoOut = null;
-      render();
+      rerender();
       return;
     }
     if (t.id === "decoAdd") {
@@ -589,33 +617,33 @@ function installListeners() {
     const t = ev.target;
     if (t.id === "fVenue") {
       ui.filters.venue = t.value;
-      render();
+      rerender();
     }
     if (t.id === "fFamily") {
       ui.filters.family = t.value;
-      render();
+      rerender();
     }
     if (t.id === "fState") {
       ui.filters.state = t.value;
-      render();
+      rerender();
     }
     if (t.id === "chSel") {
       ui.selChange = t.value;
-      render();
+      rerender();
     }
     if (t.id === "scProd") {
       S.scn.prod = Number(t.value);
       save();
-      render();
+      rerender();
     }
     if (t.id === "scFifa") {
       S.scn.fifa = t.checked;
       save();
-      render();
+      rerender();
     }
     if (t.id === "dvSel") {
       ui.dossierVenue = t.value;
-      render();
+      rerender();
     }
     if (t.id === "decoV") {
       ui.decoVenue = t.value;
@@ -667,7 +695,7 @@ function installListeners() {
     if (ev.target.id === "fQ") {
       ui.filters.q = ev.target.value;
       const pos = ev.target.selectionStart;
-      render();
+      rerender();
       const el = $("#fQ");
       el.focus();
       el.setSelectionRange(pos, pos);
