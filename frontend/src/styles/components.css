@@ -3478,6 +3478,24 @@ details.fc-table summary {
 }
 
 /* ---------- Compliance intake ---------- */
+.deco-in {
+  margin-top: 6px;
+}
+.deco-head {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.process-row {
+  margin-top: 40px;
+}
+.impact-ring {
+  margin: 6px 0 14px;
+}
+.impact-note {
+  margin: 16px 0 14px;
+}
 .req-cols {
   grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
   align-items: start;

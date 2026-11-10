@@ -88,6 +88,14 @@ h3 {
 .clickable {
   cursor: pointer;
 }
+.mt-lg {
+  margin-top: 24px;
+}
+label.f.inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
 .mono {
   font-family: var(--f-mono);
   font-size: 12.5px;

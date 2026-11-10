@@ -45,13 +45,6 @@ import {
 } from "@/lib/domain/actions";
 import { viewReadiness } from "@/legacy/views/readiness";
 import {
-  viewRequirements,
-  paintIntake,
-  intakeRun,
-  intakeAdd,
-  decoAdd,
-} from "@/legacy/views/requirements";
-import {
   openDrawer,
   closeDrawer,
   renderDrawer,
@@ -125,7 +118,6 @@ function navigate(h) {
 // Views still rendered from HTML strings. "twin" is handled below.
 const VIEW_FNS = {
   readiness: viewReadiness,
-  requirements: viewRequirements,
 };
 const LEGACY_VIEWS = new Set([...Object.keys(VIEW_FNS), "twin"]);
 
@@ -223,17 +215,10 @@ function installListeners() {
       }
     }
     const t = ev.target.closest(
-      "button,[data-obl],[data-close],[data-ai-close],#evDrop",
+      "button,[data-obl],[data-close],[data-ai-close]",
     );
 
     if (!t) return;
-    if (t.id === "evDrop") {
-      if (ev.target.id !== "evUpFile") {
-        const f = document.getElementById("evUpFile");
-        if (f) f.click();
-      }
-      return;
-    }
     if (t.id === "aiFab") {
       ai.open = !ai.open;
       const p = document.getElementById("aiPanel");
@@ -277,23 +262,6 @@ function installListeners() {
     }
     if (t.dataset.venueDetail) {
       goView("venue-" + t.dataset.venueDetail);
-      return;
-    }
-    if (t.id === "evProcess") {
-      intakeRun();
-      return;
-    }
-    if (t.id === "evAddBtn") {
-      intakeAdd();
-      return;
-    }
-    if (t.id === "evIntakeReset") {
-      ui.intake.step = -1;
-      ui.intake.running = false;
-      ui.intake.result = null;
-      ui.intake.added = false;
-      ui.intake.fileName = "";
-      paintIntake();
       return;
     }
     if (t.dataset.tour) {
@@ -413,26 +381,6 @@ function installListeners() {
       }
       return;
     }
-    if (t.id === "applyChange") {
-      applyChange();
-      return;
-    }
-    if (t.id === "decoRun") {
-      ui.decoInput = $("#decoIn").value;
-      ui.decoOut = decompose(ui.decoInput);
-      rerender();
-      return;
-    }
-    if (t.id === "decoSample") {
-      ui.decoInput = SAMPLE_CLAUSE;
-      ui.decoOut = null;
-      rerender();
-      return;
-    }
-    if (t.id === "decoAdd") {
-      decoAdd();
-      return;
-    }
   });
   document.addEventListener("mousemove", (ev) => {
     const tip = document.querySelector(".fc-tip");
@@ -454,45 +402,9 @@ function installListeners() {
     if (ev.key === "Escape" && ui.drawerId) closeDrawer();
     if (ev.key === "Enter" && ev.target.matches("tr[data-obl]"))
       openDrawer(ev.target.dataset.obl);
-    if ((ev.key === "Enter" || ev.key === " ") && ev.target.id === "evDrop") {
-      ev.preventDefault();
-      const f = document.getElementById("evUpFile");
-      if (f) f.click();
-    }
-  });
-  document.addEventListener("dragover", (ev) => {
-    const z = ev.target.closest && ev.target.closest("#evDrop");
-    if (z) {
-      ev.preventDefault();
-      z.classList.add("drag");
-    }
-  });
-  document.addEventListener("dragleave", (ev) => {
-    const z = ev.target.closest && ev.target.closest("#evDrop");
-    if (z) z.classList.remove("drag");
-  });
-  document.addEventListener("drop", (ev) => {
-    const z = ev.target.closest && ev.target.closest("#evDrop");
-    if (!z) return;
-    ev.preventDefault();
-    z.classList.remove("drag");
-    const f =
-      ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files[0];
-    if (f) {
-      ui.intake.fileName = f.name;
-      ui.intake.step = -1;
-      ui.intake.running = false;
-      ui.intake.result = null;
-      ui.intake.added = false;
-      paintIntake();
-    }
   });
   document.addEventListener("change", (ev) => {
     const t = ev.target;
-    if (t.id === "chSel") {
-      ui.selChange = t.value;
-      rerender();
-    }
     if (t.id === "scProd") {
       S.scn.prod = Number(t.value);
       save();
@@ -503,40 +415,6 @@ function installListeners() {
       save();
       rerender();
     }
-    if (t.id === "decoV") {
-      ui.decoVenue = t.value;
-    }
-    if (t.id === "evVenueSel") {
-      ui.intake.venue = t.value;
-      ui.intake.target = "";
-      ui.intake.step = -1;
-      ui.intake.running = false;
-      ui.intake.result = null;
-      ui.intake.added = false;
-      paintIntake();
-    }
-    if (t.id === "evTargetSel") {
-      ui.intake.target = t.value;
-      ui.intake.step = -1;
-      ui.intake.running = false;
-      ui.intake.result = null;
-      ui.intake.added = false;
-      paintIntake();
-    }
-    if (t.id === "evTypeSel") {
-      ui.intake.etype = Number(t.value);
-    }
-    if (t.id === "evUpFile") {
-      const f = t.files && t.files[0];
-      if (f) {
-        ui.intake.fileName = f.name;
-        ui.intake.step = -1;
-        ui.intake.running = false;
-        ui.intake.result = null;
-        ui.intake.added = false;
-        paintIntake();
-      }
-    }
     if (t.id === "tourVoice") {
       setTourVoice(t.checked);
       return;
@@ -544,14 +422,6 @@ function installListeners() {
     if (t.id === "tourVoiceSel") {
       setTourVoiceName(t.value);
       return;
-    }
-    if (t.dataset.keep !== undefined && ui.decoOut) {
-      ui.decoOut[Number(t.dataset.keep)].keep = t.checked;
-    }
-  });
-  document.addEventListener("input", (ev) => {
-    if (ev.target.id === "decoIn") {
-      ui.decoInput = ev.target.value;
     }
   });
 }
