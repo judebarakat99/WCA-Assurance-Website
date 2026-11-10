@@ -134,7 +134,7 @@ export default function Header() {
               <div className="pop r">
                 <small>Guided</small>
                 <button type="button" id="execStart" className="tourbtn" onClick={() => startTour(ASSURANCE)}>
-                  Assurance demo · 3 min
+                  Assurance demo · 4 min
                 </button>
                 <button type="button" id="tourStart" onClick={() => startTour(ASSURANCE_FULL)}>
                   Full assurance demo

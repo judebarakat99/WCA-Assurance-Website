@@ -4,8 +4,17 @@
 // Figures are read from the live (sample) data, so the script stays true.
 import { pct } from "@/lib/domain/data";
 import { assuranceMap } from "@/lib/domain/cityAssurance.mjs";
+import { criterionLabel } from "@/lib/domain/fifa-catalogue.mjs";
+import { changeImpact } from "@/lib/domain/requirementChange.mjs";
+import { scenarioById } from "@/lib/domain/requirementVersions.mjs";
 import { queueCounts, reviewQueue } from "@/lib/domain/reviewQueue.mjs";
-import { getAssessments, loadSampleAssessments, reviewAssessment } from "@/lib/store/assessments";
+import {
+  applyRequirementChange,
+  getAppliedChanges,
+  getAssessments,
+  loadSampleAssessments,
+  reviewAssessment,
+} from "@/lib/store/assessments";
 import { goView, resetMapUi, rerender, updateMap } from "@/lib/store/state";
 import { EXEC } from "@/lib/tour/steps";
 
@@ -16,7 +25,8 @@ const city = (m, id = CITY) => m.cities.find((c) => c.id === id);
 const n = (x, one, many = `${one}s`) => `${x} ${x === 1 ? one : many}`;
 
 // What the demo decided, so stepping back and forth does not decide twice.
-const demo = { item: null, before: null };
+const demo = { item: null, before: null, applied: null };
+const CHANGE = "CHG-LUX-2000";
 
 /** The first item awaiting review in the demo city whose evidence meets its criterion. */
 function pickItem() {
@@ -36,6 +46,7 @@ const OPENING = [
       resetMapUi();
       demo.item = null;
       demo.before = null;
+      demo.applied = null;
       rerender();
       go("home");
       return ".abrief";
@@ -139,13 +150,48 @@ const OPENING = [
   },
 ];
 
+// Spoken criteria: "> 1500 lux" → "above 1500 lux".
+const spoken = (c) =>
+  criterionLabel(c).replace(/^> /, "above ").replace(/^≥ /, "at least ").replace(/^< /, "below ").replace(/^≤ /, "at most ");
+
+const CHANGE_STEPS = [
+  {
+    title: "When FIFA changes the rules",
+    run: () => {
+      home({ city: null, pillar: null, year: 2034, change: demo.applied ? null : CHANGE });
+      return ".abrief";
+    },
+    say: () => {
+      const scenario = scenarioById(CHANGE);
+      const impact = demo.applied || changeImpact(scenario, getAssessments());
+      const hit = impact.byCity.filter((c) => c.reopened).length;
+      const failing = impact.rows.filter((r) => r.flipped && r.outcome === "rechecked").length;
+      return `Requirements change. Suppose FIFA raised the lighting for 8K broadcast, from ${spoken(impact.before.criterion)} to ${spoken(impact.after.criterion)}. This is a hypothetical change, not an announced one. Before anything is applied, the map shows what it would do: ${n(impact.counts.reopened, "compliant item")} would reopen, in ${n(hit, "city", "cities")}, and ${n(failing, "item")} already in review would now fail.`;
+    },
+  },
+  {
+    title: "Re-checked, and back in the queue",
+    run: () => {
+      if (!demo.applied && !getAppliedChanges().some((c) => c.changeId === CHANGE)) demo.applied = applyRequirementChange(CHANGE);
+      updateMap({ city: null, pillar: null, change: null });
+      go("review?status=reopened");
+      return ".rq-list";
+    },
+    say: () => {
+      const i = demo.applied;
+      if (!i) return "The change is already applied; its reopened items are waiting here.";
+      return `Applying it moves the requirement to version ${i.after.version}. Every stadium's evidence is checked again against the new criterion, and the ${n(i.counts.reopened, "item")} that no longer pass are back in the review queue, each labelled with the change that reopened it. Nobody has to find them.`;
+    },
+  },
+];
+
 const CLOSING = {
   title: "Proven, not declared",
   run: () => {
-    home({ city: null, pillar: null, year: 2034, recenter: Date.now() });
+    home({ city: null, pillar: null, year: 2034, change: null, recenter: Date.now() });
     return ".abrief";
   },
-  say: "Every FIFA requirement, checked for every stadium, and counted only when the evidence is accepted. From the whole country down to a single requirement, and back. That is what the proof of concept delivers.",
+  say: "Every FIFA requirement, checked for every stadium, and counted only when the evidence is accepted. From the whole country down to a single requirement, and back, and re-checked whenever the rules change. That is what the proof of concept delivers.",
 };
 
 const DEEPER = [
@@ -173,6 +219,6 @@ const DEEPER = [
   ...EXEC.filter((s) => ["Designs checked before they are built", "Fixed, re-checked, passed"].includes(s.title)),
 ];
 
-/** Short assurance demo (about 3 minutes) and the full one. */
-export const ASSURANCE = [...OPENING, CLOSING];
-export const ASSURANCE_FULL = [...OPENING, ...DEEPER, CLOSING];
+/** Short assurance demo (about 4 minutes) and the full one. */
+export const ASSURANCE = [...OPENING, ...CHANGE_STEPS, CLOSING];
+export const ASSURANCE_FULL = [...OPENING, ...CHANGE_STEPS, ...DEEPER, CLOSING];

@@ -23,7 +23,7 @@ test("every assurance step highlights something and narrates real figures", () =
       assert.doesNotMatch(s.text, /undefined|NaN|null/, s.title);
     }
   }
-  assert.ok(ASSURANCE.length <= 10);
+  assert.ok(ASSURANCE.length <= 12);
   assert.ok(ASSURANCE_FULL.length > ASSURANCE.length);
 });
 
@@ -47,4 +47,25 @@ test("tour destinations resolve to app paths", () => {
   assert.equal(pathFor("review?city=riyadh"), "/review?city=riyadh");
   assert.equal(pathFor("facility-neom"), "/facilities/neom");
   assert.equal(pathFor("venue-JED"), "/control-tower/JED");
+});
+
+test("the change steps preview first, then apply once and fill the queue", async () => {
+  const { getAppliedChanges } = await import("@/lib/store/assessments");
+  const { currentRequirement } = await import("@/lib/domain/requirementVersions.mjs");
+  ASSURANCE[0].run();
+  const preview = ASSURANCE.findIndex((s) => s.title === "When FIFA changes the rules");
+  for (const st of ASSURANCE.slice(1, preview + 1)) st.run();
+  assert.equal(ui.map.change, "CHG-LUX-2000");
+  assert.equal(getAppliedChanges().length, 0); // preview applies nothing
+  assert.match(say(ASSURANCE[preview]), /would reopen/);
+  const apply = ASSURANCE[preview + 1];
+  apply.run();
+  assert.equal(currentRequirement("FL-A-EV-AVG").version, 2);
+  const reopened = reviewQueue(getAssessments(), { status: "reopened" }).length;
+  assert.ok(reopened > 0);
+  assert.match(say(apply), new RegExp(`${reopened} items?`));
+  apply.run(); // again: no second application
+  assert.equal(getAppliedChanges().length, 1);
+  ASSURANCE.at(-1).run();
+  assert.equal(ui.map.change, null);
 });
