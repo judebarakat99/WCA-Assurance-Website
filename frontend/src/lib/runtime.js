@@ -8,6 +8,7 @@ import { applyHL } from "@/lib/tour/highlight";
 // View keys used by the domain and the tour, mapped to App Router paths.
 export const PATHS = {
   home: "/",
+  review: "/review",
   overview: "/overview",
   readiness: "/readiness",
   tower: "/control-tower",
@@ -26,11 +27,17 @@ const ALIAS = {
   decompose: "requirements",
 };
 
-/** Path for a view key; "venue-<id>" opens that venue's detail page. */
+/**
+ * Path for a view key; "venue-<id>" opens a simulation venue, "facility-<id>"
+ * a stadium's assessment page. A "?query" suffix is kept ("review?city=riyadh").
+ */
 export function pathFor(key) {
-  const k = ALIAS[key] || key;
-  if (k.startsWith("venue-")) return `/control-tower/${k.slice(6)}`;
-  return PATHS[k] || "/";
+  const [base, query] = key.split("?");
+  const k = ALIAS[base] || base;
+  let path = PATHS[k] || "/";
+  if (k.startsWith("venue-")) path = `/control-tower/${k.slice(6)}`;
+  if (k.startsWith("facility-")) path = `/facilities/${k.slice(9)}`;
+  return query ? `${path}?${query}` : path;
 }
 
 let routerPush = null;

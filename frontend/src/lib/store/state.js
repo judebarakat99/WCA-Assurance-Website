@@ -202,7 +202,20 @@ export const ui = {
   },
   drawerId: null,
   lastResult: null,
+  // Assurance map: selected city, requirement area, timeline year, recenter count.
+  map: { city: null, pillar: null, year: 2034, recenter: 0 },
 };
+
+/** Assurance map back to the whole country, all areas, every stadium. */
+export function resetMapUi() {
+  ui.map = { city: null, pillar: null, year: 2034, recenter: ui.map.recenter + 1 };
+}
+
+/** Change part of the assurance map's state and re-render. */
+export function updateMap(patch) {
+  ui.map = { ...ui.map, ...patch };
+  rerender();
+}
 export function resetFilters() {
   ui.filters = { venue: "all", family: "all", state: "all", q: "" };
 }

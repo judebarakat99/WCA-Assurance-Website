@@ -135,6 +135,26 @@ function stadiumCard(s, year) {
   ]);
 }
 
+/** Fit the selected city's stadiums, or the whole country when none is selected. */
+function fitSelection(map, cities, selected, options = {}) {
+  const city = cities.find((c) => c.id === selected);
+  if (!city) {
+    map.fitBounds(BOUNDS, { essential: true, ...options });
+    return;
+  }
+  const points = city.stadiums.map((s) => s.location.coordinates);
+  const lons = points.map((p) => p[0]);
+  const lats = points.map((p) => p[1]);
+  const pad = 0.08; // degrees around the outermost stadiums
+  map.fitBounds(
+    [
+      [Math.min(...lons) - pad, Math.min(...lats) - pad],
+      [Math.max(...lons) + pad, Math.max(...lats) + pad],
+    ],
+    { maxZoom: 10, essential: true, ...options },
+  );
+}
+
 /**
  * Interactive map of Saudi Arabia's regions. Host-city regions are shaded by
  * assurance; each host city has a pin with an attention badge, and zooming in
@@ -148,10 +168,10 @@ export default function AssuranceMap({ cities, year, selected, onSelect, onOpenS
   const popupRef = useRef(null);
   const hoverRef = useRef(null); // () => card element for what is hovered
   // Latest props, for map callbacks created once.
-  const live = useRef({ cities, year, onSelect, onOpenStadium });
+  const live = useRef({ cities, year, selected, onSelect, onOpenStadium });
   useEffect(() => {
-    live.current = { cities, year, onSelect, onOpenStadium };
-  }, [cities, year, onSelect, onOpenStadium]);
+    live.current = { cities, year, selected, onSelect, onOpenStadium };
+  }, [cities, year, selected, onSelect, onOpenStadium]);
 
   // Create the map once.
   useEffect(() => {
@@ -272,6 +292,8 @@ export default function AssuranceMap({ cities, year, selected, onSelect, onOpenS
         }
       }
       mapRef.current = map;
+      // A city may already be selected (returning to the page, or the guided demo).
+      if (live.current.selected) fitSelection(map, live.current.cities, live.current.selected, { duration: 0 });
     })();
     return () => {
       cancelled = true;
@@ -304,24 +326,7 @@ export default function AssuranceMap({ cities, year, selected, onSelect, onOpenS
 
   // Fit the selected city's stadiums, or go back to the whole country.
   useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-    const city = cities.find((c) => c.id === selected);
-    if (!city) {
-      map.fitBounds(BOUNDS, { essential: true });
-      return;
-    }
-    const points = city.stadiums.map((s) => s.location.coordinates);
-    const lons = points.map((p) => p[0]);
-    const lats = points.map((p) => p[1]);
-    const pad = 0.08; // degrees around the outermost stadiums
-    map.fitBounds(
-      [
-        [Math.min(...lons) - pad, Math.min(...lats) - pad],
-        [Math.max(...lons) + pad, Math.max(...lats) + pad],
-      ],
-      { maxZoom: 10, essential: true },
-    );
+    if (mapRef.current) fitSelection(mapRef.current, cities, selected);
     // Only react to selection changes and explicit recenter requests.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, recenterSignal]);

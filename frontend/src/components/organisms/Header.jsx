@@ -6,10 +6,10 @@ import { usePathname } from "next/navigation";
 import ThemeToggle from "@/components/atoms/ThemeToggle";
 import { publicAssetUrl } from "@/lib/assets.mjs";
 import { advance, toast } from "@/lib/domain/actions";
-import { resetS, ui, rerender } from "@/lib/store/state";
+import { resetMapUi, resetS, ui, rerender } from "@/lib/store/state";
 import { resetAssessments } from "@/lib/store/assessments";
 import { closeDrawer } from "@/lib/drawer";
-import { startTour, EXEC } from "@/lib/tour/player";
+import { startTour, ASSURANCE, ASSURANCE_FULL, TOUR } from "@/lib/tour/player";
 
 // Primary sections. `also` lists other paths that belong to a section.
 const TABS = [
@@ -42,6 +42,7 @@ function activeTab(pathname) {
 function resetDemo() {
   resetS();
   resetAssessments();
+  resetMapUi();
   closeDrawer();
   window.WNSTwin?.reset();
   ui.filters = { venue: "all", family: "all", state: "all", q: "" };
@@ -132,11 +133,11 @@ export default function Header() {
               <summary className="btn">Demo</summary>
               <div className="pop r">
                 <small>Guided</small>
-                <button type="button" id="execStart" className="tourbtn" onClick={() => startTour(EXEC)}>
-                  Executive demo · 3 min
+                <button type="button" id="execStart" className="tourbtn" onClick={() => startTour(ASSURANCE)}>
+                  Assurance demo · 3 min
                 </button>
-                <button type="button" id="tourStart" onClick={() => startTour()}>
-                  Full guided demo
+                <button type="button" id="tourStart" onClick={() => startTour(ASSURANCE_FULL)}>
+                  Full assurance demo
                 </button>
                 <hr />
                 <small>Simulation</small>
@@ -151,6 +152,9 @@ export default function Header() {
                 <ResetButton />
                 <hr />
                 <small>Programme simulation</small>
+                <button type="button" id="simTourStart" onClick={() => startTour(TOUR)}>
+                  Simulation demo
+                </button>
                 {LEGACY.map(({ href, label }) => (
                   <Link key={href} href={href}>
                     {label}

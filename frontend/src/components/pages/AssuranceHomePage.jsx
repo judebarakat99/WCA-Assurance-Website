@@ -1,15 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import AskBar from "@/components/molecules/AskBar";
 import DeliveryTimeline from "@/components/molecules/DeliveryTimeline";
 import AssuranceBriefing from "@/components/organisms/AssuranceBriefing";
 import AssuranceMap from "@/components/organisms/AssuranceMap";
 import PillarRail from "@/components/organisms/PillarRail";
 import PageTemplate from "@/components/templates/PageTemplate";
-import { TIMELINE, assuranceMap } from "@/lib/domain/cityAssurance.mjs";
+import { assuranceMap } from "@/lib/domain/cityAssurance.mjs";
 import { getAssessments, hasSampleAssessments } from "@/lib/store/assessments";
+import { updateMap } from "@/lib/store/state";
 
 function Legend() {
   return (
@@ -40,12 +40,14 @@ function Legend() {
   );
 }
 
-function AssuranceHome() {
+// Map state lives in the shared ui store so the guided demo can drive it.
+const setSelected = (city) => updateMap({ city });
+const setPillar = (pillar) => updateMap({ pillar });
+const setYear = (year) => updateMap({ year });
+
+function AssuranceHome({ ui }) {
   const router = useRouter();
-  const [selected, setSelected] = useState(null);
-  const [pillar, setPillar] = useState(null);
-  const [year, setYear] = useState(TIMELINE.to);
-  const [recenter, setRecenter] = useState(0);
+  const { city: selected, pillar, year, recenter } = ui.map;
   const map = assuranceMap(getAssessments(), pillar, year);
   return (
     <div className="ahome">
@@ -72,10 +74,7 @@ function AssuranceHome() {
           <button
             type="button"
             className="arecenter"
-            onClick={() => {
-              setSelected(null);
-              setRecenter((n) => n + 1);
-            }}
+            onClick={() => updateMap({ city: null, recenter: recenter + 1 })}
           >
             Recenter
           </button>
@@ -90,7 +89,7 @@ function AssuranceHome() {
 export default function AssuranceHomePage() {
   return (
     <PageTemplate label="FIFA assurance map" wide>
-      {() => <AssuranceHome />}
+      {({ ui }) => <AssuranceHome ui={ui} />}
     </PageTemplate>
   );
 }

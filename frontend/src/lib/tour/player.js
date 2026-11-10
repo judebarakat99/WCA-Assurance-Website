@@ -4,13 +4,21 @@ import { ui, tour, resetS, notify } from "@/lib/store/state";
 import { toast } from "@/lib/domain/actions";
 import { closeDrawer } from "@/lib/drawer";
 import { TOUR, EXEC } from "@/lib/tour/steps";
+import { ASSURANCE, ASSURANCE_FULL } from "@/lib/tour/assuranceSteps";
 import { applyHL } from "@/lib/tour/highlight";
 import { hasVoice, pickVoice } from "@/lib/tour/voice";
 
-export { EXEC };
+export { EXEC, TOUR, ASSURANCE, ASSURANCE_FULL };
 
-export const steps = () => tour.list || TOUR;
-export const tourName = () => (tour.list === EXEC ? "Executive demo" : "Guided demo");
+const NAMES = new Map([
+  [ASSURANCE, "Assurance demo"],
+  [ASSURANCE_FULL, "Full assurance demo"],
+  [EXEC, "Simulation demo · executive"],
+  [TOUR, "Simulation demo"],
+]);
+
+export const steps = () => tour.list || ASSURANCE;
+export const tourName = () => NAMES.get(steps()) || "Guided demo";
 export const sentences = (t) => t.match(/[^.!?]+[.!?]+/g) || [t];
 
 function stopVoice() {
@@ -93,7 +101,7 @@ function step(d) {
   runStep();
 }
 
-/** Start a demo from fresh sample data. list: EXEC for the executive demo. */
+/** Start a demo from fresh sample data. list: ASSURANCE (default), ASSURANCE_FULL, EXEC or TOUR. */
 export function startTour(list) {
   tour.list = list || null;
   stopVoice();
