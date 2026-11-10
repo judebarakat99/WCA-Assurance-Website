@@ -2,7 +2,7 @@
 
 import { pct } from "@/lib/domain/data";
 import { pinLabel } from "@/lib/domain/geo";
-import { aiAsk } from "@/legacy/views/ai";
+import { aiAsk } from "@/lib/assistant/chat";
 
 const plural = (n, word) => `${word}${n === 1 ? "" : "s"}`;
 

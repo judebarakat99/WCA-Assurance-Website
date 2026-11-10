@@ -5,7 +5,7 @@ import { fmtD, pct, sn, dd, venueMeta } from "@/lib/domain/data";
 import { executiveBrief } from "@/lib/domain/readiness";
 import { goView } from "@/lib/store/state";
 import { toneOf } from "@/lib/ui/tones";
-import { aiAsk } from "@/legacy/views/ai";
+import { aiAsk } from "@/lib/assistant/chat";
 
 const s = (n, one, many) => (n === 1 ? one : many);
 

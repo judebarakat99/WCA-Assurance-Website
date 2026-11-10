@@ -56,7 +56,6 @@ import {
   setTourVoiceName,
   EXEC,
 } from "@/legacy/views/tour";
-import { mountAI, renderAIMsgs, aiAsk } from "@/legacy/views/ai";
 import { ai } from "@/lib/store/state";
 
 const $ = (s) => document.querySelector(s);
@@ -142,7 +141,6 @@ export function bootRuntime() {
   bridge.render = renderLegacy;
   bridge.navigate = navigate;
   installListeners();
-  mountAI();
   waitForTwin();
 }
 
@@ -158,37 +156,14 @@ export function mountReactView() {
   applyHL(false);
 }
 
-// ---------- delegated events for the assistant panel and the tour dock ----------
-// Both are still rendered from HTML strings (views/ai.js, views/tour.js).
+// ---------- delegated events for the tour dock (rendered from HTML strings) ----------
 let listenersOn = false;
-function toggleAssistant(open) {
-  ai.open = open;
-  const panel = document.getElementById("aiPanel");
-  if (panel) panel.hidden = !open;
-  const fab = document.getElementById("aiFab");
-  if (fab) fab.setAttribute("aria-expanded", String(open));
-  if (open && !ai.msgs.length) {
-    ai.msgs.push({
-      who: "a",
-      html: "Hi, I'm Nabd. Ask me about programme readiness, stadiums, gates, decisions or your reference documents. Programme metrics are illustrative; answers include supporting references.",
-      greeting: true,
-    });
-    renderAIMsgs();
-  }
-  if (open) document.getElementById("aiInput")?.focus();
-}
 function installListeners() {
   if (listenersOn) return;
   listenersOn = true;
   document.addEventListener("click", (ev) => {
     const t = ev.target.closest("button");
     if (!t) return;
-    if (t.id === "aiFab") return toggleAssistant(!ai.open);
-    if (t.id === "aiClose" || t.hasAttribute("data-ai-close")) {
-      ev.preventDefault();
-      return toggleAssistant(false);
-    }
-    if (t.dataset.aiq) return aiAsk(t.dataset.aiq);
     if (t.dataset.tour) return handleTourClick(t.dataset.tour);
   });
   document.addEventListener("change", (ev) => {

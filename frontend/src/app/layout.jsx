@@ -7,6 +7,7 @@ import "@/styles/tokens.css";
 import "@/styles/base.css";
 import "@/styles/components.css";
 import Header from "@/components/organisms/Header";
+import AssistantPanel from "@/components/organisms/AssistantPanel";
 import ObligationDrawer from "@/components/organisms/ObligationDrawer";
 import AppRuntime from "@/components/providers/AppRuntime";
 import TwinScripts from "@/components/providers/TwinScripts";
@@ -42,7 +43,7 @@ export default function RootLayout({ children }) {
         <ObligationDrawer />
         <div id="toastRoot"></div>
         <div id="tourRoot"></div>
-        <div id="aiRoot"></div>
+        <AssistantPanel />
         <AppRuntime />
         <TwinScripts />
       </body>

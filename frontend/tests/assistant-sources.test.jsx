@@ -1,6 +1,9 @@
 import { test } from "vitest";
 import assert from "node:assert/strict";
-import { sourceHtml } from "@/legacy/views/assistantSources.js";
+import { renderToStaticMarkup } from "react-dom/server";
+import AssistantSource from "@/components/molecules/AssistantSource";
+
+const sourceHtml = (source) => renderToStaticMarkup(<AssistantSource source={source} />);
 import { buildAssistantContext } from "@/lib/assistant/context.js";
 import { resetS } from "@/lib/store/state.js";
 

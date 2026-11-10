@@ -227,8 +227,8 @@ export const tour = {
   nav: false,
   text: "",
 };
-// AI assistant runtime state (logic lives in components/views/ai.js).
-export const ai = { open: false, msgs: [] };
+// Nabd assistant conversation (actions in lib/assistant/chat.js).
+export const ai = { open: false, msgs: [], pending: false };
 
 // ---------- subscriptions ----------
 // The programme model is a mutable object changed in place by the domain
