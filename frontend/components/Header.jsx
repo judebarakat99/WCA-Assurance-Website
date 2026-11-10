@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { publicAssetUrl } from "../lib/assets.mjs";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "./ThemeToggle";
 
 const TABS = [
   ["/overview", "Overview"],
@@ -40,13 +41,12 @@ export default function Header() {
             <img
               className="logo"
               src={publicAssetUrl(
-                "/Assets/شعار_الهيئة_العليا_لاستضافة_كأس_العالم_2034.svg.png",
+                "/Assets/saudi-2034-logo.svg",
                 process.env.NEXT_PUBLIC_BASE_PATH || "",
               )}
-              //src={publicAssetUrl("/Assets/Logo_Green.jpg",process.env.NEXT_PUBLIC_BASE_PATH || "")}
-              alt="Logo"
-              width="48"
-              height="48"
+              alt="Saudi 2034"
+              width="44"
+              height="41"
             />
             <div className="brand-text">
               <h1>Compliance Assurance Engine</h1>
@@ -57,6 +57,7 @@ export default function Header() {
             {links}
           </nav>
           <div className="right">
+            <ThemeToggle />
             <details className="menu nav-menu" id="navMenu">
               <summary className="nav-toggle" aria-label="Open navigation menu">
                 Menu

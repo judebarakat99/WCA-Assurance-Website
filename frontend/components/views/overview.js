@@ -75,7 +75,7 @@ const W = 1000,
   H = 800;
 const px = ([lon, lat]) => [(lon - 33.5) * 44, (33 - lat) * 46];
 const MARK = publicAssetUrl(
-  "/Assets/wca-mark.jpg",
+  "/Assets/saudi-2034-logo.svg",
   process.env.NEXT_PUBLIC_BASE_PATH || "",
 );
 

@@ -1,6 +1,12 @@
+import "@fontsource/barlow/400.css";
+import "@fontsource/barlow/500.css";
+import "@fontsource/barlow/600.css";
+import "@fontsource/barlow/700.css";
+import "@fontsource/barlow/800.css";
 import "./globals.css";
 import Header from "../components/Header";
 import LegacyScripts from "../components/LegacyScripts";
+import { themeInitScript } from "../lib/theme.mjs";
 
 export const metadata = {
   title: "Compliance Assurance Suite",
@@ -11,11 +17,19 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#2e3569" },
+    { media: "(prefers-color-scheme: dark)", color: "#15183a" },
+  ],
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    // data-theme is set before hydration by themeInitScript.
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body>
         <Header />
         {children}

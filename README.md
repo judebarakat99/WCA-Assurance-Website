@@ -43,7 +43,10 @@ NEXT_PUBLIC_BASE_PATH=/WCA-Assurance-Website npm run build
   `/design-review`, `/requirements-evidence`, and `/dossiers`. The home page
   shows the Readiness Room and redirects legacy `#hash` bookmarks.
 - `frontend/app/layout.jsx`: document metadata, shared header, and overlay roots.
-- `frontend/app/globals.css`: original styling, with local font files.
+- `frontend/app/globals.css`: styling. Saudi 2034 brand tokens (light and dark)
+  sit at the top; every rule below uses the tokens, not colour literals. The
+  header toggle (`components/ThemeToggle.jsx`, `lib/theme.mjs`) saves the
+  choice; without one the site follows the OS setting.
 - `frontend/lib/`: shared modules split from the original `assurance.js` —
   `data.js` (reference data and helpers), `state.js` (store with localStorage
   persistence), `scoring.js`, `forecast.js` (Monte Carlo), `actions.js`
@@ -58,8 +61,10 @@ NEXT_PUBLIC_BASE_PATH=/WCA-Assurance-Website npm run build
   for the 3D twin.
 - `frontend/public/scripts/`: stadium twin and menu logic.
 - `frontend/public/vendor/`: original Three.js r128 and OrbitControls, retaining licenses.
-- `frontend/public/fonts/`: fonts extracted from the original HTML; original SIL Open Font License notice retained in CSS.
-- `frontend/public/Assets/`: images, served at `/Assets/...`.
+- Fonts: Barlow (brand typeface) from `@fontsource/barlow`; IBM Plex Mono in
+  `frontend/public/fonts/` (SIL Open Font License).
+- `frontend/public/Assets/`: images, served at `/Assets/...`, including the
+  Saudi 2034 logo (`saudi-2034-logo.svg`, viewBox cropped to the artwork).
 - `Archive/`: historical standalone HTML snapshots.
 
 
