@@ -88,6 +88,9 @@ h3 {
 .clickable {
   cursor: pointer;
 }
+.mt-sm {
+  margin-top: 8px;
+}
 .mt-lg {
   margin-top: 24px;
 }

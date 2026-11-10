@@ -43,7 +43,6 @@ import {
   escalateIssue,
   decompose,
 } from "@/lib/domain/actions";
-import { viewReadiness } from "@/legacy/views/readiness";
 import {
   openDrawer,
   closeDrawer,
@@ -103,21 +102,16 @@ function navigate(h) {
     navigate("tower");
     return;
   }
-  const view = /^venue-/.test(key) ? "venue" : key;
-  if (LEGACY_VIEWS.has(view)) {
-    current.view = view;
-    current.param = /^venue-/.test(key) ? key.slice(6) : null;
-    renderLegacy();
-  } else {
-    current.view = null;
-  }
+  // The destination page mounts after the route change and paints itself
+  // (legacy pages through AppView → mountView), so nothing is painted here.
+  current.view = null;
+  current.param = null;
   if (!tour.active) window.scrollTo(0, 0);
   if (routerPush) routerPush(pathFor(h), { scroll: false });
 }
 
 // Views still rendered from HTML strings. "twin" is handled below.
 const VIEW_FNS = {
-  readiness: viewReadiness,
 };
 const LEGACY_VIEWS = new Set([...Object.keys(VIEW_FNS), "twin"]);
 
@@ -340,18 +334,6 @@ function installListeners() {
       decide(t.dataset.decide, Number(t.dataset.opt));
       return;
     }
-    if (t.dataset.unrecover) {
-      S.scn.recovery = S.scn.recovery.filter((x) => x !== t.dataset.unrecover);
-      save();
-      rerender();
-      return;
-    }
-    if (t.id === "scReset") {
-      S.scn = { prod: 1, fifa: false, recovery: [] };
-      save();
-      rerender();
-      return;
-    }
     if (t.dataset.dossier) {
       ui.dossierVenue = t.dataset.dossier;
       goView("dossier");
@@ -382,22 +364,6 @@ function installListeners() {
       return;
     }
   });
-  document.addEventListener("mousemove", (ev) => {
-    const tip = document.querySelector(".fc-tip");
-    if (!tip) return;
-    const h = ev.target.closest && ev.target.closest(".fc-chart [data-tip]");
-    if (!h) {
-      tip.hidden = true;
-      return;
-    }
-    const w = tip.parentElement.getBoundingClientRect();
-    tip.innerHTML = h.dataset.tip;
-    tip.hidden = false;
-    const x = Math.min(ev.clientX - w.left + 14, w.width - 290),
-      y = ev.clientY - w.top + 14;
-    tip.style.left = Math.max(0, x) + "px";
-    tip.style.top = y + "px";
-  });
   document.addEventListener("keydown", (ev) => {
     if (ev.key === "Escape" && ui.drawerId) closeDrawer();
     if (ev.key === "Enter" && ev.target.matches("tr[data-obl]"))
@@ -405,16 +371,6 @@ function installListeners() {
   });
   document.addEventListener("change", (ev) => {
     const t = ev.target;
-    if (t.id === "scProd") {
-      S.scn.prod = Number(t.value);
-      save();
-      rerender();
-    }
-    if (t.id === "scFifa") {
-      S.scn.fifa = t.checked;
-      save();
-      rerender();
-    }
     if (t.id === "tourVoice") {
       setTourVoice(t.checked);
       return;

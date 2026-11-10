@@ -17,7 +17,8 @@ export default function PageTemplate({ label, children }) {
     mountReactView();
   }, []);
   return (
-    <main className="wrap" aria-label={label} aria-busy={programme ? undefined : true}>
+    // id="view" keeps the guided tour's "#view …" selectors working.
+    <main className="wrap" id="view" aria-label={label} aria-busy={programme ? undefined : true}>
       {programme ? children(programme) : null}
     </main>
   );

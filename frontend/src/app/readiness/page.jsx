@@ -1,7 +1,7 @@
-import AppView from "@/legacy/AppView";
+import ReadinessPage from "@/components/pages/ReadinessPage";
 
 export const metadata = { title: "Readiness · Compliance Assurance Suite" };
 
-export default function ReadinessPage() {
-  return <AppView view="readiness" />;
+export default function Page() {
+  return <ReadinessPage />;
 }

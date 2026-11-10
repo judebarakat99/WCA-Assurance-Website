@@ -2182,6 +2182,10 @@ body.touring .ai-panel {
 }
 
 /* ---------- Readiness Room ---------- */
+.fc-intro {
+  margin: 0 0 18px;
+  max-width: 84ch;
+}
 
 .means {
   margin-top: 24px;
