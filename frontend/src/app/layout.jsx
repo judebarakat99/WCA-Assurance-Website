@@ -8,7 +8,7 @@ import "@/styles/base.css";
 import "@/styles/components.css";
 import Header from "@/components/organisms/Header";
 import AppRuntime from "@/components/providers/AppRuntime";
-import LegacyScripts from "@/legacy/LegacyScripts";
+import TwinScripts from "@/components/providers/TwinScripts";
 import { themeInitScript } from "@/lib/theme.mjs";
 
 export const metadata = {
@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
         <div id="tourRoot"></div>
         <div id="aiRoot"></div>
         <AppRuntime />
-        <LegacyScripts />
+        <TwinScripts />
       </body>
     </html>
   );

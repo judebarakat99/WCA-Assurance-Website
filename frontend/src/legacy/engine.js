@@ -110,32 +110,12 @@ function navigate(h) {
   if (routerPush) routerPush(pathFor(h), { scroll: false });
 }
 
-// Views still rendered from HTML strings. "twin" is handled below.
-const VIEW_FNS = {
-};
-const LEGACY_VIEWS = new Set([...Object.keys(VIEW_FNS), "twin"]);
-
+// Re-applies the tour highlight after a state change (pages render in React).
 function renderLegacy() {
-  const v = document.getElementById("view");
-  if (!v || !S || !LEGACY_VIEWS.has(current.view)) {
-    applyHL(false);
-    return;
-  }
+  if (!S) return;
   invalidateForecasts();
   const today = $("#today");
   if (today) today.textContent = fmtD(S.today);
-  if (current.view === "twin") {
-    v.innerHTML = `<h2>Design intake · King Salman International Stadium</h2><p class="lead">Before anything is built, the design team's model goes in and compliance checks come out. This is the Riyadh venue for the 2034 opening match and final, beside King Abdulaziz Park in north Riyadh. The 3D massing follows Populous's published concept: a circular, segmented form like a seed cracking the earth, green walls and roof, and a ring of hospitality boxes between two tiers. Proportions are approximate. The submissions and findings are simulated, and thresholds are illustrative.</p>`;
-    if (window.WNSTwin) window.WNSTwin.mount(v);
-    else
-      v.insertAdjacentHTML(
-        "beforeend",
-        `<p class="muted">Loading the 3D design engine…</p>`,
-      );
-    applyHL(false);
-    return;
-  }
-  v.innerHTML = VIEW_FNS[current.view]();
   applyHL(false);
 }
 
@@ -149,7 +129,6 @@ function waitForTwin() {
       },
       onChange: notify,
     });
-    if (current.view === "twin") renderLegacy();
     return;
   }
   setTimeout(waitForTwin, 200);
@@ -170,15 +149,6 @@ export function bootRuntime() {
 
 export function setRouterPush(push) {
   routerPush = push;
-}
-
-// Called by legacy/AppView when a page still rendered here mounts.
-export function mountView(viewKey, param) {
-  bootRuntime();
-  current.view = viewKey;
-  current.param = param || null;
-  renderLegacy();
-  renderDrawer();
 }
 
 // Called by React pages so the legacy renderer leaves the page alone.
@@ -262,14 +232,6 @@ function installListeners() {
       handleTourClick(t.dataset.tour);
       return;
     }
-    if (t.id === "tourStart") {
-      startTour();
-      return;
-    }
-    if (t.id === "execStart") {
-      startTour(EXEC);
-      return;
-    }
     if (t.hasAttribute("data-close")) {
       closeDrawer();
       return;
@@ -337,30 +299,6 @@ function installListeners() {
     if (t.dataset.dossier) {
       ui.dossierVenue = t.dataset.dossier;
       goView("dossier");
-      return;
-    }
-    if (t.id === "advance") {
-      advance();
-      return;
-    }
-    if (t.id === "reset") {
-      if (t.dataset.confirm) {
-        resetS();
-        closeDrawer();
-        window.WNSTwin && window.WNSTwin.reset();
-        ui.filters = { venue: "all", family: "all", state: "all", q: "" };
-        rerender();
-        toast("Sample data restored.");
-      } else {
-        t.dataset.confirm = "1";
-        t.textContent = "Click again to reset";
-        t.classList.add("danger");
-        setTimeout(() => {
-          delete t.dataset.confirm;
-          t.textContent = "Reset demo";
-          t.classList.remove("danger");
-        }, 3000);
-      }
       return;
     }
   });
