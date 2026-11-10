@@ -9,6 +9,7 @@ import {
   complianceProven,
 } from "../../lib/complianceData";
 import { headV } from "./shared";
+import { fifaLibrary } from "./fifaLibrary";
 
 const records = () => complianceRecords(VENUES);
 const rate = (L) =>
@@ -128,14 +129,17 @@ function venueDrill(all, id) {
 
 export function viewCompliance() {
   const all = records();
-  if (ui.compliance.venue) return venueDrill(all, ui.compliance.venue);
-  if (ui.compliance.family) return familyDrill(all, ui.compliance.family);
+  const simulationNotice = `<p class="criterion">Legacy simulation · These generated sample statuses are independent of the sourced FIFA library and evidence intake.</p>`;
+  if (ui.compliance.venue) return simulationNotice + venueDrill(all, ui.compliance.venue);
+  if (ui.compliance.family) return simulationNotice + familyDrill(all, ui.compliance.family);
   const overall = rate(all),
     proven = all.filter((x) => complianceProven(x.status)).length;
   return (
+    fifaLibrary() +
+    simulationNotice +
     headV(
       `Compliance · ${VENUES.length} venues · ${COMPLIANCE_AUTHORITIES.length} authorities`,
-      "Programme compliance",
+      "Legacy sample compliance",
       "Start at programme level, compare compliance across the four authorities and requirement families, then drill into a family or venue. KSA examples are regulatory samples; WCA and City controls are illustrative PoC data and must be replaced by authoritative requirement libraries.",
     ) +
     `<div class="comp-actions"><div class="comp-overall"><span>Combined compliance</span><b>${overall}%</b><small>${proven}/${all.length} venue-controls proven</small></div><div class="spacer"></div><button class="primary" data-compliance-intake="evidence">+ Add new evidence</button><button data-compliance-intake="requirement">+ Add new requirement</button></div>` +

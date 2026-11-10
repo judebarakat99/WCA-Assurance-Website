@@ -6103,3 +6103,19 @@ details.fc-table summary {
     align-items: flex-start;
   }
 }
+
+/* Sourced requirement library */
+.fifa-library a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.fifa-library table {
+  min-width: 760px;
+}
+.fifa-library td {
+  vertical-align: top;
+}
+.fifa-library .pill {
+  white-space: normal;
+}

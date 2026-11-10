@@ -1,0 +1,1730 @@
+{
+  "schemaVersion": 2,
+  "reviewedOn": "2026-11-10",
+  "scopeNote": "Reviewed source subset covering initial infrastructure criteria and lighting. The 2020 lighting edition is a provisional technical baseline for 2034. Facility applicability and later tournament specifications require confirmation.",
+  "sources": [
+    {
+      "id": "fifa-wc2034-hosting-overview-2023",
+      "publisher": "FIFA",
+      "title": "FIFA World Cup 2034 — Overview of Hosting Requirements",
+      "shortTitle": "2034 hosting overview",
+      "url": "https://digitalhub.fifa.com/m/6036e6c71384b364/original/Overview-of-Hosting-Requirements-for-the-FIFA-World-Cup-2034-_EN.pdf",
+      "discoveryUrl": "https://inside.fifa.com/organisation/media-releases/fifa-receives-declarations-of-interest-in-hosting-fifa-world-cup-tm-editions-in-2030-and-2034",
+      "announcedOn": "2023-10-31",
+      "edition": "Public bidding-stage overview linked October 2023",
+      "documentRevision": null,
+      "kind": "hosting-requirements-overview",
+      "tournament": "FIFA World Cup 2034",
+      "reviewedOn": "2026-11-10",
+      "limitations": "High-level overview; later detailed specifications and final hosting requirements may supersede it. See section 1.3, printed page 2.",
+      "availability": "public",
+      "reviewStatus": "selected-clauses-reviewed",
+      "authority": "Tournament hosting overview",
+      "coverage": [
+        "Infrastructure",
+        "Legal framework",
+        "Environmental and social outcomes"
+      ]
+    },
+    {
+      "id": "fifa-lighting-guide-2020-01",
+      "publisher": "FIFA",
+      "title": "FIFA Lighting Guide",
+      "shortTitle": "Lighting Guide 2020.01",
+      "url": "https://digitalhub.fifa.com/m/75486e34dc4aa39f/original/edawdowsmtr5fntxxwup-pdf.pdf",
+      "discoveryUrl": "https://inside.fifa.com/innovation/stadium-guidelines/annexe",
+      "edition": "October 2020",
+      "documentRevision": "2020.01",
+      "kind": "technical-standard-and-guidance",
+      "authority": "Technical standards and recommendations",
+      "availability": "public",
+      "reviewStatus": "selected-clauses-reviewed",
+      "reviewedOn": "2026-11-10",
+      "coverage": [
+        "Stadium lighting",
+        "Training lighting",
+        "Measurement",
+        "Power continuity"
+      ],
+      "pageCount": 81,
+      "sha256": "0252e3b6d81e66508179b1f59223ad1f8d2c20f8c208a9c9022576751e73362c",
+      "limitations": "Later tournament provisions may supersede this edition. Review flags preserve internal ambiguities."
+    },
+    {
+      "id": "fifa-stadium-guidelines-digital",
+      "publisher": "FIFA",
+      "title": "FIFA Football Stadium Guidelines",
+      "shortTitle": "Stadium Guidelines",
+      "url": "https://inside.fifa.com/innovation/stadium-guidelines",
+      "discoveryUrl": "https://inside.fifa.com/organisation/news/football-stadium-guidelines-un-sustainable-development-world-cup-26",
+      "edition": "Digital publication; update announced February 2025",
+      "documentRevision": null,
+      "kind": "best-practice-guidance",
+      "authority": "General recommendations",
+      "availability": "public",
+      "reviewStatus": "inventory-only",
+      "coverage": [
+        "Design",
+        "Operations",
+        "Technical systems",
+        "Training sites"
+      ],
+      "limitations": "Detailed clauses await review. General recommendations need applicability decisions before use as compliance criteria."
+    },
+    {
+      "id": "fifa-stadium-safety-security",
+      "publisher": "FIFA",
+      "title": "FIFA Stadium Safety and Security Regulations",
+      "shortTitle": "Safety and Security Regulations",
+      "url": "https://img.fifa.com/image/upload/xycg4m3h1r1zudk7rnkb.pdf",
+      "edition": "Edition to verify",
+      "documentRevision": null,
+      "kind": "regulations",
+      "authority": "Regulations; applicability to confirm",
+      "availability": "public",
+      "reviewStatus": "inventory-only",
+      "coverage": [
+        "Safety",
+        "Security"
+      ],
+      "limitations": "Edition and detailed clauses await review."
+    },
+    {
+      "id": "fifa-wc2034-full-hosting-package",
+      "publisher": "FIFA",
+      "title": "Complete 2034 hosting requirements and amendments",
+      "shortTitle": "Full 2034 hosting package",
+      "url": null,
+      "discoveryUrl": "https://digitalhub.fifa.com/m/6036e6c71384b364/original/Overview-of-Hosting-Requirements-for-the-FIFA-World-Cup-2034-_EN.pdf#page=3",
+      "edition": "Current issued edition needed",
+      "documentRevision": null,
+      "kind": "tournament-hosting-requirements",
+      "authority": "Tournament-specific requirements",
+      "availability": "not-obtained",
+      "reviewStatus": "awaiting-partner-source",
+      "coverage": [
+        "Full tournament scope",
+        "Technical annexes",
+        "Amendments"
+      ],
+      "limitations": "Official public full-package download not verified. Obtain issued package and amendment history from partners."
+    }
+  ],
+  "requirements": [
+    {
+      "id": "F34-ST-CAP-01",
+      "version": 1,
+      "sourceId": "fifa-wc2034-hosting-overview-2023",
+      "title": "Stadium seating",
+      "summary": "At least 40,000 seats.",
+      "assetType": "Stadium",
+      "condition": "Group (excluding opening), round of 32, round of 16, quarter-final or third-place match",
+      "category": "Capacity",
+      "categoryBasis": "PoC grouping",
+      "section": "2 Infrastructure",
+      "topic": "Seating capacities",
+      "printedPage": 3,
+      "pdfPage": 4,
+      "criterion": {
+        "operator": "min",
+        "value": 40000,
+        "unit": "seats"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "suggestedEvidence": "Seating plan and match allocation",
+      "evidenceBasis": "PoC proposal",
+      "authority": "hosting-requirement",
+      "reviewIssueIds": []
+    },
+    {
+      "id": "F34-ST-CAP-02",
+      "version": 1,
+      "sourceId": "fifa-wc2034-hosting-overview-2023",
+      "title": "Stadium seating",
+      "summary": "At least 60,000 seats.",
+      "assetType": "Stadium",
+      "condition": "Semi-final",
+      "category": "Capacity",
+      "categoryBasis": "PoC grouping",
+      "section": "2 Infrastructure",
+      "topic": "Seating capacities",
+      "printedPage": 3,
+      "pdfPage": 4,
+      "criterion": {
+        "operator": "min",
+        "value": 60000,
+        "unit": "seats"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "suggestedEvidence": "Seating plan and match allocation",
+      "evidenceBasis": "PoC proposal",
+      "authority": "hosting-requirement",
+      "reviewIssueIds": []
+    },
+    {
+      "id": "F34-ST-CAP-03",
+      "version": 1,
+      "sourceId": "fifa-wc2034-hosting-overview-2023",
+      "title": "Stadium seating",
+      "summary": "At least 80,000 seats.",
+      "assetType": "Stadium",
+      "condition": "Opening match or final",
+      "category": "Capacity",
+      "categoryBasis": "PoC grouping",
+      "section": "2 Infrastructure",
+      "topic": "Seating capacities",
+      "printedPage": 3,
+      "pdfPage": 4,
+      "criterion": {
+        "operator": "min",
+        "value": 80000,
+        "unit": "seats"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "suggestedEvidence": "Seating plan and match allocation",
+      "evidenceBasis": "PoC proposal",
+      "authority": "hosting-requirement",
+      "reviewIssueIds": []
+    },
+    {
+      "id": "F34-ST-PITCH-01",
+      "version": 1,
+      "sourceId": "fifa-wc2034-hosting-overview-2023",
+      "title": "Playing-field length",
+      "summary": "Length of 105 m.",
+      "assetType": "Stadium",
+      "condition": "All match allocations",
+      "category": "Pitch",
+      "categoryBasis": "PoC grouping",
+      "section": "2 Infrastructure",
+      "topic": "Pitch dimensions",
+      "printedPage": 4,
+      "pdfPage": 5,
+      "criterion": {
+        "operator": "eq",
+        "value": 105,
+        "unit": "m"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "suggestedEvidence": "Design dimensions and survey",
+      "evidenceBasis": "PoC proposal",
+      "authority": "hosting-requirement",
+      "reviewIssueIds": []
+    },
+    {
+      "id": "F34-ST-PITCH-02",
+      "version": 1,
+      "sourceId": "fifa-wc2034-hosting-overview-2023",
+      "title": "Playing-field width",
+      "summary": "Width of 68 m.",
+      "assetType": "Stadium",
+      "condition": "All match allocations",
+      "category": "Pitch",
+      "categoryBasis": "PoC grouping",
+      "section": "2 Infrastructure",
+      "topic": "Pitch dimensions",
+      "printedPage": 4,
+      "pdfPage": 5,
+      "criterion": {
+        "operator": "eq",
+        "value": 68,
+        "unit": "m"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "suggestedEvidence": "Design dimensions and survey",
+      "evidenceBasis": "PoC proposal",
+      "authority": "hosting-requirement",
+      "reviewIssueIds": []
+    },
+    {
+      "id": "F34-TR-PITCH-01",
+      "version": 1,
+      "sourceId": "fifa-wc2034-hosting-overview-2023",
+      "title": "Training pitch count",
+      "summary": "At least one pitch.",
+      "assetType": "Training site",
+      "condition": "Venue-specific training site",
+      "category": "Pitch",
+      "categoryBasis": "PoC grouping",
+      "section": "2 Infrastructure",
+      "topic": "Number of pitches and playing surface",
+      "printedPage": 6,
+      "pdfPage": 7,
+      "criterion": {
+        "operator": "min",
+        "value": 1,
+        "unit": "pitches"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "suggestedEvidence": "Design dimensions and survey",
+      "evidenceBasis": "PoC proposal",
+      "authority": "hosting-requirement",
+      "reviewIssueIds": []
+    },
+    {
+      "id": "F34-TR-PITCH-02",
+      "version": 1,
+      "sourceId": "fifa-wc2034-hosting-overview-2023",
+      "title": "Training pitch count",
+      "summary": "At least two pitches.",
+      "assetType": "Training site",
+      "condition": "Team base camp training site",
+      "category": "Pitch",
+      "categoryBasis": "PoC grouping",
+      "section": "2 Infrastructure",
+      "topic": "Number of pitches and playing surface",
+      "printedPage": 6,
+      "pdfPage": 7,
+      "criterion": {
+        "operator": "min",
+        "value": 2,
+        "unit": "pitches"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "suggestedEvidence": "Design dimensions and survey",
+      "evidenceBasis": "PoC proposal",
+      "authority": "hosting-requirement",
+      "reviewIssueIds": []
+    },
+    {
+      "id": "F34-TR-TRAVEL-01",
+      "version": 1,
+      "sourceId": "fifa-wc2034-hosting-overview-2023",
+      "title": "Travel from paired hotel",
+      "summary": "Drive of at most 20 minutes.",
+      "assetType": "Training site",
+      "condition": "Paired team hotel; consider route and infrastructure suitability",
+      "category": "Access",
+      "categoryBasis": "PoC grouping",
+      "section": "2 Infrastructure",
+      "topic": "Maximum distance from paired team hotel",
+      "printedPage": 6,
+      "pdfPage": 7,
+      "criterion": {
+        "operator": "max",
+        "value": 20,
+        "unit": "minutes"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "suggestedEvidence": "Route and travel-time assessment",
+      "evidenceBasis": "PoC proposal",
+      "authority": "hosting-requirement",
+      "reviewIssueIds": []
+    },
+    {
+      "id": "F34-ST-LIGHT-01",
+      "version": 1,
+      "sourceId": "fifa-wc2034-hosting-overview-2023",
+      "title": "Applicable lighting class",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "2 Infrastructure",
+      "topic": "Applicable lighting class",
+      "printedPage": 5,
+      "pdfPage": 6,
+      "criterion": {
+        "operator": "classification",
+        "value": "Standard A"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "hosting-requirement",
+      "evidenceIds": [
+        "lighting-applicability"
+      ],
+      "reviewIssueIds": []
+    },
+    {
+      "id": "F34-TR-LIGHT-01",
+      "version": 1,
+      "sourceId": "fifa-wc2034-hosting-overview-2023",
+      "title": "Applicable lighting class",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "2 Infrastructure",
+      "topic": "Applicable lighting class",
+      "printedPage": 7,
+      "pdfPage": 8,
+      "criterion": {
+        "operator": "classification",
+        "value": "Grade 1"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "hosting-requirement",
+      "evidenceIds": [
+        "lighting-applicability"
+      ],
+      "reviewIssueIds": []
+    },
+    {
+      "id": "FL-A-EV-MIN",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Vertical minimum",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Vertical minimum",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "gt",
+        "value": 1000,
+        "unit": "lux"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Ev0",
+        "Ev90",
+        "Ev180",
+        "Ev270"
+      ],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-EV-AVG",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Vertical average",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Vertical average",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "gt",
+        "value": 1500,
+        "unit": "lux"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Ev0",
+        "Ev90",
+        "Ev180",
+        "Ev270"
+      ],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-EV-U1",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Vertical U1",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Vertical U1",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "gt",
+        "value": 0.5,
+        "unit": "ratio"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Ev0",
+        "Ev90",
+        "Ev180",
+        "Ev270"
+      ],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-EV-U2",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Vertical U2",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Vertical U2",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "gt",
+        "value": 0.6,
+        "unit": "ratio"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Ev0",
+        "Ev90",
+        "Ev180",
+        "Ev270"
+      ],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-EH-AVG",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Horizontal average",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Horizontal average",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "gt",
+        "value": 2500,
+        "unit": "lux"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Eh"
+      ],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-EH-U1",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Horizontal U1",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Horizontal U1",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "gt",
+        "value": 0.5,
+        "unit": "ratio"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Eh"
+      ],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-EH-U2",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Horizontal U2",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Horizontal U2",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "gt",
+        "value": 0.7,
+        "unit": "ratio"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Eh"
+      ],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-GLARE",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Glare rating",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Glare rating",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "lt",
+        "value": 50,
+        "unit": "RG"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-quality"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-CRI",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Colour rendering",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Colour rendering",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "gte",
+        "value": 80,
+        "unit": "Ra"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-quality"
+      ],
+      "reviewIssueIds": [
+        "cri-boundary"
+      ],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-COLOUR",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Colour temperature",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Colour temperature",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "range",
+        "minimum": 5000,
+        "maximum": 6200,
+        "unit": "K",
+        "boundaryInterpretation": "review-required"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-quality"
+      ],
+      "reviewIssueIds": [
+        "colour-range-boundaries"
+      ],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-MF",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Maintenance factor",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Maintenance factor",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "design-default",
+        "values": {
+          "LED": 0.9,
+          "HID": 0.8
+        },
+        "variationReference": {
+          "sourceId": "fifa-lighting-guide-2020-01",
+          "printedPage": 63,
+          "pdfPage": 64
+        }
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-design"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-EV-MIN",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Vertical minimum",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.39",
+      "topic": "Vertical minimum",
+      "printedPage": 41,
+      "pdfPage": 42,
+      "criterion": {
+        "operator": "gt",
+        "value": 350,
+        "unit": "lux"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Ev0",
+        "Ev90",
+        "Ev180",
+        "Ev270"
+      ],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-EV-AVG",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Vertical average",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.39",
+      "topic": "Vertical average",
+      "printedPage": 41,
+      "pdfPage": 42,
+      "criterion": {
+        "operator": "gt",
+        "value": 500,
+        "unit": "lux"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Ev0",
+        "Ev90",
+        "Ev180",
+        "Ev270"
+      ],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-EV-U1",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Vertical U1",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.39",
+      "topic": "Vertical U1",
+      "printedPage": 41,
+      "pdfPage": 42,
+      "criterion": {
+        "operator": "gt",
+        "value": 0.3,
+        "unit": "ratio"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Ev0",
+        "Ev90",
+        "Ev180",
+        "Ev270"
+      ],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-EV-U2",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Vertical U2",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.39",
+      "topic": "Vertical U2",
+      "printedPage": 41,
+      "pdfPage": 42,
+      "criterion": {
+        "operator": "gt",
+        "value": 0.4,
+        "unit": "ratio"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [
+        "training-u2-label"
+      ],
+      "planes": [
+        "Ev0",
+        "Ev90",
+        "Ev180",
+        "Ev270"
+      ],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-EH-AVG",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Horizontal average",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.39",
+      "topic": "Horizontal average",
+      "printedPage": 41,
+      "pdfPage": 42,
+      "criterion": {
+        "operator": "gt",
+        "value": 750,
+        "unit": "lux"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Eh"
+      ],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-EH-U1",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Horizontal U1",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.39",
+      "topic": "Horizontal U1",
+      "printedPage": 41,
+      "pdfPage": 42,
+      "criterion": {
+        "operator": "gt",
+        "value": 0.4,
+        "unit": "ratio"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Eh"
+      ],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-EH-U2",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Horizontal U2",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.39",
+      "topic": "Horizontal U2",
+      "printedPage": 41,
+      "pdfPage": 42,
+      "criterion": {
+        "operator": "gt",
+        "value": 0.6,
+        "unit": "ratio"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Eh"
+      ],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-GLARE",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Glare rating",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.39",
+      "topic": "Glare rating",
+      "printedPage": 41,
+      "pdfPage": 42,
+      "criterion": {
+        "operator": "lt",
+        "value": 50,
+        "unit": "RG"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-quality"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-CRI",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Colour rendering",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.39",
+      "topic": "Colour rendering",
+      "printedPage": 41,
+      "pdfPage": 42,
+      "criterion": {
+        "operator": "gte",
+        "value": 80,
+        "unit": "Ra"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-quality"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-COLOUR",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Colour temperature",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.39",
+      "topic": "Colour temperature",
+      "printedPage": 41,
+      "pdfPage": 42,
+      "criterion": {
+        "operator": "range",
+        "minimum": 5000,
+        "maximum": 6200,
+        "unit": "K",
+        "boundaryInterpretation": "review-required"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-quality"
+      ],
+      "reviewIssueIds": [
+        "colour-range-boundaries"
+      ],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-MF",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Maintenance factor",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.39",
+      "topic": "Maintenance factor",
+      "printedPage": 41,
+      "pdfPage": 42,
+      "criterion": {
+        "operator": "design-default",
+        "values": {
+          "LED": 0.9,
+          "HID": 0.8
+        },
+        "variationReference": {
+          "sourceId": "fifa-lighting-guide-2020-01",
+          "printedPage": 63,
+          "pdfPage": 64
+        }
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-design"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-A-EH-MIN",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Horizontal minimum",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Horizontal minimum",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "gt",
+        "value": 1500,
+        "unit": "lux"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Eh"
+      ],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-FF-AVG",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Flicker average",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Flicker average",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "lt",
+        "value": 1,
+        "unit": "percent"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-quality"
+      ],
+      "reviewIssueIds": [
+        "flicker-boundary"
+      ],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-FF-MAX",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Flicker maximum",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Flicker maximum",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "lt",
+        "value": 1,
+        "unit": "percent"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-quality"
+      ],
+      "reviewIssueIds": [
+        "flicker-boundary"
+      ],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-MAUR",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Adjacent uniformity",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Adjacent uniformity",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "adjacency",
+        "ratioOperator": "gt",
+        "ratio": 0.6,
+        "maximumFailures": 10,
+        "aggregation": "All five planes combined; counting convention requires review"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [
+        "maur-counting"
+      ],
+      "planes": [
+        "Eh",
+        "Ev0",
+        "Ev90",
+        "Ev180",
+        "Ev270"
+      ],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-CONTINUITY",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Match continuity",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.6",
+      "topic": "Match continuity",
+      "printedPage": 11,
+      "pdfPage": 12,
+      "criterion": {
+        "operator": "manual",
+        "description": "Uninterrupted illumination"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-power"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-FF",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Flicker",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.39",
+      "topic": "Flicker",
+      "printedPage": 41,
+      "pdfPage": 42,
+      "criterion": {
+        "operator": "lt",
+        "value": 1,
+        "unit": "percent"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-quality"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-GOAL-EH",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Goal-line horizontal",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.38",
+      "topic": "Goal-line horizontal",
+      "printedPage": 40,
+      "pdfPage": 41,
+      "criterion": {
+        "operator": "gt",
+        "value": 500,
+        "unit": "lux"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Eh"
+      ],
+      "basisRequirementId": "F34-TR-LIGHT-01",
+      "measurementLocation": "Centre of each goal line, 1 m height"
+    },
+    {
+      "id": "FL-T1-GOAL-EV",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Goal-line vertical",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.38",
+      "topic": "Goal-line vertical",
+      "printedPage": 40,
+      "pdfPage": 41,
+      "criterion": {
+        "operator": "gt",
+        "value": 350,
+        "unit": "lux"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "planes": [
+        "Ev0",
+        "Ev90",
+        "Ev180",
+        "Ev270"
+      ],
+      "basisRequirementId": "F34-TR-LIGHT-01",
+      "measurementLocation": "Centre of each goal line, 1 m height"
+    },
+    {
+      "id": "FL-A-GRID",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Test coverage",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.10",
+      "topic": "Test coverage",
+      "printedPage": 15,
+      "pdfPage": 16,
+      "criterion": {
+        "operator": "measurement-protocol",
+        "gridPoints": 96,
+        "planes": [
+          "Eh",
+          "Ev0",
+          "Ev90",
+          "Ev180",
+          "Ev270"
+        ],
+        "heightM": 1
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-GRID",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Test coverage",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.39",
+      "topic": "Test coverage",
+      "printedPage": 41,
+      "pdfPage": 42,
+      "criterion": {
+        "operator": "measurement-protocol",
+        "gridPoints": 96,
+        "planes": [
+          "Eh",
+          "Ev0",
+          "Ev90",
+          "Ev180",
+          "Ev270"
+        ]
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-A-CALIBRATION",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Meter calibration age",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.10",
+      "topic": "Meter calibration age",
+      "printedPage": 15,
+      "pdfPage": 16,
+      "criterion": {
+        "operator": "lte",
+        "value": 12,
+        "unit": "months"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-TESTER",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Independent testing",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.10",
+      "topic": "Independent testing",
+      "printedPage": 15,
+      "pdfPage": 16,
+      "criterion": {
+        "operator": "manual",
+        "description": "Qualified independent tester"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-measurements"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-A-FPS",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Power profile",
+      "assetType": "Stadium",
+      "condition": "Stadium · Standard A",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.61",
+      "topic": "Power profile",
+      "printedPage": 65,
+      "pdfPage": 66,
+      "criterion": {
+        "operator": "manual",
+        "description": "FPS A engineering review"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-power"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    },
+    {
+      "id": "FL-T1-FPS",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "Power profile",
+      "assetType": "Training site",
+      "condition": "Training site · Grade 1",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "training-grade-1",
+      "section": "1.64",
+      "topic": "Power profile",
+      "printedPage": 68,
+      "pdfPage": 69,
+      "criterion": {
+        "operator": "manual",
+        "description": "FPS D with Grade 1 conditions"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "technical-standard",
+      "evidenceIds": [
+        "lighting-power"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-TR-LIGHT-01"
+    },
+    {
+      "id": "FL-A-LED",
+      "version": 1,
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "title": "New-system luminaires",
+      "assetType": "Stadium",
+      "condition": "New Standard A stadium or lighting installation",
+      "category": "Lighting",
+      "categoryBasis": "PoC grouping",
+      "profileId": "stadium-a",
+      "section": "1.1",
+      "topic": "New-system luminaires",
+      "printedPage": 7,
+      "pdfPage": 8,
+      "criterion": {
+        "operator": "recommendation",
+        "value": "LED"
+      },
+      "sourceCheck": "source-checked",
+      "applicabilityReview": "pending",
+      "authority": "recommendation",
+      "evidenceIds": [
+        "lighting-design"
+      ],
+      "reviewIssueIds": [],
+      "basisRequirementId": "F34-ST-LIGHT-01"
+    }
+  ],
+  "lightingProfiles": [
+    {
+      "id": "stadium-a",
+      "name": "Stadium · Standard A",
+      "assetType": "Stadium",
+      "basisRequirementId": "F34-ST-LIGHT-01",
+      "scopeNote": "Stadium performance table plus selected testing and continuity controls. Detailed design, entertainment lighting and full electrical design review remain outside this subset."
+    },
+    {
+      "id": "training-grade-1",
+      "name": "Training site · Grade 1",
+      "assetType": "Training site",
+      "basisRequirementId": "F34-TR-LIGHT-01",
+      "scopeNote": "Grade 1 performance table and selected power controls. Site-specific design and the complete training test procedure require specialist review."
+    }
+  ],
+  "evidenceSpecifications": [
+    {
+      "id": "lighting-applicability",
+      "name": "Lighting applicability decision",
+      "basis": "PoC evidence design",
+      "fields": [
+        "Facility ID and asset type",
+        "Intended tournament use",
+        "Issued specification and edition",
+        "Selected lighting and power profiles",
+        "Reviewer decision and date"
+      ],
+      "reviewPurpose": "Confirm the applicable baseline before creating facility assessments."
+    },
+    {
+      "id": "lighting-measurements",
+      "name": "Illuminance evidence pack",
+      "basis": "PoC evidence design",
+      "fields": [
+        "Facility and pitch ID",
+        "Test date and operating mode",
+        "Grid point ID and orientation",
+        "Horizontal and four vertical plane readings in lux",
+        "Meter height",
+        "Tester independence and qualifications",
+        "Meter ID and calibration date",
+        "Measured or design-modelled evidence"
+      ],
+      "reviewPurpose": "Recalculate plane-specific results, check coverage, and distinguish measured performance from design predictions."
+    },
+    {
+      "id": "lighting-quality",
+      "name": "Lighting quality report",
+      "basis": "PoC evidence design",
+      "fields": [
+        "Facility ID and test date",
+        "Flicker readings and positions",
+        "Colour temperature and colour rendering results",
+        "Glare calculation and method",
+        "Test equipment and calibration"
+      ],
+      "reviewPurpose": "Check traceability of each reported quality metric and resolve flagged source interpretations."
+    },
+    {
+      "id": "lighting-power",
+      "name": "Power continuity evidence",
+      "basis": "PoC evidence design",
+      "fields": [
+        "Electrical single-line diagram",
+        "Primary and secondary supply arrangements",
+        "Load schedule",
+        "Failure and switching test records",
+        "UPS sizing and runtime",
+        "Lighting control supply",
+        "Reviewer approval"
+      ],
+      "reviewPurpose": "Engineering review of continuity, redundancy and the selected power profile."
+    },
+    {
+      "id": "lighting-design",
+      "name": "Lighting design and maintenance evidence",
+      "basis": "PoC evidence design",
+      "fields": [
+        "Design model and luminaire type",
+        "Maintenance assumptions",
+        "Cleaning and replacement plan",
+        "Supporting specialist calculation"
+      ],
+      "reviewPurpose": "Review design assumptions and any project-specific departures."
+    }
+  ],
+  "reviewIssues": [
+    {
+      "id": "cri-boundary",
+      "title": "Colour-rendering boundary",
+      "detail": "Table uses ≥; prose uses >. Confirm equality treatment before assessment.",
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "pages": [
+        6,
+        11,
+        59
+      ],
+      "status": "open"
+    },
+    {
+      "id": "flicker-boundary",
+      "title": "Flicker boundary",
+      "detail": "Table is strict; obligations paragraph permits equality. Confirm precedence.",
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "pages": [
+        6,
+        11,
+        54
+      ],
+      "status": "open"
+    },
+    {
+      "id": "training-u2-label",
+      "title": "Training uniformity label",
+      "detail": "The 0° row is labelled “Uniformity b”. U2 interpretation needs confirmation.",
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "pages": [
+        41,
+        49
+      ],
+      "status": "open"
+    },
+    {
+      "id": "colour-range-boundaries",
+      "title": "Colour range endpoints",
+      "detail": "Range notation does not define endpoint comparison. Confirm before automation.",
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "pages": [
+        11,
+        41
+      ],
+      "status": "open"
+    },
+    {
+      "id": "maur-counting",
+      "title": "Adjacent-failure counting",
+      "detail": "Confirm treatment of repeated neighbouring comparisons. Retain raw grid evidence for specialist review.",
+      "sourceId": "fifa-lighting-guide-2020-01",
+      "pages": [
+        56,
+        57
+      ],
+      "status": "open"
+    }
+  ],
+  "lightingScope": {
+    "title": "Lighting domain baseline",
+    "status": "Source research and evidence design; assessments pending",
+    "scopeNote": "Standard A and Grade 1 selected criteria. Specialist review is required for flagged interpretations and power designs. This subset does not establish complete lighting compliance.",
+    "businessInputs": [
+      "Current issued 2034 hosting requirements, lighting annexes and amendments",
+      "Confirmed lighting profile for each facility",
+      "Representative signed illuminance and power test reports",
+      "Named engineering reviewer for interpretation decisions"
+    ],
+    "legacyDifferences": [
+      {
+        "legacyCode": "LGT-01",
+        "detail": "Legacy vertical threshold differs from sourced horizontal and vertical definitions. Reassessment requires plane-specific evidence.",
+        "requirementIds": [
+          "FL-A-EH-AVG",
+          "FL-A-EV-AVG"
+        ]
+      },
+      {
+        "legacyCode": "LGT-02",
+        "detail": "Legacy vertical U2 differs from the sourced Standard A vertical criterion. Existing results require reassessment.",
+        "requirementIds": [
+          "FL-A-EV-U2"
+        ]
+      }
+    ],
+    "measurementDefinitions": [
+      {
+        "name": "U1",
+        "description": "Minimum divided by maximum within the same reference plane.",
+        "sourceId": "fifa-lighting-guide-2020-01",
+        "printedPage": 49,
+        "pdfPage": 50
+      },
+      {
+        "name": "U2",
+        "description": "Minimum divided by average within the same reference plane.",
+        "sourceId": "fifa-lighting-guide-2020-01",
+        "printedPage": 49,
+        "pdfPage": 50
+      }
+    ]
+  }
+}
