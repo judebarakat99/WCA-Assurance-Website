@@ -6,7 +6,7 @@ import StatusPill from "@/components/atoms/StatusPill";
 import { LEVELS, fmtD, dd, daysBetween, venueMeta } from "@/lib/domain/data";
 import { escalateIssue } from "@/lib/domain/actions";
 import { LEVEL_COLOR } from "@/lib/ui/tones";
-import { openDrawer } from "@/legacy/views/drawer";
+import { openDrawer } from "@/lib/drawer";
 
 /** A corrective action: SLA clock, escalation level, history and escalate button. */
 export default function IssueCard({ issue: i, S }) {

@@ -7,7 +7,7 @@ import ThemeToggle from "@/components/atoms/ThemeToggle";
 import { publicAssetUrl } from "@/lib/assets.mjs";
 import { advance, toast } from "@/lib/domain/actions";
 import { resetS, ui, rerender } from "@/lib/store/state";
-import { closeDrawer } from "@/legacy/views/drawer";
+import { closeDrawer } from "@/lib/drawer";
 import { startTour, EXEC } from "@/legacy/views/tour";
 
 const TABS = [

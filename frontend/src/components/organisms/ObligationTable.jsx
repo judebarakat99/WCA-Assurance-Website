@@ -6,7 +6,7 @@ import StatusPill from "@/components/atoms/StatusPill";
 import { fmtN, venueMeta } from "@/lib/domain/data";
 import { depBlocked, isProven } from "@/lib/domain/scoring";
 import { STATE_TONE } from "@/lib/ui/tones";
-import { openDrawer } from "@/legacy/views/drawer";
+import { openDrawer } from "@/lib/drawer";
 
 const OP = { min: "≥ ", max: "≤ ", eq: "= " };
 const criterion = (o) => (o.op === "bool" ? "yes" : `${OP[o.op]}${fmtN(o.value)} ${o.unit}`);

@@ -2,7 +2,7 @@
 
 import StatusPill from "@/components/atoms/StatusPill";
 import { MAT, fmtD, showVal } from "@/lib/domain/data";
-import { openDrawer } from "@/legacy/views/drawer";
+import { openDrawer } from "@/lib/drawer";
 
 const RESULT = {
   pass: ["good", "Pass"],

@@ -23,7 +23,7 @@ import {
 import { goView } from "@/lib/store/state";
 import { openDossier, openRegister } from "@/lib/navigation";
 import { STATE_COLOR, STATE_TONE, probTone, toneOf } from "@/lib/ui/tones";
-import { openDrawer } from "@/legacy/views/drawer";
+import { openDrawer } from "@/lib/drawer";
 
 const plural = (n, one, many) => (n === 1 ? one : many);
 

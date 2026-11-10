@@ -8,7 +8,7 @@ import Select from "@/components/molecules/Select";
 import { CHANGES, sn, showVal, venueMeta } from "@/lib/domain/data";
 import { applyChange, changeImpact } from "@/lib/domain/actions";
 import { updateUi } from "@/lib/store/state";
-import { openDrawer } from "@/legacy/views/drawer";
+import { openDrawer } from "@/lib/drawer";
 
 const OUTCOME = {
   flip: ["bad", "✕", "flips to fail"],

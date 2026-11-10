@@ -20,8 +20,11 @@ import {
   toast,
   changeImpact,
   decompose,
+  applyChange,
+  requestGatePass,
+  escalateGateBlockers,
 } from "@/lib/domain/actions";
-import { openDrawer, closeDrawer } from "@/legacy/views/drawer";
+import { openDrawer, closeDrawer, runValidation } from "@/lib/drawer";
 
 const $ = (s) => document.querySelector(s);
 // ---------- guided demo ----------
@@ -107,8 +110,7 @@ const TOUR = [
     title: "Evidence decides",
     run: () => {
       if (ui.drawerId !== "JED-LGT-01") openDrawer("JED-LGT-01");
-      const b = $("[data-validate]");
-      if (b) b.click();
+      runValidation("JED-LGT-01");
       return "#lastResult";
     },
     say: "The engine checks the submitted commissioning test against the rule. It shows 1,850 lux. So the owner's complete is overturned. The obligation is rejected, and a corrective action opens with a seven day deadline. In a status report, this would have been green.",
@@ -143,8 +145,7 @@ const TOUR = [
     title: "Gate refused",
     run: () => {
       go("gates");
-      const b = $('[data-gate="JED"]');
-      if (b) b.click();
+      requestGatePass("JED");
       return "#gate-JED";
     },
     say: "The contractor requests the gate pass. The engine refuses it, and names every blocker. The tool does not just inform the decision. It enforces the standard.",
@@ -153,8 +154,7 @@ const TOUR = [
     title: "Blockers escalated",
     run: () => {
       go("gates");
-      const b = $('[data-escalate-gate="JED"]');
-      if (b) b.click();
+      escalateGateBlockers("JED");
       return "#gate-JED";
     },
     say: "With one click, every blocker is escalated straight to the authority executive, each with its own deadline and owner.",
@@ -187,8 +187,7 @@ const TOUR = [
     run: () => {
       ui.selChange = "lux";
       go("change");
-      const b = $("#applyChange");
-      if (b && !b.disabled) b.click();
+      if (!(S.applied || []).includes("lux")) applyChange();
       return ".tablewrap";
     },
     say: "Applying the update re-baselines the criterion everywhere it appears, reverts the failing evidence, and opens corrective actions. Past compliance cannot silently decay.",
@@ -276,8 +275,7 @@ const EXEC = [
     title: "The gate holds",
     run: () => {
       go("gates");
-      const b = $('[data-gate="JED"]');
-      if (b) b.click();
+      requestGatePass("JED");
       return "#gate-JED";
     },
     say: "Jeddah asks to pass construction complete. The engine checks every critical obligation and the evidence behind it. It refuses the pass, and names each blocker. The standard is enforced, not just reported.",
@@ -314,8 +312,7 @@ const EXEC = [
     run: () => {
       ui.selChange = "lux";
       go("change");
-      const b = $("#applyChange");
-      if (b && !b.disabled) b.click();
+      if (!(S.applied || []).includes("lux")) applyChange();
       return ".tablewrap";
     },
     say: "When FIFA changes a requirement, the engine re-tests all past evidence at once, and reopens anything that no longer complies.",

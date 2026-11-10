@@ -47,7 +47,7 @@ import {
   openDrawer,
   closeDrawer,
   renderDrawer,
-} from "@/legacy/views/drawer";
+} from "@/lib/drawer";
 import {
   applyHL,
   startTour,
@@ -144,7 +144,6 @@ export function bootRuntime() {
   installListeners();
   mountAI();
   waitForTwin();
-  renderDrawer();
 }
 
 export function setRouterPush(push) {
@@ -159,163 +158,42 @@ export function mountReactView() {
   applyHL(false);
 }
 
-// ---------- delegated events (behaviour preserved from the original app) ----------
+// ---------- delegated events for the assistant panel and the tour dock ----------
+// Both are still rendered from HTML strings (views/ai.js, views/tour.js).
 let listenersOn = false;
+function toggleAssistant(open) {
+  ai.open = open;
+  const panel = document.getElementById("aiPanel");
+  if (panel) panel.hidden = !open;
+  const fab = document.getElementById("aiFab");
+  if (fab) fab.setAttribute("aria-expanded", String(open));
+  if (open && !ai.msgs.length) {
+    ai.msgs.push({
+      who: "a",
+      html: "Hi, I'm Nabd. Ask me about programme readiness, stadiums, gates, decisions or your reference documents. Programme metrics are illustrative; answers include supporting references.",
+      greeting: true,
+    });
+    renderAIMsgs();
+  }
+  if (open) document.getElementById("aiInput")?.focus();
+}
 function installListeners() {
   if (listenersOn) return;
   listenersOn = true;
   document.addEventListener("click", (ev) => {
-    const link = ev.target.closest && ev.target.closest('a[href^="#"]');
-    if (link) {
-      const h = link.getAttribute("href").slice(1);
-      if (
-        PATHS[h] ||
-        ALIAS[h] ||
-        (/^venue-/.test(h) && venueMeta(h.slice(6)))
-      ) {
-        ev.preventDefault();
-        goView(h);
-        return;
-      }
-    }
-    const t = ev.target.closest(
-      "button,[data-obl],[data-close],[data-ai-close]",
-    );
-
+    const t = ev.target.closest("button");
     if (!t) return;
-    if (t.id === "aiFab") {
-      ai.open = !ai.open;
-      const p = document.getElementById("aiPanel");
-      if (p) p.hidden = !ai.open;
-      t.setAttribute("aria-expanded", String(ai.open));
-      if (ai.open && !ai.msgs.length) {
-        ai.msgs.push({
-          who: "a",
-          html: "Hi, I'm Nabd. Ask me about programme readiness, stadiums, gates, decisions or your reference documents. Programme metrics are illustrative; answers include supporting references.",
-          greeting: true,
-        });
-        renderAIMsgs();
-      }
-      if (ai.open) {
-        const i = document.getElementById("aiInput");
-        if (i) i.focus();
-      }
-      return;
-    }
+    if (t.id === "aiFab") return toggleAssistant(!ai.open);
     if (t.id === "aiClose" || t.hasAttribute("data-ai-close")) {
       ev.preventDefault();
-      ev.stopPropagation();
-
-      ai.open = false;
-
-      const panel = document.getElementById("aiPanel");
-      if (panel) {
-        panel.hidden = true;
-      }
-
-      const fab = document.getElementById("aiFab");
-      if (fab) {
-        fab.setAttribute("aria-expanded", "false");
-      }
-
-      return;
+      return toggleAssistant(false);
     }
-    if (t.dataset.aiq) {
-      aiAsk(t.dataset.aiq);
-      return;
-    }
-    if (t.dataset.venueDetail) {
-      goView("venue-" + t.dataset.venueDetail);
-      return;
-    }
-    if (t.dataset.tour) {
-      handleTourClick(t.dataset.tour);
-      return;
-    }
-    if (t.hasAttribute("data-close")) {
-      closeDrawer();
-      return;
-    }
-    const o = ui.drawerId && S.obligations.find((x) => x.id === ui.drawerId);
-    if (t.hasAttribute("data-validate") && o) {
-      const ok = validate(o);
-      const e = o.evidence[o.evidence.length - 1];
-      ui.lastResult = {
-        ok,
-        msg: ok
-          ? `Pass: ${showVal(o, e.value)} meets the criterion.`
-          : `Fail: ${showVal(o, e.value)} does not meet ${critText(o)}. The owner's "complete" is overturned, status set to Rejected, corrective action opened with a ${SLA[o.crit]}-day SLA.`,
-      };
-      save();
-      rerender();
-      renderDrawer();
-      return;
-    }
-    if (t.hasAttribute("data-verify") && o) {
-      verify(o);
-      ui.lastResult = {
-        ok: true,
-        msg: "Verified by the compliance office. This obligation now counts fully toward assured readiness.",
-      };
-      save();
-      rerender();
-      renderDrawer();
-      return;
-    }
-    if (t.dataset.obl) {
-      openDrawer(t.dataset.obl);
-      return;
-    }
-
-    if (t.dataset.goto) {
-      ui.filters.venue = t.dataset.venue || "all";
-      ui.filters.family = "all";
-      ui.filters.state = "all";
-      ui.filters.q = "";
-      goView(t.dataset.goto);
-      if (t.dataset.goto === "gates")
-        setTimeout(() => {
-          const el = document.getElementById("gate-" + t.dataset.venue);
-          if (el) el.scrollIntoView({ block: "start" });
-        }, 30);
-      return;
-    }
-    if (t.dataset.gate) {
-      requestGatePass(t.dataset.gate);
-      return;
-    }
-    if (t.dataset.escalateGate) {
-      escalateGateBlockers(t.dataset.escalateGate);
-      return;
-    }
-    if (t.dataset.esc) {
-      escalateIssue(t.dataset.esc);
-      return;
-    }
-    if (t.dataset.decide) {
-      decide(t.dataset.decide, Number(t.dataset.opt));
-      return;
-    }
-    if (t.dataset.dossier) {
-      ui.dossierVenue = t.dataset.dossier;
-      goView("dossier");
-      return;
-    }
-  });
-  document.addEventListener("keydown", (ev) => {
-    if (ev.key === "Escape" && ui.drawerId) closeDrawer();
-    if (ev.key === "Enter" && ev.target.matches("tr[data-obl]"))
-      openDrawer(ev.target.dataset.obl);
+    if (t.dataset.aiq) return aiAsk(t.dataset.aiq);
+    if (t.dataset.tour) return handleTourClick(t.dataset.tour);
   });
   document.addEventListener("change", (ev) => {
     const t = ev.target;
-    if (t.id === "tourVoice") {
-      setTourVoice(t.checked);
-      return;
-    }
-    if (t.id === "tourVoiceSel") {
-      setTourVoiceName(t.value);
-      return;
-    }
+    if (t.id === "tourVoice") setTourVoice(t.checked);
+    if (t.id === "tourVoiceSel") setTourVoiceName(t.value);
   });
 }

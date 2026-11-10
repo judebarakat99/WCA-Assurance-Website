@@ -1031,6 +1031,21 @@ tr.flip td {
 }
 
 /* ---------- Drawer ---------- */
+.drawer-title {
+  font-size: 19px;
+  margin-top: 4px;
+  padding-right: 56px;
+}
+.drawer-note {
+  margin-top: -6px;
+}
+.drawer-form {
+  background: var(--sunk);
+  border: 0;
+}
+#evForm {
+  gap: 10px;
+}
 .drawer-bg {
   position: fixed;
   inset: 0;

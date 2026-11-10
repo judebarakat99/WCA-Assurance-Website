@@ -1,7 +1,7 @@
 "use client";
 
 import { fmtD } from "@/lib/domain/data";
-import { openDrawer } from "@/legacy/views/drawer";
+import { openDrawer } from "@/lib/drawer";
 
 // Colour an audit entry by what happened.
 export function auditTone(action) {

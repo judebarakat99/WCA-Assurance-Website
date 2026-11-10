@@ -5,7 +5,7 @@ import StatusPill from "@/components/atoms/StatusPill";
 import GateTrack from "@/components/molecules/GateTrack";
 import { fmtD } from "@/lib/domain/data";
 import { requestGatePass, escalateGateBlockers } from "@/lib/domain/actions";
-import { openDrawer } from "@/legacy/views/drawer";
+import { openDrawer } from "@/lib/drawer";
 
 const MAX_BLOCKERS = 6;
 
