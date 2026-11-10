@@ -1,5 +1,7 @@
-import AppView from "@/legacy/AppView";
+import OverviewPage from "@/components/pages/OverviewPage";
 
-export default function OverviewPage() {
-  return <AppView view="overview" />;
+export const metadata = { title: "Overview · Compliance Assurance Suite" };
+
+export default function Page() {
+  return <OverviewPage />;
 }

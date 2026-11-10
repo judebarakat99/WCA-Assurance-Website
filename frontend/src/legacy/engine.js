@@ -66,7 +66,6 @@ import {
 } from "@/legacy/views/tour";
 import { mountAI, renderAIMsgs, aiAsk } from "@/legacy/views/ai";
 import { ai } from "@/lib/store/state";
-import { viewOverview, ovSelect } from "@/legacy/views/overview";
 
 const $ = (s) => document.querySelector(s);
 export const PATHS = {
@@ -125,7 +124,6 @@ function navigate(h) {
 
 // Views still rendered from HTML strings. "twin" is handled below.
 const VIEW_FNS = {
-  overview: viewOverview,
   readiness: viewReadiness,
   requirements: viewRequirements,
 };
@@ -271,16 +269,6 @@ function installListeners() {
         fab.setAttribute("aria-expanded", "false");
       }
 
-      return;
-    }
-    if (t.dataset.ovVenue) {
-      ovSelect(t.dataset.ovVenue);
-      rerender();
-      return;
-    }
-    if (t.hasAttribute("data-ov-clear")) {
-      ovSelect(null);
-      rerender();
       return;
     }
     if (t.dataset.aiq) {

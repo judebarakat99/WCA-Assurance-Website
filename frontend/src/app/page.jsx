@@ -1,5 +1,5 @@
-import AppView from "@/legacy/AppView";
+import OverviewPage from "@/components/pages/OverviewPage";
 
-export default function HomePage() {
-  return <AppView view="overview" />;
+export default function Page() {
+  return <OverviewPage />;
 }
