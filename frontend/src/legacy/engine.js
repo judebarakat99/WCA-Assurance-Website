@@ -44,7 +44,6 @@ import {
 } from "@/lib/domain/actions";
 import { viewTower, intakeCard } from "@/legacy/views/tower";
 import { viewReadiness } from "@/legacy/views/readiness";
-import { viewVenueDetail } from "@/legacy/views/venueDetail";
 import { viewActions } from "@/legacy/views/actionsView";
 import {
   viewRequirements,
@@ -127,7 +126,7 @@ function navigate(h) {
   if (routerPush) routerPush(pathFor(h), { scroll: false });
 }
 
-// Views still rendered from HTML strings. "twin" and "venue" are handled below.
+// Views still rendered from HTML strings. "twin" is handled below.
 const VIEW_FNS = {
   overview: viewOverview,
   readiness: viewReadiness,
@@ -137,7 +136,7 @@ const VIEW_FNS = {
   dossier: viewDossier,
   compliance: viewCompliance,
 };
-const LEGACY_VIEWS = new Set([...Object.keys(VIEW_FNS), "twin", "venue"]);
+const LEGACY_VIEWS = new Set([...Object.keys(VIEW_FNS), "twin"]);
 
 function renderLegacy() {
   const v = document.getElementById("view");
@@ -156,11 +155,6 @@ function renderLegacy() {
         "beforeend",
         `<p class="muted">Loading the 3D design engine…</p>`,
       );
-    applyHL(false);
-    return;
-  }
-  if (current.view === "venue") {
-    v.innerHTML = viewVenueDetail(current.param);
     applyHL(false);
     return;
   }

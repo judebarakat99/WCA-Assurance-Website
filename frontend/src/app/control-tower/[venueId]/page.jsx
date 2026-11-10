@@ -1,4 +1,4 @@
-import AppView from "@/legacy/AppView";
+import VenueDetailPage from "@/components/pages/VenueDetailPage";
 import { VENUES, venueMeta } from "@/lib/domain/data";
 
 export const dynamicParams = false;
@@ -13,7 +13,7 @@ export async function generateMetadata({ params }) {
   return { title: `${m ? m.name : "Venue"} · Compliance Assurance Suite` };
 }
 
-export default async function VenueDetailPage({ params }) {
+export default async function Page({ params }) {
   const { venueId } = await params;
-  return <AppView view="venue" param={venueId} />;
+  return <VenueDetailPage venueId={venueId} />;
 }

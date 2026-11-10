@@ -76,6 +76,18 @@ h3 {
 .fine {
   font-size: 12px;
 }
+.mt {
+  margin-top: 14px;
+}
+.m0 {
+  margin: 0;
+}
+.note {
+  margin: 12px 0 0;
+}
+.clickable {
+  cursor: pointer;
+}
 .mono {
   font-family: var(--f-mono);
   font-size: 12.5px;
