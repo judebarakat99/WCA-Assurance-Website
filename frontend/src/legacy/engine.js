@@ -44,7 +44,6 @@ import {
 } from "@/lib/domain/actions";
 import { viewTower, intakeCard } from "@/legacy/views/tower";
 import { viewReadiness } from "@/legacy/views/readiness";
-import { viewRegister } from "@/legacy/views/register";
 import { viewVenueDetail } from "@/legacy/views/venueDetail";
 import { viewActions } from "@/legacy/views/actionsView";
 import {
@@ -137,7 +136,6 @@ const VIEW_FNS = {
   requirements: viewRequirements,
   dossier: viewDossier,
   compliance: viewCompliance,
-  register: viewRegister,
 };
 const LEGACY_VIEWS = new Set([...Object.keys(VIEW_FNS), "twin", "venue"]);
 
@@ -613,18 +611,6 @@ function installListeners() {
   });
   document.addEventListener("change", (ev) => {
     const t = ev.target;
-    if (t.id === "fVenue") {
-      ui.filters.venue = t.value;
-      rerender();
-    }
-    if (t.id === "fFamily") {
-      ui.filters.family = t.value;
-      rerender();
-    }
-    if (t.id === "fState") {
-      ui.filters.state = t.value;
-      rerender();
-    }
     if (t.id === "chSel") {
       ui.selChange = t.value;
       rerender();
@@ -690,14 +676,6 @@ function installListeners() {
     }
   });
   document.addEventListener("input", (ev) => {
-    if (ev.target.id === "fQ") {
-      ui.filters.q = ev.target.value;
-      const pos = ev.target.selectionStart;
-      rerender();
-      const el = $("#fQ");
-      el.focus();
-      el.setSelectionRange(pos, pos);
-    }
     if (ev.target.id === "decoIn") {
       ui.decoInput = ev.target.value;
     }

@@ -73,6 +73,9 @@ h3 {
 .small {
   font-size: 13px;
 }
+.fine {
+  font-size: 12px;
+}
 .mono {
   font-family: var(--f-mono);
   font-size: 12.5px;
