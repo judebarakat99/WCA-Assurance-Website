@@ -43,7 +43,8 @@ alias (`frontend/jsconfig.json`). Components follow atomic design; routes stay
 thin.
 
 - `src/app/`: App Router routes only — `page.jsx` files with metadata, plus
-  `layout.jsx`. Routes: `/` and `/overview`, `/readiness`, `/control-tower`
+  `layout.jsx`. Routes: `/assurance` (map-first assurance home, prototype),
+  `/facilities/[facilityId]` (facility assessments), `/` and `/overview`, `/readiness`, `/control-tower`
   (with `/register`, `/gates` and `/[venueId]`), `/decisions-actions`,
   `/design-review`, `/requirements-evidence`, `/dossiers`, `/compliance`.
 - `src/components/atoms/` → `molecules/` → `organisms/` → `templates/` →
@@ -68,6 +69,9 @@ thin.
 - `src/styles/`: `tokens.css` (Saudi 2034 brand, light and dark), `base.css`
   (elements, layout, controls) and `components.css` (component styles; class
   names are shared with the tour's selectors).
+- Map: MapLibre GL JS (BSD-3-Clause, no account or API key) draws
+  `data/geo/sa-regions.geo.json` (geoBoundaries / OpenStreetMap, ODbL; the map
+  shows the required credit). No basemap tiles are loaded.
 - `public/scripts/stadium-twin.js`, `public/vendor/`: the imperative 3D twin,
   Three.js r128 and OrbitControls (licenses retained).
 - Fonts: Barlow (brand typeface) from `@fontsource/barlow`; IBM Plex Mono in

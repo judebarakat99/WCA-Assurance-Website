@@ -129,6 +129,7 @@ export default function AssessmentTable({ facilityId, title, rows, records }) {
                   </td>
                   <td>
                     {inScope ? <StatusPill tone={STATUS_TONE[status]}>{STATUS[status]}</StatusPill> : "–"}
+                    {record?.sample && <div className="muted fine">Sample data</div>}
                   </td>
                 </tr>
                 {inScope && (

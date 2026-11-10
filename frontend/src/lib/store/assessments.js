@@ -2,6 +2,7 @@
 // browser (separately from the demo simulation). Changes call notify() so
 // components using useProgramme() re-render.
 import { assessmentKey, evaluate, seedAssessments } from "@/lib/domain/assessment.mjs";
+import { sampleAssessments } from "@/lib/domain/sampleAssessments.mjs";
 import { notify } from "@/lib/store/state";
 
 const KEY = "wca-assessments-v1";
@@ -80,4 +81,16 @@ export function resetAssessments() {
   records = seedAssessments();
   save();
   notify();
+}
+
+/** Replace the store with labelled sample assessments for a demonstration. */
+export function loadSampleAssessments() {
+  records = sampleAssessments();
+  save();
+  notify();
+}
+
+/** True when the store holds sample records. */
+export function hasSampleAssessments() {
+  return Object.values(getAssessments()).some((a) => a.sample);
 }

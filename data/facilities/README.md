@@ -69,3 +69,12 @@ the seed).
 
 A shared, multi-user store (and real document intake) will replace browser
 storage before this is used beyond a demo.
+
+## Sample assessments (demo only)
+
+`frontend/src/lib/domain/sampleAssessments.mjs` generates assessments for
+demonstrations, loaded from the assurance map ("Load sample assessments") and
+cleared there or with "Reset demo". Every sample record has `sample: true`, its
+evidence file is named `sample_…` and the UI labels it "Sample data". Values are
+deterministic; stadiums due earlier are further along. None of it is real
+evidence.

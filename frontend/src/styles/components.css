@@ -5583,3 +5583,358 @@ details.fc-table summary {
 .assess-form {
   align-items: end;
 }
+
+/* ---------- Assurance map (map-first home) ---------- */
+main.wide {
+  padding: 0;
+}
+.ahome {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  height: calc(100dvh - 72px);
+  min-height: 560px;
+}
+.arail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 6px;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+}
+.arail button {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  width: 62px;
+  padding: 8px 2px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.15;
+}
+.arail button:hover:not(:disabled) {
+  background: var(--sunk);
+  color: var(--ink);
+}
+.arail button.on {
+  background: var(--highlight-soft);
+  color: var(--highlight);
+  font-weight: 600;
+}
+.arail button:disabled {
+  opacity: 0.4;
+}
+.arail hr {
+  width: 36px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 6px 0;
+}
+.astage {
+  position: relative;
+  min-width: 0;
+}
+/* More specific than maplibre-gl.css's .maplibregl-map { position: relative }. */
+.astage .amap {
+  position: absolute;
+  inset: 0;
+}
+.amap .maplibregl-ctrl-attrib {
+  font-size: 10px;
+}
+.amap-pin {
+  position: relative;
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  --pin: var(--muted);
+}
+.amap-pin[data-tone="good"] {
+  --pin: var(--good);
+}
+.amap-pin[data-tone="warn"] {
+  --pin: var(--warn);
+}
+.amap-pin[data-tone="bad"] {
+  --pin: var(--bad);
+}
+.amap-pin .amap-glow,
+.amap-pin .amap-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.amap-pin .amap-glow {
+  width: 44px;
+  height: 44px;
+  background: color-mix(in srgb, var(--pin) 28%, transparent);
+  animation: amap-pulse 2.6s ease-out infinite;
+}
+.amap-pin .amap-dot {
+  width: 18px;
+  height: 18px;
+  background: var(--pin);
+  border: 3px solid var(--surface);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--shadow-color) 35%, transparent);
+}
+.amap-pin.sel .amap-dot {
+  width: 24px;
+  height: 24px;
+}
+.amap-pin .amap-label {
+  position: absolute;
+  left: 0;
+  top: 18px;
+  transform: translateX(-50%);
+  display: grid;
+  justify-items: center;
+  padding: 2px 8px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  color: var(--ink);
+  white-space: nowrap;
+  font-size: 12px;
+  line-height: 1.25;
+}
+.amap-pin .amap-label small {
+  color: var(--muted);
+  font-size: 10.5px;
+}
+@keyframes amap-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .amap-pin .amap-glow {
+    animation: none;
+  }
+}
+.abrief {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  bottom: 96px;
+  width: min(380px, calc(100% - 36px));
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+.abrief h2 {
+  margin: 0;
+  font-size: 22px;
+}
+.abrief-top {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+.abrief-lead {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+}
+.abrief-cover > div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.abrief-cover b {
+  color: var(--ink);
+}
+.abrief-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.abrief-cta {
+  display: grid;
+  gap: 2px;
+  text-align: left;
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: var(--highlight-soft);
+  border: 1px solid color-mix(in srgb, var(--highlight) 30%, transparent);
+  color: var(--ink);
+}
+.abrief-cta b {
+  color: var(--highlight);
+  font-size: 15px;
+}
+.abrief-cta span {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.abrief-sample {
+  margin: auto 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.abrief-back {
+  align-self: flex-start;
+}
+.abrief-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.abrief-list a {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--sunk);
+  color: var(--ink);
+  text-decoration: none;
+}
+.abrief-list a:hover {
+  background: var(--accent-soft);
+}
+.abrief-list small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+.abrief-list i,
+.alegend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.abrief-list i.good,
+.alegend i.good {
+  background: var(--good);
+}
+.abrief-list i.warn,
+.alegend i.warn {
+  background: var(--warn);
+}
+.abrief-list i.bad,
+.alegend i.bad {
+  background: var(--bad);
+}
+.alegend {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border: 1px solid var(--line);
+  font-size: 12px;
+}
+.alegend span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+}
+/* right: clear of the floating Ask Nabd button */
+.abottom {
+  position: absolute;
+  left: 416px;
+  right: 170px;
+  bottom: 18px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+.arecenter {
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.askbar {
+  display: flex;
+  gap: 8px;
+  width: min(520px, 100%);
+  padding: 6px 6px 6px 16px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+.askbar input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  padding: 6px 0;
+}
+.askbar input:focus-visible {
+  outline: none;
+}
+.askbar button {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+}
+@media (max-width: 860px) {
+  .ahome {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    height: auto;
+  }
+  .arail {
+    flex-direction: row;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .arail hr {
+    display: none;
+  }
+  /* Stack: map, briefing, legend, ask bar. */
+  .astage {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 88px;
+  }
+  .astage .amap {
+    position: relative;
+    inset: auto;
+    height: 380px;
+  }
+  .abrief,
+  .alegend,
+  .abottom {
+    position: static;
+    width: auto;
+    margin: 0 12px;
+  }
+  .abottom {
+    justify-content: stretch;
+  }
+  .askbar {
+    width: 100%;
+  }
+}

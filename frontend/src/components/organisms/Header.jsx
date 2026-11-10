@@ -12,6 +12,7 @@ import { closeDrawer } from "@/lib/drawer";
 import { startTour, EXEC } from "@/lib/tour/player";
 
 const TABS = [
+  ["/assurance", "Assurance map"],
   ["/overview", "Overview"],
   ["/readiness", "Readiness"],
   ["/control-tower", "Control Tower"],
