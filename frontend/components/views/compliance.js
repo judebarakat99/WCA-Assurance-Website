@@ -34,7 +34,7 @@ const familyGroup = (f) =>
   COMPLIANCE_GROUPS.find((g) => g.families.includes(f));
 
 function authorityCards(all) {
-  return `<div class="comp-authorities">${COMPLIANCE_AUTHORITIES.map((a) => {
+  return `<div class="hero comp-authorities" aria-label="Compliance by authority">${COMPLIANCE_AUTHORITIES.map((a) => {
     const L = all.filter((x) => x.authority === a.id),
       r = rate(L),
       proven = L.filter((x) => complianceProven(x.status)).length;
