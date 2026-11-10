@@ -27,6 +27,7 @@ import {
   rerender,
   goView,
   ensureLoaded,
+  notify,
 } from "@/lib/store/state";
 import { venueState, gateEval } from "@/lib/domain/scoring";
 import { invalidateForecasts } from "@/lib/domain/forecast";
@@ -42,7 +43,6 @@ import {
   escalateIssue,
   decompose,
 } from "@/lib/domain/actions";
-import { viewTower, intakeCard } from "@/legacy/views/tower";
 import { viewReadiness } from "@/legacy/views/readiness";
 import {
   viewRequirements,
@@ -127,7 +127,6 @@ function navigate(h) {
 const VIEW_FNS = {
   overview: viewOverview,
   readiness: viewReadiness,
-  tower: viewTower,
   requirements: viewRequirements,
 };
 const LEGACY_VIEWS = new Set([...Object.keys(VIEW_FNS), "twin"]);
@@ -164,12 +163,9 @@ function waitForTwin() {
         log("Rule engine", txt, null);
         save();
       },
-      onChange: () => {
-        const el = document.getElementById("intakeCard");
-        if (el) el.outerHTML = intakeCard();
-      },
+      onChange: notify,
     });
-    if (current.view === "twin" || current.view === "tower") renderLegacy();
+    if (current.view === "twin") renderLegacy();
     return;
   }
   setTimeout(waitForTwin, 200);
@@ -403,31 +399,6 @@ function installListeners() {
     if (t.dataset.dossier) {
       ui.dossierVenue = t.dataset.dossier;
       goView("dossier");
-      return;
-    }
-    if (t.dataset.demo) {
-      const d = t.dataset.demo;
-      if (d === "green") {
-        openDrawer("JED-LGT-01");
-      }
-      if (d === "gate") {
-        goView("gates");
-        setTimeout(() => {
-          const el = document.getElementById("gate-JED");
-          if (el) el.scrollIntoView({ block: "start" });
-        }, 30);
-      }
-      if (d === "camp") {
-        openDrawer("TBC-R3-TBC-03");
-      }
-      if (d === "change") {
-        ui.selChange = "lux";
-        goView("change");
-      }
-      if (d === "dossier") {
-        ui.dossierVenue = "KHO";
-        goView("dossier");
-      }
       return;
     }
     if (t.id === "advance") {

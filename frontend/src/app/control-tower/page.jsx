@@ -1,7 +1,7 @@
-import AppView from "@/legacy/AppView";
+import TowerPage from "@/components/pages/TowerPage";
 
 export const metadata = { title: "Control Tower · Compliance Assurance Suite" };
 
-export default function ControlTowerPage() {
-  return <AppView view="tower" />;
+export default function Page() {
+  return <TowerPage />;
 }
