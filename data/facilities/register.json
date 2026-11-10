@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-11-10",
+  "scopeNote": "Facility facts for the Saudi Arabia 2034 programme as declared in the bid. Values are declarations, not verified assessments. Replace the secondary source with the bid book or FIFA evaluation report when obtained.",
+  "sources": [
+    {
+      "id": "alrajhi-wc2034-economy-2024-12",
+      "title": "Saudi Arabia FIFA World Cup 2034 Bid: Tremendous Growth, Catalyst for the Saudi Economy",
+      "publisher": "Al Rajhi Capital (equity research)",
+      "published": "2024-12-23",
+      "url": "https://argaamplus.s3.amazonaws.com/ffba612d-0798-426d-9a83-2cab9d2e0e15.pdf",
+      "kind": "secondary",
+      "basis": "Tables reproduced from Saudi Arabia's FIFA World Cup 2034 bid document (cited in the report as 'FIFA Bid Document, Al Rajhi Capital').",
+      "limitations": "Secondary source with minor transcription errors (e.g. a capacity printed as 46.979). Training sites and fan festival sites are given as totals only."
+    },
+    {
+      "id": "fifa-wc2034-bid-book",
+      "title": "Saudi Arabia FIFA World Cup 2034 bid book",
+      "publisher": "Saudi Arabian Football Federation",
+      "published": null,
+      "url": null,
+      "kind": "primary",
+      "basis": "Primary source for every fact in this register.",
+      "limitations": "Not yet obtained. Facts are taken from the secondary source until it is."
+    }
+  ],
+  "hostCities": [
+    { "id": "riyadh", "name": "Riyadh", "populationMillions": 7.0, "roomKeys": 127275, "sourceId": "alrajhi-wc2034-economy-2024-12", "pages": [6, 10] },
+    { "id": "jeddah", "name": "Jeddah", "populationMillions": 3.75, "roomKeys": 43109, "sourceId": "alrajhi-wc2034-economy-2024-12", "pages": [6, 10] },
+    { "id": "al-khobar", "name": "Al Khobar", "populationMillions": 2.7, "roomKeys": 17504, "sourceId": "alrajhi-wc2034-economy-2024-12", "pages": [6, 10] },
+    { "id": "abha", "name": "Abha", "populationMillions": 1.1, "roomKeys": 19697, "sourceId": "alrajhi-wc2034-economy-2024-12", "pages": [6, 10] },
+    {
+      "id": "neom",
+      "name": "NEOM",
+      "populationMillions": 0.3,
+      "populationNote": "Population expected by 2030",
+      "roomKeys": 24438,
+      "sourceId": "alrajhi-wc2034-economy-2024-12",
+      "pages": [6, 10]
+    }
+  ],
+  "stadiums": [
+    { "id": "king-fahad-sports-city", "name": "King Fahad Sports City Stadium", "cityId": "riyadh", "grossCapacity": 70200, "status": "existing-refurbishment", "completionYear": 2026, "highestMatch": "semi-final", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8 },
+    { "id": "aramco", "name": "Aramco Stadium", "cityId": "al-khobar", "grossCapacity": 46096, "status": "under-construction", "completionYear": 2026, "highestMatch": "round-of-16", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8, "simulationId": "KHO" },
+    { "id": "prince-faisal-bin-fahad", "name": "Prince Faisal bin Fahad Sports City Stadium", "cityId": "riyadh", "grossCapacity": 46865, "status": "under-construction", "completionYear": 2027, "highestMatch": "round-of-32", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8 },
+    { "id": "jeddah-central-development", "name": "Jeddah Central Development Stadium", "cityId": "jeddah", "grossCapacity": 45894, "status": "under-construction", "completionYear": 2027, "highestMatch": "round-of-32", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8 },
+    { "id": "king-salman-international", "name": "King Salman International Stadium", "cityId": "riyadh", "grossCapacity": 92760, "status": "planned", "completionYear": 2029, "highestMatch": "opening-final", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8, "simulationId": "RUH" },
+    {
+      "id": "prince-mohammed-bin-salman",
+      "name": "Prince Mohammed bin Salman Stadium",
+      "cityId": "riyadh",
+      "grossCapacity": 46979,
+      "capacityNote": "Printed as 46.979 in the source; read as 46,979.",
+      "status": "planned",
+      "completionYear": 2029,
+      "highestMatch": "third-place",
+      "sourceId": "alrajhi-wc2034-economy-2024-12",
+      "page": 8
+    },
+    { "id": "new-murabba", "name": "New Murabba Stadium", "cityId": "riyadh", "grossCapacity": 46010, "status": "planned", "completionYear": 2032, "highestMatch": "round-of-32", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8 },
+    { "id": "roshn", "name": "ROSHN Stadium", "cityId": "riyadh", "grossCapacity": 46000, "status": "planned", "completionYear": 2032, "highestMatch": "round-of-32", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8 },
+    { "id": "south-riyadh", "name": "South Riyadh Stadium", "cityId": "riyadh", "grossCapacity": 47060, "status": "planned", "completionYear": 2032, "highestMatch": "round-of-32", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8 },
+    { "id": "king-saud-university", "name": "King Saud University Stadium", "cityId": "riyadh", "grossCapacity": 46319, "status": "existing-refurbishment", "completionYear": 2032, "highestMatch": "round-of-32", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8 },
+    { "id": "king-abdullah-sports-city", "name": "King Abdullah Sports City Stadium", "cityId": "jeddah", "grossCapacity": 58432, "status": "existing-refurbishment", "completionYear": 2032, "highestMatch": "quarter-final", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8, "simulationId": "JED" },
+    { "id": "qiddiya-coast", "name": "Qiddiya Coast Stadium", "cityId": "jeddah", "grossCapacity": 46096, "status": "planned", "completionYear": 2032, "highestMatch": "round-of-16", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8 },
+    { "id": "king-abdullah-economic-city", "name": "King Abdullah Economic City Stadium", "cityId": "jeddah", "grossCapacity": 45700, "status": "planned", "completionYear": 2032, "highestMatch": "round-of-32", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8 },
+    { "id": "king-khalid-university", "name": "King Khalid University Stadium", "cityId": "abha", "grossCapacity": 45428, "status": "existing-refurbishment", "completionYear": 2032, "highestMatch": "round-of-16", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8, "simulationId": "AHB" },
+    { "id": "neom", "name": "NEOM Stadium", "cityId": "neom", "grossCapacity": 46010, "status": "planned", "completionYear": 2032, "highestMatch": "quarter-final", "sourceId": "alrajhi-wc2034-economy-2024-12", "page": 8, "simulationId": "NEO" }
+  ],
+  "otherAssets": [
+    { "assetType": "Training site", "total": 134, "existing": 61, "planned": 73, "note": "Across 15 cities; no per-site list in the source.", "sourceId": "alrajhi-wc2034-economy-2024-12", "pages": [6, 8] },
+    { "assetType": "Fan festival site", "total": 10, "note": "Planned in the host cities; no per-site list in the source.", "sourceId": "alrajhi-wc2034-economy-2024-12", "pages": [6] },
+    { "assetType": "International airport", "total": 16, "sourceId": "alrajhi-wc2034-economy-2024-12", "pages": [6] }
+  ]
+}

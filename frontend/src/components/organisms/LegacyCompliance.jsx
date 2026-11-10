@@ -322,9 +322,10 @@ const NOTICE = (
 
 /**
  * The legacy authority-based compliance dashboard and its drill-downs.
- * library: the server-rendered FIFA library, shown at programme level only.
+ * reference: server-rendered sections (FIFA library, facility register),
+ * shown at programme level only.
  */
-export default function LegacyCompliance({ ui, library }) {
+export default function LegacyCompliance({ ui, reference }) {
   const all = complianceRecords(VENUES);
   const { authority, family, venue } = ui.compliance;
   if (venue)
@@ -343,7 +344,7 @@ export default function LegacyCompliance({ ui, library }) {
     );
   return (
     <>
-      {library}
+      {reference}
       {NOTICE}
       <PageHead
         chip={`Compliance · ${VENUES.length} venues · ${COMPLIANCE_AUTHORITIES.length} authorities`}
