@@ -51,7 +51,6 @@ import {
   intakeAdd,
   decoAdd,
 } from "@/legacy/views/requirements";
-import { viewCompliance } from "@/legacy/views/compliance";
 import {
   openDrawer,
   closeDrawer,
@@ -130,7 +129,6 @@ const VIEW_FNS = {
   readiness: viewReadiness,
   tower: viewTower,
   requirements: viewRequirements,
-  compliance: viewCompliance,
 };
 const LEGACY_VIEWS = new Set([...Object.keys(VIEW_FNS), "twin"]);
 
@@ -361,58 +359,6 @@ function installListeners() {
       return;
     }
 
-    if (t.dataset.compAuthority) {
-      ui.compliance.authority =
-        ui.compliance.authority === t.dataset.compAuthority
-          ? "all"
-          : t.dataset.compAuthority;
-      rerender();
-      return;
-    }
-
-    if (t.dataset.compFamily) {
-      ui.compliance.family = t.dataset.compFamily;
-      ui.compliance.venue = null;
-      rerender();
-      window.scrollTo(0, 0);
-      return;
-    }
-
-    if (t.dataset.compVenue) {
-      ui.compliance.venue = t.dataset.compVenue;
-      rerender();
-      window.scrollTo(0, 0);
-      return;
-    }
-
-    if (t.hasAttribute("data-comp-back")) {
-      ui.compliance.family = null;
-      ui.compliance.venue = null;
-      rerender();
-      window.scrollTo(0, 0);
-      return;
-    }
-
-    if (t.dataset.complianceIntake) {
-      const target = t.dataset.complianceIntake;
-
-      goView("requirements");
-
-      setTimeout(() => {
-        const el = document.getElementById(
-          target === "evidence" ? "evIntake" : "reqIntake",
-        );
-
-        if (el) {
-          el.scrollIntoView({
-            block: "start",
-            behavior: "smooth",
-          });
-        }
-      }, 60);
-
-      return;
-    }
     if (t.dataset.goto) {
       ui.filters.venue = t.dataset.venue || "all";
       ui.filters.family = "all";

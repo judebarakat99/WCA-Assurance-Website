@@ -1,7 +1,10 @@
 import { test } from "vitest";
 import assert from "node:assert/strict";
 import { FIFA_CATALOGUE, fifaRequirementRecords, criterionLabel } from "@/lib/domain/fifa-catalogue.mjs";
-import { fifaLibrary } from "@/legacy/views/fifaLibrary.js";
+import { renderToStaticMarkup } from "react-dom/server";
+import FifaLibrary from "@/components/organisms/FifaLibrary";
+
+const fifaLibrary = () => renderToStaticMarkup(<FifaLibrary />);
 
 test("catalogue references resolve to official sources and explicit applicability", () => {
   const records = fifaRequirementRecords();

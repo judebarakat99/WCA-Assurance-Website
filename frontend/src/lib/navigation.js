@@ -23,6 +23,12 @@ export function openDossier(venueId) {
   goView("dossier");
 }
 
+/** Compliance intake, scrolled to evidence or requirement intake. */
+export function openIntake(target) {
+  goView("requirements");
+  scrollToWhenReady(target === "evidence" ? "evIntake" : "reqIntake");
+}
+
 /** Venue detail page. */
 export function openVenue(venueId) {
   goView(`venue-${venueId}`);
