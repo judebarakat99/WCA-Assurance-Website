@@ -1,9 +1,9 @@
-import AppView from "@/legacy/AppView";
+import GatesPage from "@/components/pages/GatesPage";
 
 export const metadata = {
   title: "Readiness gates · Compliance Assurance Suite",
 };
 
-export default function GatesPage() {
-  return <AppView view="gates" />;
+export default function Page() {
+  return <GatesPage />;
 }

@@ -45,7 +45,6 @@ import {
 import { viewTower, intakeCard } from "@/legacy/views/tower";
 import { viewReadiness } from "@/legacy/views/readiness";
 import { viewRegister } from "@/legacy/views/register";
-import { viewGates } from "@/legacy/views/gates";
 import { viewVenueDetail } from "@/legacy/views/venueDetail";
 import { viewActions } from "@/legacy/views/actionsView";
 import {
@@ -139,7 +138,6 @@ const VIEW_FNS = {
   dossier: viewDossier,
   compliance: viewCompliance,
   register: viewRegister,
-  gates: viewGates,
 };
 const LEGACY_VIEWS = new Set([...Object.keys(VIEW_FNS), "twin", "venue"]);
 
