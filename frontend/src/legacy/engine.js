@@ -44,7 +44,6 @@ import {
 } from "@/lib/domain/actions";
 import { viewTower, intakeCard } from "@/legacy/views/tower";
 import { viewReadiness } from "@/legacy/views/readiness";
-import { viewActions } from "@/legacy/views/actionsView";
 import {
   viewRequirements,
   paintIntake,
@@ -131,7 +130,6 @@ const VIEW_FNS = {
   overview: viewOverview,
   readiness: viewReadiness,
   tower: viewTower,
-  actions: viewActions,
   requirements: viewRequirements,
   dossier: viewDossier,
   compliance: viewCompliance,

@@ -1,8 +1,8 @@
-import test from "node:test";
+import { test } from "vitest";
 import assert from "node:assert/strict";
-import { sourceHtml } from "../src/legacy/views/assistantSources.js";
-import { buildAssistantContext } from "../src/lib/assistant/context.js";
-import { resetS } from "../src/lib/store/state.js";
+import { sourceHtml } from "@/legacy/views/assistantSources.js";
+import { buildAssistantContext } from "@/lib/assistant/context.js";
+import { resetS } from "@/lib/store/state.js";
 
 test("forecast source renders named facts instead of raw JSON", () => {
   const html = sourceHtml({

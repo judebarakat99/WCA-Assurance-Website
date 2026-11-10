@@ -3210,6 +3210,15 @@ details.fc-table summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+.section-intro {
+  margin: 0 0 16px;
+  max-width: 84ch;
+  font-size: 13.5px;
+}
+.rung-name {
+  font-size: 13px;
+  font-weight: 500;
+}
 .rung {
   padding: 22px 24px;
   display: flex;

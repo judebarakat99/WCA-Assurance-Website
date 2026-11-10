@@ -1,17 +1,26 @@
-import test from "node:test";
+import { afterEach, test } from "vitest";
+import { cleanup, render } from "@testing-library/react";
 import assert from "node:assert/strict";
 import { validateHeaderValue } from "node:http";
-import { publicAssetUrl } from "../src/lib/assets.mjs";
+import { publicAssetUrl } from "@/lib/assets.mjs";
 import {
   normalizeDecisionRecords,
   decisionOptionLabel,
   hasDecisionForecast,
-} from "../src/lib/domain/decision-records.mjs";
-import { DECISIONS } from "../src/lib/domain/data.js";
-import { load, S, seed } from "../src/lib/store/state.js";
-import { viewActions } from "../src/legacy/views/actionsView.js";
-import { invalidateForecasts } from "../src/lib/domain/forecast.js";
-import { decide } from "../src/lib/domain/actions.js";
+} from "@/lib/domain/decision-records.mjs";
+import { DECISIONS } from "@/lib/domain/data.js";
+import { load, S, seed } from "@/lib/store/state.js";
+import { ActionsView } from "@/components/pages/ActionsPage";
+import { invalidateForecasts } from "@/lib/domain/forecast.js";
+import { decide } from "@/lib/domain/actions.js";
+
+afterEach(cleanup);
+
+// Render the Actions page for the loaded model and return its markup.
+function actionsHtml() {
+  const { container } = render(<ActionsView S={S} />);
+  return container.innerHTML;
+}
 
 function loadSnapshot(snapshot) {
   const serialized = JSON.stringify(snapshot);
@@ -42,7 +51,7 @@ test("older decisions retain their recorded option without reapplying recovery e
   assert.equal(S.decisions[0].status, "Taken");
   assert.equal(S.decisions[0].choice, 0);
   assert.deepEqual(S.scn.recovery, ["JED"]);
-  const html = viewActions();
+  const html = actionsHtml();
   assert.ok(html.includes(DECISIONS[0].options[0].t));
   assert.ok(html.includes("Historical forecast comparison was not stored"));
   assert.ok(!html.includes("NaN"));
@@ -57,7 +66,7 @@ test("unknown or missing historical options do not crash the Actions page", () =
     const snapshot = seed();
     snapshot.decisions[0] = { id: "DEC-01", ...record };
     loadSnapshot(snapshot);
-    const html = viewActions();
+    const html = actionsHtml();
     assert.ok(!html.includes("NaN"));
     if (record.option) assert.ok(html.includes("&lt;archived&gt;"));
     else assert.ok(html.includes("Recorded option unavailable"));
@@ -87,7 +96,7 @@ test("current decision records retain their option and stored forecast", () => {
   const snapshot = seed();
   snapshot.decisions = result;
   loadSnapshot(snapshot);
-  assert.ok(!viewActions().includes("NaN"));
+  assert.ok(!actionsHtml().includes("NaN"));
 });
 test("invalid decision indices are ignored without changing demo state", () => {
   loadSnapshot(seed());
