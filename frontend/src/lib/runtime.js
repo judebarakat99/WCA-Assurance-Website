@@ -7,6 +7,7 @@ import { applyHL } from "@/lib/tour/highlight";
 
 // View keys used by the domain and the tour, mapped to App Router paths.
 export const PATHS = {
+  home: "/",
   overview: "/overview",
   readiness: "/readiness",
   tower: "/control-tower",
@@ -29,7 +30,7 @@ const ALIAS = {
 export function pathFor(key) {
   const k = ALIAS[key] || key;
   if (k.startsWith("venue-")) return `/control-tower/${k.slice(6)}`;
-  return PATHS[k] || "/overview";
+  return PATHS[k] || "/";
 }
 
 let routerPush = null;

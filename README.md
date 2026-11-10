@@ -43,10 +43,14 @@ alias (`frontend/jsconfig.json`). Components follow atomic design; routes stay
 thin.
 
 - `src/app/`: App Router routes only — `page.jsx` files with metadata, plus
-  `layout.jsx`. Routes: `/assurance` (map-first assurance home, prototype),
-  `/facilities/[facilityId]` (facility assessments), `/` and `/overview`, `/readiness`, `/control-tower`
-  (with `/register`, `/gates` and `/[venueId]`), `/decisions-actions`,
-  `/design-review`, `/requirements-evidence`, `/dossiers`, `/compliance`.
+  `layout.jsx`. Main sections (header): `/` (map-first FIFA assurance home),
+  `/compliance` (requirements library, facility register) with
+  `/facilities/[facilityId]` (facility assessments), `/requirements-evidence`
+  (intake and change impact) and `/design-review`. The earlier programme
+  simulation stays reachable from the Demo menu and is used by the guided
+  demos: `/overview`, `/readiness`, `/control-tower`
+  (with `/register`, `/gates` and `/[venueId]`), `/decisions-actions` and
+  `/dossiers`.
 - `src/components/atoms/` → `molecules/` → `organisms/` → `templates/` →
   `pages/`: React components from smallest to a whole screen. A route renders
   one page component. `PageTemplate` waits for the programme store (it lives in

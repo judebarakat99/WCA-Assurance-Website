@@ -11,24 +11,31 @@ import { resetAssessments } from "@/lib/store/assessments";
 import { closeDrawer } from "@/lib/drawer";
 import { startTour, EXEC } from "@/lib/tour/player";
 
+// Primary sections. `also` lists other paths that belong to a section.
 const TABS = [
-  ["/assurance", "Assurance map"],
-  ["/overview", "Overview"],
-  ["/readiness", "Readiness"],
-  ["/control-tower", "Control Tower"],
-  ["/decisions-actions", "Actions"],
-  ["/design-review", "Design"],
-  ["/requirements-evidence", "Compliance Intake"],
-  ["/compliance", "Compliance"],
+  { href: "/", label: "Assurance map" },
+  { href: "/compliance", label: "Requirements", also: ["/facilities"] },
+  { href: "/requirements-evidence", label: "Intake & change" },
+  { href: "/design-review", label: "Design review" },
+];
+
+// The earlier programme simulation: out of the main navigation, still used by
+// the guided demos.
+const LEGACY = [
+  { href: "/overview", label: "Programme overview" },
+  { href: "/readiness", label: "Readiness Room" },
+  { href: "/control-tower", label: "Control Tower" },
+  { href: "/decisions-actions", label: "Decisions & actions" },
+  { href: "/dossiers", label: "Inspection dossier" },
 ];
 
 const LOGO = publicAssetUrl("/Assets/saudi-2034-logo.svg", process.env.NEXT_PUBLIC_BASE_PATH || "");
 
 function activeTab(pathname) {
   const p = (pathname || "/").replace(/\/+$/, "") || "/";
-  if (p === "/") return "/overview";
-  const hit = TABS.find(([href]) => p === href || p.startsWith(`${href}/`));
-  return hit ? hit[0] : null;
+  const within = (base) => p === base || p.startsWith(`${base}/`);
+  const hit = TABS.find((t) => (t.href === "/" ? p === "/" : within(t.href) || (t.also || []).some(within)));
+  return hit ? hit.href : null;
 }
 
 function resetDemo() {
@@ -91,7 +98,7 @@ export default function Header() {
   const ref = useRef(null);
   useMenuDismiss(ref);
   const current = activeTab(usePathname());
-  const links = TABS.map(([href, label]) => (
+  const links = TABS.map(({ href, label }) => (
     <Link key={href} href={href} aria-current={current === href ? "page" : undefined}>
       {label}
     </Link>
@@ -141,6 +148,13 @@ export default function Header() {
                   Advance 7 days
                 </button>
                 <ResetButton />
+                <hr />
+                <small>Programme simulation</small>
+                {LEGACY.map(({ href, label }) => (
+                  <Link key={href} href={href}>
+                    {label}
+                  </Link>
+                ))}
               </div>
             </details>
           </div>
