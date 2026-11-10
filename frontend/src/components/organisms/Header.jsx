@@ -7,6 +7,7 @@ import ThemeToggle from "@/components/atoms/ThemeToggle";
 import { publicAssetUrl } from "@/lib/assets.mjs";
 import { advance, toast } from "@/lib/domain/actions";
 import { resetS, ui, rerender } from "@/lib/store/state";
+import { resetAssessments } from "@/lib/store/assessments";
 import { closeDrawer } from "@/lib/drawer";
 import { startTour, EXEC } from "@/lib/tour/player";
 
@@ -31,6 +32,7 @@ function activeTab(pathname) {
 
 function resetDemo() {
   resetS();
+  resetAssessments();
   closeDrawer();
   window.WNSTwin?.reset();
   ui.filters = { venue: "all", family: "all", state: "all", q: "" };

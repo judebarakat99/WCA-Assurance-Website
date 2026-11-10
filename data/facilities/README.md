@@ -44,3 +44,28 @@ belongs in the assessment store keyed by facility, requirement and version.
 Five stadiums carry a `simulationId` (RUH, JED, KHO, AHB, NEO): the venues the
 existing demo simulation uses. The simulation's own capacities are approximate
 and are not yet driven by this register.
+
+## Assessments
+
+Assessments are one record per facility × requirement × version
+(`frontend/src/lib/domain/assessment.mjs`, stored by
+`frontend/src/lib/store/assessments.js` in the browser under
+`wca-assessments-v1`, separate from the demo simulation; "Reset demo" restores
+the seed).
+
+- **Applicability** is decided by rule for each stadium: requirements for other
+  asset types do not apply; of the capacity rules only the one for the
+  stadium's highest match applies; lighting criteria are **provisional** (the
+  2020 Lighting Guide is a provisional 2034 baseline); everything else that
+  names all match allocations applies.
+- **Status** runs unassessed → declared (from the register) → evidence
+  submitted → compliant or non-compliant. Numeric criteria are checked when
+  evidence is recorded (strict and inclusive operators are respected);
+  qualitative criteria are marked for a reviewer. Only a reviewer decision
+  makes a requirement compliant.
+- The seed holds the 15 declared capacities; everything else starts
+  unassessed. Each facility's page (`/facilities/<id>`) shows coverage and lets
+  a reviewer record evidence and decide.
+
+A shared, multi-user store (and real document intake) will replace browser
+storage before this is used beyond a demo.

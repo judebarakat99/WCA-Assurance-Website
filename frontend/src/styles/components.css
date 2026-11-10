@@ -5563,3 +5563,23 @@ details.fc-table summary {
 .fifa-library .pill {
   white-space: normal;
 }
+
+/* ---------- Facility assessments ---------- */
+.assess-table tbody + tbody {
+  border-top: 1px solid var(--line);
+}
+.assess-table tbody.muted td {
+  color: var(--muted);
+}
+.assess-table .assess-more td {
+  padding-top: 0;
+  border-top: 0;
+}
+.assess-detail {
+  display: grid;
+  gap: 10px;
+  padding: 10px 0 4px;
+}
+.assess-form {
+  align-items: end;
+}

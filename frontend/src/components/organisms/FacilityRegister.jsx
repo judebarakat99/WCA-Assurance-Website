@@ -1,5 +1,6 @@
 // Server Component: the programme's facilities as declared in the bid, with the
 // FIFA capacity requirement that applies to each stadium.
+import Link from "next/link";
 import StatusPill from "@/components/atoms/StatusPill";
 import { fmtN } from "@/lib/domain/data";
 import {
@@ -104,7 +105,7 @@ function CityTable({ city }) {
             {city.stadiums.map((s) => (
               <tr key={s.id}>
                 <td>
-                  {s.name}
+                  <Link href={`/facilities/${s.id}`}>{s.name}</Link>
                   {s.capacityNote && <div className="muted fine">{s.capacityNote}</div>}
                 </td>
                 <td className="mono">{fmtN(s.grossCapacity)}</td>
@@ -152,7 +153,7 @@ export default function FacilityRegister() {
       <SourceNote />
       <Summary />
       <p className="muted small">
-        Each stadium&apos;s highest match selects its FIFA capacity requirement. The check compares the declared capacity
+        Open a stadium to see every FIFA requirement that applies to it and record evidence. Each stadium&apos;s highest match selects its FIFA capacity requirement. The check compares the declared capacity
         with that minimum; it becomes an assessment only when evidence (seating plan and match allocation) is reviewed.
       </p>
       {cities.map((city) => (
