@@ -5675,10 +5675,205 @@ main.wide {
   transform: translate(-50%, -50%);
 }
 .amap-pin .amap-glow {
-  width: 44px;
-  height: 44px;
-  background: color-mix(in srgb, var(--pin) 28%, transparent);
-  animation: amap-pulse 2.6s ease-out infinite;
+  width: 40px;
+  height: 40px;
+  background: color-mix(in srgb, var(--pin) 22%, transparent);
+}
+/* Only a city with a non-compliant item pulses. */
+.amap-pin[data-alert="true"] .amap-glow,
+.amap-stadium[data-alert="true"] i::after {
+  animation: amap-pulse 2.2s ease-out infinite;
+}
+.amap-badge {
+  position: absolute;
+  left: 8px;
+  top: -22px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--surface);
+  font: 600 11px/20px var(--font-sans, inherit);
+  font-style: normal;
+  text-align: center;
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--shadow-color) 35%, transparent);
+}
+.amap-pin[data-alert="true"] .amap-badge {
+  background: var(--bad);
+  color: #fff;
+}
+.amap-badge[hidden] {
+  display: none;
+}
+/* City pins at country zoom, stadium pins once zoomed in. */
+.amap.amap-zoomed .amap-pin,
+.amap:not(.amap-zoomed) .amap-stadium {
+  visibility: hidden;
+  pointer-events: none;
+}
+.amap-stadium {
+  position: relative;
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  --pin: var(--muted);
+}
+.amap-stadium[data-tone="good"] {
+  --pin: var(--good);
+}
+.amap-stadium[data-tone="warn"] {
+  --pin: var(--warn);
+}
+.amap-stadium[data-tone="bad"] {
+  --pin: var(--bad);
+}
+.amap-stadium i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--pin);
+  border: 2.5px solid var(--surface);
+  box-shadow: 0 1px 6px color-mix(in srgb, var(--shadow-color) 35%, transparent);
+}
+.amap-stadium i::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--pin) 26%, transparent);
+  transform: translate(-50%, -50%) scale(0);
+}
+/* Approximate location: dashed outline. Not due by the timeline year: hollow. */
+.amap-stadium[data-approx="true"] i {
+  outline: 1.5px dashed var(--muted);
+  outline-offset: 2px;
+}
+.amap-stadium[data-due="false"] i {
+  background: var(--surface);
+  border-color: var(--pin);
+}
+.amap-stadium[data-due="false"] b {
+  opacity: 0.6;
+}
+.amap-stadium b {
+  position: absolute;
+  left: 0;
+  top: 13px;
+  transform: translateX(-50%);
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  color: var(--ink);
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 500;
+}
+.amap-stadium:hover b,
+.amap-stadium:focus-visible b {
+  font-weight: 700;
+}
+.amap-card .maplibregl-popup-content {
+  display: grid;
+  gap: 3px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+.amap-card .maplibregl-popup-content > div {
+  display: grid;
+  gap: 3px;
+}
+.amap-card b {
+  font-size: 13.5px;
+}
+.amap-card .bad {
+  color: var(--bad);
+}
+.amap-card .warn {
+  color: var(--warn);
+}
+.amap-card .muted {
+  color: var(--muted);
+}
+.amap-card .fine {
+  font-size: 11px;
+}
+.amap-card.maplibregl-popup-anchor-top .maplibregl-popup-tip {
+  border-bottom-color: var(--surface);
+}
+.amap-card.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+  border-top-color: var(--surface);
+}
+.amap-card.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: var(--surface);
+}
+.amap-card.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: var(--surface);
+}
+.atimeline {
+  position: absolute;
+  top: 18px;
+  left: 416px;
+  width: min(440px, calc(100% - 416px - 210px));
+  display: grid;
+  gap: 4px;
+  padding: 10px 14px 8px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  font-size: 12px;
+}
+.atimeline label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+}
+.atimeline label b {
+  color: var(--ink);
+}
+.atimeline input {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--highlight);
+}
+.atimeline-years {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 10.5px;
+  text-align: center;
+}
+.atimeline-years li.on {
+  color: var(--ink);
+}
+.atimeline-years em {
+  display: block;
+  font-style: normal;
+  color: var(--highlight);
+}
+.abrief-list li.notdue a {
+  opacity: 0.62;
 }
 .amap-pin .amap-dot {
   width: 18px;
@@ -5721,7 +5916,8 @@ main.wide {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .amap-pin .amap-glow {
+  .amap-pin[data-alert="true"] .amap-glow,
+  .amap-stadium[data-alert="true"] i::after {
     animation: none;
   }
 }
@@ -5859,6 +6055,28 @@ main.wide {
   gap: 8px;
   color: var(--muted);
 }
+.alegend i.badge {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin: -3px;
+  background: var(--ink);
+  color: var(--surface);
+  font: 600 9px/1 var(--font-sans, inherit);
+  font-style: normal;
+}
+.alegend i.ring {
+  background: transparent;
+  border: 2px solid var(--muted);
+}
+.alegend i.approx {
+  outline: 1.5px dashed var(--muted);
+  outline-offset: 2px;
+  width: 8px;
+  height: 8px;
+  margin: 1px;
+}
 /* right: clear of the floating Ask Nabd button */
 .abottom {
   position: absolute;
@@ -5926,6 +6144,7 @@ main.wide {
   }
   .abrief,
   .alegend,
+  .atimeline,
   .abottom {
     position: static;
     width: auto;

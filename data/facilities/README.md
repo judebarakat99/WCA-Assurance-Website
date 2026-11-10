@@ -27,6 +27,20 @@ Known source issues:
 - Training sites (134) and fan festival sites (10) are totals only; there is no
   per-site list yet.
 
+## Locations (for the map only)
+
+- Each host city has `coordinates` (an approximate centre) and `region`, the
+  name of its region in `data/geo/sa-regions.geo.json`; the map shades that
+  region by the city's assurance.
+- Each stadium has `location.coordinates` ([longitude, latitude]),
+  `location.accuracy` and `location.source`:
+  - `mapped`: taken from an OpenStreetMap feature (reference in `source`).
+    Aramco, King Abdullah Sports City and King Khalid University.
+  - `approximate`: placed by hand from public descriptions of the site, for
+    planned or unmapped stadiums. Good to a few kilometres at best; the map
+    draws these with a dashed outline and says "approximate location".
+- None are surveyed. Replace them with the bid book's site plans when obtained.
+
 ## How it links to the FIFA catalogue
 
 Each stadium's `highestMatch` selects its capacity requirement from

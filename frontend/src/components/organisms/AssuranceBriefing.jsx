@@ -5,7 +5,6 @@ import Meter from "@/components/atoms/Meter";
 import Ring from "@/components/atoms/Ring";
 import StatusPill from "@/components/atoms/StatusPill";
 import { pct } from "@/lib/domain/data";
-import { assuranceTone } from "@/lib/domain/cityAssurance.mjs";
 import { loadSampleAssessments, resetAssessments } from "@/lib/store/assessments";
 
 const TONE_COLOR = { good: "var(--good)", warn: "var(--warn)", bad: "var(--bad)", mute: "var(--muted)" };
@@ -79,7 +78,9 @@ function Programme({ map, pillar, sample, onSelect }) {
         <AssuranceRing a={a} tone={map.tone} />
         <div>
           <p className="abrief-lead">
-            {pct(a.assured)}% of {a.inScope} in-scope requirements across 15 stadiums are accepted by a reviewer.
+            {pct(a.assured)}% of {a.inScope} in-scope requirements across{" "}
+            {map.due === map.stadiumCount ? `all ${map.stadiumCount} stadiums` : `the ${map.due} stadiums due by ${map.year}`}{" "}
+            are accepted by a reviewer.
           </p>
           <Coverage a={a} />
         </div>
@@ -98,7 +99,7 @@ function Programme({ map, pillar, sample, onSelect }) {
   );
 }
 
-function City({ city, pillar, sample, onSelect }) {
+function City({ city, year, pillar, sample, onSelect }) {
   const a = city.assurance;
   return (
     <>
@@ -113,7 +114,8 @@ function City({ city, pillar, sample, onSelect }) {
         <AssuranceRing a={a} tone={city.tone} />
         <div>
           <p className="abrief-lead">
-            {city.stadiums.length} {city.stadiums.length === 1 ? "stadium" : "stadiums"} ·{" "}
+            {city.stadiums.length} {city.stadiums.length === 1 ? "stadium" : "stadiums"}
+            {city.dueCount < city.stadiums.length ? ` (${city.dueCount} due by ${year})` : ""} ·{" "}
             {city.roomKeys.toLocaleString("en-US")} room keys planned
           </p>
           <Coverage a={a} />
@@ -122,16 +124,17 @@ function City({ city, pillar, sample, onSelect }) {
       <Counts a={a} />
       <ul className="abrief-list">
         {city.stadiums.map((s) => {
-          const tone = assuranceTone(s.assurance);
           return (
-            <li key={s.id}>
+            <li key={s.id} className={s.due ? undefined : "notdue"}>
               <Link href={`/facilities/${s.id}`}>
-                <i className={tone} />
+                <i className={s.tone} />
                 <span>
                   <b>{s.name}</b>
                   <small>
+                    {s.due ? "" : `Due ${s.completionYear} · `}
                     {pct(s.assurance.assured)}% assured · {pct(s.assurance.coverage)}% assessed
                     {s.assurance.needsAttention ? ` · ${s.assurance.needsAttention} need attention` : ""}
+                    {s.location.accuracy === "approximate" ? " · approximate location" : ""}
                   </small>
                 </span>
                 <em>→</em>
@@ -151,7 +154,7 @@ export default function AssuranceBriefing({ map, selected, pillar, sample, onSel
   return (
     <aside className="abrief" aria-live="polite">
       {city ? (
-        <City city={city} pillar={pillar} sample={sample} onSelect={onSelect} />
+        <City city={city} year={map.year} pillar={pillar} sample={sample} onSelect={onSelect} />
       ) : (
         <Programme map={map} pillar={pillar} sample={sample} onSelect={onSelect} />
       )}

@@ -41,18 +41,39 @@ export function assuranceTone(a) {
   return a.assured >= 0.85 ? "good" : a.assured >= 0.5 ? "warn" : "bad";
 }
 
-/** Cities with their stadiums' roll-ups, plus a programme total. */
-export function assuranceMap(records, category = null) {
+/** Years the delivery timeline steps through. */
+export const TIMELINE = { from: 2026, to: 2034 };
+
+/**
+ * Cities with their stadiums' roll-ups, plus a programme total.
+ * year: only stadiums due complete by then count towards the roll-ups
+ * (null for every stadium). Every stadium stays listed, flagged `due`.
+ * The statuses are today's; the timeline changes which stadiums count.
+ */
+export function assuranceMap(records, category = null, year = null) {
+  let due = 0;
   const cities = FACILITY_REGISTER.hostCities.map((city) => {
     const stadiums = FACILITY_REGISTER.stadiums
       .filter((s) => s.cityId === city.id)
-      .map((s) => ({ ...s, assurance: stadiumAssurance(s, records, category) }))
-      .sort((a, b) => a.assurance.assured - b.assurance.assured);
-    const total = finish(stadiums.reduce((t, s) => add(t, s.assurance), EMPTY()));
-    return { ...city, stadiums, assurance: total, tone: assuranceTone(total) };
+      .map((s) => {
+        const assurance = stadiumAssurance(s, records, category);
+        return { ...s, due: !year || s.completionYear <= year, assurance, tone: assuranceTone(assurance) };
+      })
+      .sort((a, b) => b.due - a.due || a.assurance.assured - b.assurance.assured);
+    const counted = stadiums.filter((s) => s.due);
+    due += counted.length;
+    const total = finish(counted.reduce((t, s) => add(t, s.assurance), EMPTY()));
+    return { ...city, stadiums, dueCount: counted.length, assurance: total, tone: assuranceTone(total) };
   });
   const programme = finish(cities.reduce((t, c) => add(t, c.assurance), EMPTY()));
-  return { cities, programme, tone: assuranceTone(programme) };
+  return {
+    cities,
+    programme,
+    tone: assuranceTone(programme),
+    year,
+    due,
+    stadiumCount: FACILITY_REGISTER.stadiums.length,
+  };
 }
 
 /** Categories present in the catalogue for stadiums, in display order. */

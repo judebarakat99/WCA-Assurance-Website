@@ -38,7 +38,8 @@
       "coordinates": [
         46.716,
         24.713
-      ]
+      ],
+      "region": "Riyadh Region"
     },
     {
       "id": "jeddah",
@@ -53,7 +54,8 @@
       "coordinates": [
         39.193,
         21.485
-      ]
+      ],
+      "region": "Makkah Region"
     },
     {
       "id": "al-khobar",
@@ -68,7 +70,8 @@
       "coordinates": [
         50.208,
         26.279
-      ]
+      ],
+      "region": "Eastern Region"
     },
     {
       "id": "abha",
@@ -83,7 +86,8 @@
       "coordinates": [
         42.505,
         18.216
-      ]
+      ],
+      "region": "'Asir Region"
     },
     {
       "id": "neom",
@@ -99,7 +103,8 @@
       "coordinates": [
         35.25,
         28.0
-      ]
+      ],
+      "region": "Tabuk Region"
     }
   ],
   "stadiums": [
@@ -112,7 +117,15 @@
       "completionYear": 2026,
       "highestMatch": "semi-final",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
-      "page": 8
+      "page": 8,
+      "location": {
+        "coordinates": [
+          46.839,
+          24.789
+        ],
+        "accuracy": "approximate",
+        "source": "Placed by hand from public descriptions of the site; not surveyed"
+      }
     },
     {
       "id": "aramco",
@@ -124,7 +137,15 @@
       "highestMatch": "round-of-16",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
       "page": 8,
-      "simulationId": "KHO"
+      "simulationId": "KHO",
+      "location": {
+        "coordinates": [
+          50.1816,
+          26.3653
+        ],
+        "accuracy": "mapped",
+        "source": "OpenStreetMap relation/20078625"
+      }
     },
     {
       "id": "prince-faisal-bin-fahad",
@@ -135,7 +156,15 @@
       "completionYear": 2027,
       "highestMatch": "round-of-32",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
-      "page": 8
+      "page": 8,
+      "location": {
+        "coordinates": [
+          46.738,
+          24.666
+        ],
+        "accuracy": "approximate",
+        "source": "Placed by hand from public descriptions of the site; not surveyed"
+      }
     },
     {
       "id": "jeddah-central-development",
@@ -146,7 +175,15 @@
       "completionYear": 2027,
       "highestMatch": "round-of-32",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
-      "page": 8
+      "page": 8,
+      "location": {
+        "coordinates": [
+          39.15,
+          21.5
+        ],
+        "accuracy": "approximate",
+        "source": "Placed by hand from public descriptions of the site; not surveyed"
+      }
     },
     {
       "id": "king-salman-international",
@@ -158,7 +195,15 @@
       "highestMatch": "opening-final",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
       "page": 8,
-      "simulationId": "RUH"
+      "simulationId": "RUH",
+      "location": {
+        "coordinates": [
+          46.7,
+          24.95
+        ],
+        "accuracy": "approximate",
+        "source": "Placed by hand from public descriptions of the site; not surveyed"
+      }
     },
     {
       "id": "prince-mohammed-bin-salman",
@@ -170,7 +215,15 @@
       "completionYear": 2029,
       "highestMatch": "third-place",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
-      "page": 8
+      "page": 8,
+      "location": {
+        "coordinates": [
+          46.33,
+          24.58
+        ],
+        "accuracy": "approximate",
+        "source": "Placed by hand from public descriptions of the site; not surveyed"
+      }
     },
     {
       "id": "new-murabba",
@@ -181,7 +234,15 @@
       "completionYear": 2032,
       "highestMatch": "round-of-32",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
-      "page": 8
+      "page": 8,
+      "location": {
+        "coordinates": [
+          46.64,
+          24.84
+        ],
+        "accuracy": "approximate",
+        "source": "Placed by hand from public descriptions of the site; not surveyed"
+      }
     },
     {
       "id": "roshn",
@@ -192,7 +253,15 @@
       "completionYear": 2032,
       "highestMatch": "round-of-32",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
-      "page": 8
+      "page": 8,
+      "location": {
+        "coordinates": [
+          46.6,
+          24.6
+        ],
+        "accuracy": "approximate",
+        "source": "Placed by hand from public descriptions of the site; not surveyed"
+      }
     },
     {
       "id": "south-riyadh",
@@ -203,7 +272,15 @@
       "completionYear": 2032,
       "highestMatch": "round-of-32",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
-      "page": 8
+      "page": 8,
+      "location": {
+        "coordinates": [
+          46.75,
+          24.53
+        ],
+        "accuracy": "approximate",
+        "source": "Placed by hand from public descriptions of the site; not surveyed"
+      }
     },
     {
       "id": "king-saud-university",
@@ -214,7 +291,15 @@
       "completionYear": 2032,
       "highestMatch": "round-of-32",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
-      "page": 8
+      "page": 8,
+      "location": {
+        "coordinates": [
+          46.627,
+          24.716
+        ],
+        "accuracy": "approximate",
+        "source": "Placed by hand from public descriptions of the site; not surveyed"
+      }
     },
     {
       "id": "king-abdullah-sports-city",
@@ -226,7 +311,15 @@
       "highestMatch": "quarter-final",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
       "page": 8,
-      "simulationId": "JED"
+      "simulationId": "JED",
+      "location": {
+        "coordinates": [
+          39.1643,
+          21.7633
+        ],
+        "accuracy": "mapped",
+        "source": "OpenStreetMap way/292395768"
+      }
     },
     {
       "id": "qiddiya-coast",
@@ -237,7 +330,15 @@
       "completionYear": 2032,
       "highestMatch": "round-of-16",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
-      "page": 8
+      "page": 8,
+      "location": {
+        "coordinates": [
+          39.05,
+          21.85
+        ],
+        "accuracy": "approximate",
+        "source": "Placed by hand from public descriptions of the site; not surveyed"
+      }
     },
     {
       "id": "king-abdullah-economic-city",
@@ -248,7 +349,15 @@
       "completionYear": 2032,
       "highestMatch": "round-of-32",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
-      "page": 8
+      "page": 8,
+      "location": {
+        "coordinates": [
+          39.13,
+          22.45
+        ],
+        "accuracy": "approximate",
+        "source": "Placed by hand from public descriptions of the site; not surveyed"
+      }
     },
     {
       "id": "king-khalid-university",
@@ -260,7 +369,15 @@
       "highestMatch": "round-of-16",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
       "page": 8,
-      "simulationId": "AHB"
+      "simulationId": "AHB",
+      "location": {
+        "coordinates": [
+          42.7206,
+          18.0976
+        ],
+        "accuracy": "mapped",
+        "source": "OpenStreetMap way/591498494"
+      }
     },
     {
       "id": "neom",
@@ -272,7 +389,15 @@
       "highestMatch": "quarter-final",
       "sourceId": "alrajhi-wc2034-economy-2024-12",
       "page": 8,
-      "simulationId": "NEO"
+      "simulationId": "NEO",
+      "location": {
+        "coordinates": [
+          35.4,
+          28.1
+        ],
+        "accuracy": "approximate",
+        "source": "Placed by hand from public descriptions of the site; not surveyed"
+      }
     }
   ],
   "otherAssets": [
@@ -306,5 +431,5 @@
       ]
     }
   ],
-  "coordinatesNote": "City coordinates are approximate city centres ([longitude, latitude]) for the map; NEOM is placed at its approximate area."
+  "coordinatesNote": "City coordinates are approximate city centres ([longitude, latitude]); NEOM is placed at its approximate area. Stadium locations are either 'mapped' (taken from an OpenStreetMap feature, reference given) or 'approximate' (placed by hand for planned or unmapped sites; good to a few kilometres at best). Neither is surveyed; do not use for anything beyond the overview map."
 }
