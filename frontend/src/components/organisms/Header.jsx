@@ -14,6 +14,7 @@ import { startTour, EXEC } from "@/lib/tour/player";
 // Primary sections. `also` lists other paths that belong to a section.
 const TABS = [
   { href: "/", label: "Assurance map" },
+  { href: "/review", label: "Review queue" },
   { href: "/compliance", label: "Requirements", also: ["/facilities"] },
   { href: "/requirements-evidence", label: "Intake & change" },
   { href: "/design-review", label: "Design review" },

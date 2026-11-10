@@ -5,6 +5,7 @@ import Meter from "@/components/atoms/Meter";
 import Ring from "@/components/atoms/Ring";
 import StatusPill from "@/components/atoms/StatusPill";
 import { pct } from "@/lib/domain/data";
+import { TIMELINE } from "@/lib/domain/cityAssurance.mjs";
 import { loadSampleAssessments, resetAssessments } from "@/lib/store/assessments";
 
 const TONE_COLOR = { good: "var(--good)", warn: "var(--warn)", bad: "var(--bad)", mute: "var(--muted)" };
@@ -65,6 +66,16 @@ function SampleControl({ sample }) {
   );
 }
 
+// Queue link carrying the map's current filters.
+function queueHref({ cityId, pillar, year }) {
+  const q = new URLSearchParams();
+  if (cityId) q.set("city", cityId);
+  if (pillar) q.set("area", pillar);
+  if (year && year < TIMELINE.to) q.set("year", String(year));
+  const s = q.toString();
+  return s ? `/review?${s}` : "/review";
+}
+
 function Programme({ map, pillar, sample, onSelect }) {
   const a = map.programme;
   const focus = map.cities
@@ -87,12 +98,15 @@ function Programme({ map, pillar, sample, onSelect }) {
       </div>
       <Counts a={a} />
       {focus && (
-        <button type="button" className="abrief-cta" onClick={() => onSelect(focus.id)}>
-          <b>{a.needsAttention} need you now</b>
-          <span>
-            Most in {focus.name} · {focus.assurance.needsAttention}
-          </span>
-        </button>
+        <div className="abrief-cta">
+          <Link href={queueHref({ pillar, year: map.year })}>
+            <b>{a.needsAttention} need you now →</b>
+            <span>Open the review queue</span>
+          </Link>
+          <button type="button" className="linkish" onClick={() => onSelect(focus.id)}>
+            Most in {focus.name} ({focus.assurance.needsAttention}): show on map
+          </button>
+        </div>
       )}
       <SampleControl sample={sample} />
     </>
@@ -122,6 +136,14 @@ function City({ city, year, pillar, sample, onSelect }) {
         </div>
       </div>
       <Counts a={a} />
+      {a.needsAttention > 0 && (
+        <Link className="abrief-cta" href={queueHref({ cityId: city.id, pillar, year })}>
+          <b>Review {a.needsAttention} in {city.name} →</b>
+          <span>
+            {a["evidence-submitted"]} awaiting review · {a["non-compliant"]} non-compliant
+          </span>
+        </Link>
+      )}
       <ul className="abrief-list">
         {city.stadiums.map((s) => {
           return (

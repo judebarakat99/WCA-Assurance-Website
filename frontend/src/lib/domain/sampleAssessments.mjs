@@ -41,7 +41,8 @@ export function sampleAssessments() {
       const r = unit(key);
       if (r >= progress) continue; // stays as it is (unassessed or declared)
       const outcome = r < progress * 0.7 ? "compliant" : r < progress * 0.88 ? "evidence-submitted" : "non-compliant";
-      const meets = outcome !== "non-compliant";
+      // About a third of the evidence awaiting review misses its criterion.
+      const meets = outcome === "compliant" || (outcome === "evidence-submitted" && unit(`${key}#check`) >= 0.35);
       const value = sampleValue(row.requirement.criterion, meets);
       const file = `sample_${row.requirement.id}_${stadium.id}.pdf`;
       const base = records[key] || {

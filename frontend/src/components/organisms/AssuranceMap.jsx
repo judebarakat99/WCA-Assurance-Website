@@ -203,7 +203,7 @@ export default function AssuranceMap({ cities, year, selected, onSelect, onOpenS
       map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
       // Keep the country clear of the briefing card on wide screens.
       if (box.current.clientWidth > 860) {
-        map.setPadding({ left: 400, right: 40, top: 70, bottom: 70 });
+        map.setPadding({ left: 430, right: 60, top: 80, bottom: 70 });
         map.fitBounds(BOUNDS, { duration: 0 });
       }
       map.on("click", () => live.current.onSelect(null));

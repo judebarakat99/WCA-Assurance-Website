@@ -5980,6 +5980,22 @@ main.wide {
   color: var(--highlight);
   font-size: 15px;
 }
+a.abrief-cta,
+.abrief-cta a {
+  display: grid;
+  gap: 2px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.abrief-cta a:hover b,
+a.abrief-cta:hover b {
+  text-decoration: underline;
+}
+.abrief-cta .linkish {
+  justify-self: start;
+  margin-top: 4px;
+  font-size: 12.5px;
+}
 .abrief-cta span {
   font-size: 12.5px;
   color: var(--muted);
@@ -6155,5 +6171,71 @@ main.wide {
   }
   .askbar {
     width: 100%;
+  }
+}
+
+/* ---------- Review queue ---------- */
+.rq-filters {
+  margin-top: 20px;
+  align-items: end;
+}
+.rq-filters .f {
+  min-width: 170px;
+}
+.rq-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.rq-item {
+  display: grid;
+  grid-template-columns: minmax(160px, 220px) minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.rq-where {
+  display: grid;
+  gap: 2px;
+}
+.rq-where a {
+  color: var(--ink);
+  text-decoration: none;
+}
+.rq-where a:hover {
+  text-decoration: underline;
+}
+.rq-what {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.rq-act {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.rq-act .btnlink {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.rq-empty {
+  display: grid;
+  gap: 6px;
+  padding: 24px;
+}
+@media (max-width: 860px) {
+  .rq-item {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .rq-act {
+    justify-content: flex-start;
   }
 }
