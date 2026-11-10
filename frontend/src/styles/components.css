@@ -3391,6 +3391,9 @@ details.fc-table summary {
 }
 
 /* ---------- Dossier & decompose ---------- */
+.dossier-title {
+  margin-top: 6px;
+}
 .dossier {
   padding: 44px;
 }

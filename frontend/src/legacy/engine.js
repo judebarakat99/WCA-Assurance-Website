@@ -51,7 +51,6 @@ import {
   intakeAdd,
   decoAdd,
 } from "@/legacy/views/requirements";
-import { viewDossier, dossierText } from "@/legacy/views/dossier";
 import { viewCompliance } from "@/legacy/views/compliance";
 import {
   openDrawer,
@@ -131,7 +130,6 @@ const VIEW_FNS = {
   readiness: viewReadiness,
   tower: viewTower,
   requirements: viewRequirements,
-  dossier: viewDossier,
   compliance: viewCompliance,
 };
 const LEGACY_VIEWS = new Set([...Object.keys(VIEW_FNS), "twin"]);
@@ -514,23 +512,6 @@ function installListeners() {
       applyChange();
       return;
     }
-    if (t.id === "copyDossier") {
-      const txt = dossierText();
-      (navigator.clipboard
-        ? navigator.clipboard.writeText(txt)
-        : Promise.reject()
-      )
-        .then(() => toast("Dossier copied."))
-        .catch(() => {
-          const r = document.createRange();
-          r.selectNodeContents($("#dossierDoc"));
-          const s = getSelection();
-          s.removeAllRanges();
-          s.addRange(r);
-          toast("Dossier selected. Copy it with your keyboard.");
-        });
-      return;
-    }
     if (t.id === "decoRun") {
       ui.decoInput = $("#decoIn").value;
       ui.decoOut = decompose(ui.decoInput);
@@ -615,10 +596,6 @@ function installListeners() {
     if (t.id === "scFifa") {
       S.scn.fifa = t.checked;
       save();
-      rerender();
-    }
-    if (t.id === "dvSel") {
-      ui.dossierVenue = t.value;
       rerender();
     }
     if (t.id === "decoV") {

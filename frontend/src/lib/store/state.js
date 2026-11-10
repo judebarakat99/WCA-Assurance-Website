@@ -207,6 +207,12 @@ export function resetFilters() {
   ui.filters = { venue: "all", family: "all", state: "all", q: "" };
 }
 
+/** Merge a patch into the shared UI state and re-render. */
+export function updateUi(patch) {
+  Object.assign(ui, patch);
+  rerender();
+}
+
 // Guided demo runtime state (logic lives in components/views/tour.js).
 export const tour = {
   active: false,

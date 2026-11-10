@@ -12,7 +12,7 @@ import ObligationTable from "@/components/organisms/ObligationTable";
 import PageTemplate from "@/components/templates/PageTemplate";
 import { VENUES, STATES, pct } from "@/lib/domain/data";
 import { isProven } from "@/lib/domain/scoring";
-import { rerender } from "@/lib/store/state";
+import { updateUi } from "@/lib/store/state";
 import { stateParts } from "@/lib/ui/tones";
 
 const CRITS = ["Critical", "High", "Medium"];
@@ -104,10 +104,7 @@ function Summary({ list, total }) {
 
 function Register({ S, ui }) {
   const f = ui.filters;
-  const set = (key) => (value) => {
-    ui.filters = { ...ui.filters, [key]: value };
-    rerender();
-  };
+  const set = (key) => (value) => updateUi({ filters: { ...f, [key]: value } });
   const families = [...new Set(S.obligations.map((o) => o.family))];
   const list = S.obligations.filter((o) => matches(o, f));
   return (
