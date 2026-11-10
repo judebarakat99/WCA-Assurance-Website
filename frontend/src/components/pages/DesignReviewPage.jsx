@@ -2,12 +2,12 @@
 
 import { useEffect } from "react";
 import StadiumTwin from "@/components/organisms/StadiumTwin";
-import { mountReactView } from "@/legacy/engine";
+import { onPageMount } from "@/lib/runtime";
 
 /** Design intake: the 3D twin of King Salman International Stadium with simulated checks. */
 export default function DesignReviewPage() {
   useEffect(() => {
-    mountReactView();
+    onPageMount();
   }, []);
   return (
     <main className="wrap" id="view" aria-label="Design review">

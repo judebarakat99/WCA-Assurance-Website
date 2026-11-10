@@ -9,6 +9,7 @@ import "@/styles/components.css";
 import Header from "@/components/organisms/Header";
 import AssistantPanel from "@/components/organisms/AssistantPanel";
 import ObligationDrawer from "@/components/organisms/ObligationDrawer";
+import TourDock from "@/components/organisms/TourDock";
 import AppRuntime from "@/components/providers/AppRuntime";
 import TwinScripts from "@/components/providers/TwinScripts";
 import { themeInitScript } from "@/lib/theme.mjs";
@@ -38,11 +39,9 @@ export default function RootLayout({ children }) {
       <body>
         <Header />
         {children}
-        {/* Hidden target for the simulated-clock writer; not shown in the header. */}
-        <b id="today" hidden></b>
         <ObligationDrawer />
         <div id="toastRoot"></div>
-        <div id="tourRoot"></div>
+        <TourDock />
         <AssistantPanel />
         <AppRuntime />
         <TwinScripts />

@@ -1,5 +1,4 @@
-// Mapping from programme values to visual tones and colours, shared by the
-// React components and the legacy string views.
+// Mapping from programme values to visual tones and colours.
 
 // Pill tone per obligation state (matches the .p-* classes).
 export const STATE_TONE = {

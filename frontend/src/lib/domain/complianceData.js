@@ -387,7 +387,6 @@ export const COMPLIANCE_REQUIREMENTS = [
   ),
 ];
 
-const STATUS = ["Verified", "Validated", "Submitted", "Assigned", "Rejected"];
 export function complianceStatus(venueId, authority, family) {
   const s = [...String(venueId + authority + family)].reduce(
     (a, c) => a + c.charCodeAt(0),

@@ -2,10 +2,10 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { bootRuntime, setRouterPush } from "@/legacy/engine";
+import { bootRuntime, setRouterPush } from "@/lib/runtime";
 
-// Boots the shared client runtime once (programme store, document listeners,
-// assistant, 3D twin hooks) and gives in-app navigation the Next router.
+// Boots the client runtime once (programme store, 3D twin hooks) and gives
+// in-app navigation the Next router.
 export default function AppRuntime() {
   const router = useRouter();
   useEffect(() => {

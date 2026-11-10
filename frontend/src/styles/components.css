@@ -1,5 +1,6 @@
-/* components.css — component styles shared by React components and the
-   legacy string views. They move into CSS Modules once src/legacy is gone. */
+/* components.css — component styles, grouped by component. Class names are
+   shared with the guided tour's selectors; split into CSS Modules per
+   component as each is next changed. */
 
 /* ---------- Header ---------- */
 header.top {
@@ -266,14 +267,7 @@ summary.btn::after {
     display: none;
   }
 }
-nav.tabs summary .lbl {
-  display: inline-block;
-  max-width: 160px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: bottom;
-}
+
 @media (max-width: 1320px) {
   nav.tabs {
     gap: 16px;
@@ -1166,12 +1160,7 @@ tr.flip td {
   flex-direction: column;
   gap: 8px;
 }
-.tour-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-}
+
 .tour h3 {
   margin: 0;
   font-size: 17px;
@@ -2818,81 +2807,6 @@ details.fc-table summary {
 }
 
 /* design intake summary card */
-.intake-card .row {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  font-size: 13px;
-  padding: 5px 0;
-  border-top: 1px solid var(--line);
-}
-.intake-card .row:first-of-type {
-  border-top: 0;
-}
-.ik-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-.ik-rev {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  align-items: flex-start;
-}
-.ik-rev > span:first-child,
-.ik-l span {
-  font-size: 11px;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: var(--muted);
-}
-.ik-rev b {
-  font-family: var(--f-display);
-  font-size: 26px;
-  line-height: 1;
-}
-.ik-steps,
-.ik-checks {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 16px;
-  border-radius: 14px;
-  background: var(--sunk);
-  margin-bottom: 12px;
-}
-.ik-l {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  align-items: baseline;
-}
-.ik-l b {
-  font-size: 13.5px;
-}
-.ik-dots {
-  display: flex;
-  gap: 6px;
-}
-.ik-dots i {
-  flex: 1;
-  height: 8px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--muted) 28%, var(--surface));
-}
-.ik-dots i.done {
-  background: var(--accent);
-}
-.ik-dots i.cur {
-  background: var(--warn);
-}
-.ik-checks .segbar {
-  background: var(--surface);
-}
 
 /* ---------- Decisions ---------- */
 .decs {
@@ -2995,17 +2909,7 @@ details.fc-table summary {
 }
 
 /* ---------- Gates & register ---------- */
-.gatecard {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 28px;
-  align-items: start;
-}
-@media (max-width: 560px) {
-  .gatecard {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
+
 .gcard {
   padding: 30px;
   display: flex;
@@ -3192,29 +3096,6 @@ details.fc-table summary {
   font-weight: 500;
   color: var(--muted);
   font-size: 11px;
-}
-.gatetrack {
-  display: flex;
-  gap: 4px;
-  margin-top: 8px;
-  flex-wrap: wrap;
-}
-.gatetrack span {
-  font-size: 11px;
-  font-family: var(--f-mono);
-  padding: 3px 7px;
-  border-radius: 4px;
-  background: var(--sunk);
-  color: var(--muted);
-}
-.gatetrack span.done {
-  background: var(--good-soft);
-  color: var(--good);
-}
-.gatetrack span.next {
-  background: var(--gold-soft);
-  color: var(--gold);
-  font-weight: 600;
 }
 
 /* ---------- Escalations ---------- */
@@ -3664,18 +3545,7 @@ details.fc-table summary {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.exec-sim-label {
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--panel-muted);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  font-size: 11px;
-  font-weight: 600;
-  white-space: nowrap;
-}
+
 .exec-kpis {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -3947,9 +3817,7 @@ details.fc-table summary {
   .exec-brief-head h2 {
     font-size: 21px;
   }
-  .exec-sim-label {
-    display: none;
-  }
+  
   .exec-kpi {
     padding: 18px;
   }
@@ -4133,13 +4001,7 @@ details.fc-table summary {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
-.ai-ul {
-  margin: 8px 0 4px;
-  padding-left: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+
 .ai-warning {
   font-size: 11px;
   color: var(--warn);
@@ -5440,22 +5302,6 @@ details.fc-table summary {
 /* =========================================================
    DISCLAIMER
    ========================================================= */
-
-.comp-disclaimer {
-  margin: 32px 0 0;
-
-  padding: 15px 18px;
-
-  background: var(--surface);
-
-  color: var(--muted);
-
-  border-left: 3px solid var(--warn);
-  border-radius: 0 12px 12px 0;
-
-  font-size: 11.5px;
-  line-height: 1.55;
-}
 
 /* =========================================================
    FAMILY / VENUE DRILL-DOWN

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { mountReactView } from "@/legacy/engine";
+import { onPageMount } from "@/lib/runtime";
 import { useProgramme } from "@/lib/store/useProgramme";
 
 /**
@@ -14,7 +14,7 @@ import { useProgramme } from "@/lib/store/useProgramme";
 export default function PageTemplate({ label, children }) {
   const programme = useProgramme();
   useEffect(() => {
-    mountReactView();
+    onPageMount();
   }, []);
   return (
     // id="view" keeps the guided tour's "#view …" selectors working.

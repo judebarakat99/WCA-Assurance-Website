@@ -213,8 +213,9 @@ export function updateUi(patch) {
   rerender();
 }
 
-// Guided demo runtime state (logic lives in components/views/tour.js).
+// Guided demo state (player in lib/tour/player.js, dock in organisms/TourDock).
 export const tour = {
+  list: null,
   active: false,
   i: 0,
   playing: false,
@@ -253,14 +254,14 @@ export function notify() {
 }
 
 // ---------- render & navigation bridge ----------
-// bridge.render repaints pages still rendered by src/legacy/engine.js;
-// bridge.navigate is set by the app runtime to the Next router.
+// Set by lib/runtime.js: bridge.render refreshes the tour highlight after a
+// change; bridge.navigate routes view keys through the Next router.
 export const bridge = { render: null, navigate: null };
 export function rerender() {
   notify();
   if (bridge.render) bridge.render();
 }
-// goView accepts the legacy hash keys ("tower", "register", "venue-RUH", ...)
+// goView takes a view key ("tower", "register", "venue-RUH", ...); see lib/runtime PATHS.
 export function goView(h) {
   if (bridge.navigate) bridge.navigate(h);
 }

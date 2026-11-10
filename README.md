@@ -19,6 +19,7 @@ Open http://localhost:3000. No environment variables or backend are required.
 ```sh
 cd frontend
 npm run lint
+npm test
 npm run build
 ```
 
@@ -38,31 +39,41 @@ NEXT_PUBLIC_BASE_PATH=/WCA-Assurance-Website npm run build
 ## Structure
 
 Application code lives in `frontend/src/` and is imported through the `@/`
-alias (`frontend/jsconfig.json`). Components follow atomic design.
+alias (`frontend/jsconfig.json`). Components follow atomic design; routes stay
+thin.
 
-- `src/app/`: App Router routes only (thin `page.jsx` files, `layout.jsx`,
-  metadata). Routes: `/overview`, `/readiness`, `/control-tower` (with
-  `/register`, `/gates` and `/[venueId]`), `/decisions-actions`,
+- `src/app/`: App Router routes only — `page.jsx` files with metadata, plus
+  `layout.jsx`. Routes: `/` and `/overview`, `/readiness`, `/control-tower`
+  (with `/register`, `/gates` and `/[venueId]`), `/decisions-actions`,
   `/design-review`, `/requirements-evidence`, `/dossiers`, `/compliance`.
-- `src/components/atoms/`, `molecules/`, `organisms/`, `templates/`: React
-  components, smallest to largest. Pages compose templates and organisms.
-- `src/lib/domain/`: pure programme logic — reference data, scoring, the
-  Monte Carlo forecast, actions (validation, escalation, decisions, change
-  impact) and the sourced FIFA catalogue.
-- `src/lib/store/`: client state with localStorage persistence.
-- `src/lib/assistant/`: assistant API client and context builder.
-- `src/legacy/`: the original string-template views and the runtime that
-  renders them (`engine.js`). Pages move out of here as they are rebuilt as
-  React components; the folder is deleted when the last one moves.
-- `src/app/globals.css`: Saudi 2034 brand tokens (light and dark) at the top;
-  rules below use tokens, not colour literals. The header toggle saves the
-  theme; without a saved choice the site follows the OS setting.
-- `public/scripts/`, `public/vendor/`: 3D stadium twin, menu logic, Three.js
-  r128 and OrbitControls (licenses retained).
+- `src/components/atoms/` → `molecules/` → `organisms/` → `templates/` →
+  `pages/`: React components from smallest to a whole screen. A route renders
+  one page component. `PageTemplate` waits for the programme store (it lives in
+  localStorage, so pages render after hydration). `FifaLibrary` is a Server
+  Component rendered at build time.
+- `src/components/providers/`: `AppRuntime` (boots the store, connects
+  navigation to the Next router) and `TwinScripts` (loads Three.js and the 3D
+  twin).
+- `src/lib/domain/`: programme logic — reference data, scoring, the Monte
+  Carlo forecast, actions (validation, escalation, decisions, change impact),
+  readiness analysis, intake, the dossier and the sourced FIFA catalogue.
+- `src/lib/store/`: the programme model (`state.js`, persisted to
+  localStorage) exposed to React as an external store through
+  `useProgramme()` (`useSyncExternalStore`). Domain actions mutate the model
+  and call `rerender()`; UI state changes go through `updateUi()`.
+- `src/lib/tour/`: guided demo script, player, voice selection and highlight.
+- `src/lib/assistant/`: Nabd chat state, API client and context builder.
+- `src/lib/runtime.js`, `navigation.js`, `drawer.js`: view-key routing,
+  navigation helpers and the obligation drawer actions.
+- `src/styles/`: `tokens.css` (Saudi 2034 brand, light and dark), `base.css`
+  (elements, layout, controls) and `components.css` (component styles; class
+  names are shared with the tour's selectors).
+- `public/scripts/stadium-twin.js`, `public/vendor/`: the imperative 3D twin,
+  Three.js r128 and OrbitControls (licenses retained).
 - Fonts: Barlow (brand typeface) from `@fontsource/barlow`; IBM Plex Mono in
   `public/fonts/` (SIL Open Font License).
 - `public/Assets/`: images, including the Saudi 2034 logo.
-- `tests/`: Node test runner; `tests/resolve.mjs` mirrors the `@/` alias.
+- `tests/`: Vitest + React Testing Library (`npm test`).
 - `Archive/`: historical standalone HTML snapshots.
 
 

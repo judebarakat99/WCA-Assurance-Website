@@ -1,23 +1,13 @@
-// ---------- guided demo (executive & full tours) ----------
-import {
-  esc,
-  fmtD,
-  pct,
-  dd,
-  sn,
-  venueMeta,
-  decMeta,
-  SAMPLE_CLAUSE,
-  CHANGES,
-} from "@/lib/domain/data";
-import { S, ui, resetS, tour, goView } from "@/lib/store/state";
+// Guided demo script: what each step shows (run) and says (say).
+// run() navigates and sets up the page, then returns the selector to highlight.
+import { fmtD, pct, venueMeta, decMeta, SAMPLE_CLAUSE, CHANGES } from "@/lib/domain/data";
+import { S, ui, goView } from "@/lib/store/state";
 import { scores } from "@/lib/domain/scoring";
 import { forecasts } from "@/lib/domain/forecast";
 import {
   decide,
   decRec,
   advance,
-  toast,
   changeImpact,
   decompose,
   applyChange,
@@ -26,16 +16,7 @@ import {
 } from "@/lib/domain/actions";
 import { openDrawer, closeDrawer, runValidation } from "@/lib/drawer";
 
-const $ = (s) => document.querySelector(s);
-// ---------- guided demo ----------
-
-const hasVoice =
-  typeof window !== "undefined" &&
-  typeof window.speechSynthesis !== "undefined" &&
-  typeof window.SpeechSynthesisUtterance !== "undefined";
-function go(h) {
-  goView(h);
-}
+const go = (h) => goView(h);
 
 const RR_STEPS = [
   {
@@ -266,9 +247,6 @@ const TOUR = [
     say: "That is the difference. Readiness questions answered with a confidence level. Designs checked before they are built. Status earned by evidence. Gates that hold. Escalation that runs itself. And proof for FIFA at any moment. This is the compliance backbone of the programme control tower.",
   },
 ];
-let tourList = null;
-const TL = () => tourList || TOUR;
-const tourName = () => (tourList === EXEC ? "Executive demo" : "Guided demo");
 const EXEC = [
   ...RR_STEPS,
   {
@@ -335,295 +313,6 @@ const EXEC = [
     say: "One control tower. Every readiness question answered with a confidence level. Every requirement owned, proven and enforced, from the first drawing to the final whistle. We propose a twelve-week proof of concept to deliver it.",
   },
 ];
-function sentences(t) {
-  return t.match(/[^.!?]+[.!?]+/g) || [t];
-}
-function clearTimers() {
-  tour.timers.forEach(clearTimeout);
-  tour.timers = [];
-}
-function stopVoice() {
-  clearTimers();
-  tour.gen++;
-  if (hasVoice)
-    try {
-      speechSynthesis.cancel();
-    } catch (e) {}
-}
-// Narrator voice: prefer Saudi or Gulf English where the browser has one, then the presenter's own choice, then British English.
-const GULF_EN = /^en[-_](SA|AE|QA|KW|BH|OM)/i,
-  ARAB_NAME =
-    /saudi|arab|hamed|naayf|zariyah|fatima|hamdan|shakir|maged|tarik|laila/i;
-function voiceList() {
-  if (!hasVoice) return [];
-  try {
-    return speechSynthesis.getVoices().filter((x) => /^(en|ar)/i.test(x.lang));
-  } catch (e) {
-    return [];
-  }
-}
-function pickVoice() {
-  if (!hasVoice) return null;
-  const v = voiceList();
-  if (tour.voiceName) {
-    const c = v.find((x) => x.name === tour.voiceName);
-    if (c) return c;
-  }
-  return (
-    v.find((x) => GULF_EN.test(x.lang)) ||
-    v.find((x) => /^en/i.test(x.lang) && ARAB_NAME.test(x.name)) ||
-    v.find(
-      (x) =>
-        /en-GB/i.test(x.lang) &&
-        /natural|google|daniel|serena|libby|ryan/i.test(x.name),
-    ) ||
-    v.find((x) => /en-GB/i.test(x.lang)) ||
-    v.find((x) => /^en/i.test(x.lang)) ||
-    null
-  );
-}
-function voiceLabel(x) {
-  const ar = /^ar/i.test(x.lang),
-    gulf =
-      GULF_EN.test(x.lang) || (/^en/i.test(x.lang) && ARAB_NAME.test(x.name));
-  return `${x.name.replace(/^Microsoft |^Google /, "")} · ${x.lang}${gulf ? " · Saudi/Gulf English" : ar ? " · Arabic voice reading English" : ""}`;
-}
-function voiceOptions() {
-  const v = voiceList(),
-    cur = pickVoice();
-  if (!v.length) return "";
-  const rank = (x) =>
-    GULF_EN.test(x.lang) || (/^en/i.test(x.lang) && ARAB_NAME.test(x.name))
-      ? 0
-      : /^ar-SA/i.test(x.lang)
-        ? 1
-        : /^ar/i.test(x.lang)
-          ? 2
-          : 3;
-  return v
-    .slice()
-    .sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name))
-    .map(
-      (x) =>
-        `<option value="${esc(x.name)}" ${cur && cur.name === x.name ? "selected" : ""}>${esc(voiceLabel(x))}</option>`,
-    )
-    .join("");
-}
-// React pages render after navigation, so a step's target may not exist yet.
-// Watch the DOM briefly and highlight it as soon as it appears.
-let targetWatch = null;
-function waitForTarget(sel, scroll) {
-  if (targetWatch) targetWatch.disconnect();
-  const obs = new MutationObserver(() => {
-    if (tour.sel !== sel || !tour.active) return stop();
-    if (document.querySelector(sel)) {
-      stop();
-      applyHL(scroll);
-    }
-  });
-  const timer = setTimeout(stop, 3000);
-  function stop() {
-    obs.disconnect();
-    clearTimeout(timer);
-    if (targetWatch === obs) targetWatch = null;
-  }
-  targetWatch = obs;
-  obs.observe(document.body, { childList: true, subtree: true });
-}
 
-export function applyHL(scroll) {
-  document
-    .querySelectorAll(".tour-hl")
-    .forEach((e) => e.classList.remove("tour-hl"));
-  if (!tour.active || !tour.sel) return;
-  const el = document.querySelector(tour.sel);
-  if (!el) {
-    waitForTarget(tour.sel, scroll);
-    return;
-  }
-  el.classList.add("tour-hl");
-  if (scroll)
-    try {
-      el.scrollIntoView({
-        block: "center",
-        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "auto"
-          : "smooth",
-      });
-    } catch (e) {
-      el.scrollIntoView();
-    }
-}
-export function renderTour() {
-  const r = $("#tourRoot");
-  document.body.classList.toggle("touring", tour.active);
-  if (!tour.active) {
-    r.innerHTML = "";
-    return;
-  }
-  const st = TL()[tour.i],
-    txt = typeof st.say === "function" ? st.say() : st.say;
-  tour.text = txt;
-  const ss = sentences(txt);
-  r.innerHTML = `<section class="tour dock" role="region" aria-label="${tourName()}" aria-live="polite">
-   <div class="tour-head"><span class="chip">${tourName()} · ${tour.i + 1} of ${TL().length}</span><h3>${esc(st.title)}</h3></div>
-   <p class="cap">${ss.map((x, k) => `<span class="${k < tour.sent ? "done" : k === tour.sent && tour.playing ? "now" : ""}">${esc(x)}</span>`).join("")}</p>
-   <div class="tour-prog"><i style="width:${(((tour.i + 1) / TL().length) * 100).toFixed(1)}%"></i></div>
-   <div class="tour-ctl"><button data-tour="back" ${tour.i === 0 ? "disabled" : ""}>Back</button><button class="primary" data-tour="play">${tour.playing ? "Pause" : "Play"}</button><button data-tour="next">${tour.i === TL().length - 1 ? "Finish" : "Next"}</button>
-   <label for="tourVoice"><input type="checkbox" id="tourVoice" ${tour.voice && hasVoice ? "checked" : ""} ${hasVoice ? "" : "disabled"}> Voice</label>
-   ${hasVoice && voiceList().length ? `<select id="tourVoiceSel" aria-label="Narrator voice">${voiceOptions()}</select>` : ""}
-   <button class="ghost" data-tour="exit">Exit</button></div>
-   ${hasVoice ? "" : `<div class="tour-note">This browser has no speech voice, so the demo plays with captions only.</div>`}
-  </section>`;
-}
-function markSentence(k) {
-  tour.sent = k;
-  const sp = document.querySelectorAll("#tourRoot .cap span");
-  const cap = document.querySelector("#tourRoot .cap");
-  if (cap && sp[Math.min(k, sp.length - 1)])
-    cap.scrollTop = sp[Math.min(k, sp.length - 1)].offsetTop - cap.offsetTop;
-  sp.forEach((e, j) => {
-    e.className = j < k ? "done" : j === k && tour.playing ? "now" : "";
-  });
-}
-function narrate() {
-  stopVoice();
-  const gen = tour.gen;
-  const ss = sentences(tour.text);
-  tour.sent = 0;
-  const done = () => {
-    if (gen !== tour.gen) return;
-    markSentence(ss.length);
-    tour.timers.push(
-      setTimeout(() => {
-        if (gen === tour.gen && tour.playing) step(1);
-      }, 1100),
-    );
-  };
-  const say = (k) => {
-    if (gen !== tour.gen || !tour.playing) return;
-    if (k >= ss.length) {
-      done();
-      return;
-    }
-    markSentence(k);
-    const words = ss[k].split(/\s+/).length,
-      est = words * 390 + 700;
-    if (tour.voice && hasVoice) {
-      let fired = false;
-      const next = () => {
-        if (fired) return;
-        fired = true;
-        say(k + 1);
-      };
-      const u = new SpeechSynthesisUtterance(ss[k].trim());
-      const v = pickVoice();
-      if (v) u.voice = v;
-      u.lang = v ? v.lang : "en-GB";
-      u.rate = /^ar/i.test(u.lang) ? 0.92 : 0.97;
-      u.onend = next;
-      u.onerror = next;
-      tour.timers.push(setTimeout(next, est * 2 + 3000));
-      try {
-        speechSynthesis.speak(u);
-      } catch (e) {
-        next();
-      }
-    } else tour.timers.push(setTimeout(() => say(k + 1), est));
-  };
-  say(0);
-}
-function runStep() {
-  const st = TL()[tour.i];
-  tour.sel = st.run() || null;
-  tour.sent = 0;
-  renderTour();
-  setTimeout(() => applyHL(true), 120);
-  if (tour.playing) narrate();
-}
-function step(d) {
-  stopVoice();
-  const n = tour.i + d;
-  if (n >= TL().length) {
-    endTour(true);
-    return;
-  }
-  if (n < 0) return;
-  tour.i = n;
-  runStep();
-}
-export function startTour(list) {
-  tourList = list || null;
-  stopVoice();
-  resetS();
-  closeDrawer();
-  window.WNSTwin && window.WNSTwin.reset();
-  ui.filters = { venue: "all", family: "all", state: "all", q: "" };
-  ui.decoOut = null;
-  tour.active = true;
-  tour.i = 0;
-  tour.playing = true;
-  if (hasVoice)
-    try {
-      speechSynthesis.getVoices();
-    } catch (e) {}
-  runStep();
-}
-export function endTour(finished) {
-  stopVoice();
-  window.WNSTwin && window.WNSTwin.stop();
-  tour.active = false;
-  tour.playing = false;
-  tour.sel = null;
-  applyHL(false);
-  renderTour();
-  if (finished)
-    toast(
-      "Demo finished. The app stays in the state the demo left it; use Reset demo to start fresh.",
-    );
-}
-if (hasVoice && speechSynthesis.addEventListener)
-  speechSynthesis.addEventListener("voiceschanged", () => {
-    if (tour.active) {
-      const sel = document.getElementById("tourVoiceSel");
-      if (sel) sel.innerHTML = voiceOptions();
-      else renderTour();
-    }
-  });
-
-// ---------- wiring helpers used by lib/engine.js ----------
-export { EXEC };
-export function handleTourClick(a) {
-  if (a === "exit") {
-    endTour(false);
-    return;
-  }
-  if (a === "next") {
-    step(1);
-    return;
-  }
-  if (a === "back") {
-    step(-1);
-    return;
-  }
-  if (a === "play") {
-    if (tour.playing) {
-      tour.playing = false;
-      stopVoice();
-      renderTour();
-    } else {
-      tour.playing = true;
-      renderTour();
-      narrate();
-    }
-    return;
-  }
-}
-export function setTourVoice(c) {
-  tour.voice = c;
-  if (tour.playing) narrate();
-}
-export function setTourVoiceName(v) {
-  tour.voiceName = v;
-  if (tour.playing) narrate();
-}
+/** Full guided demo and the 3-minute executive demo. */
+export { TOUR, EXEC };
