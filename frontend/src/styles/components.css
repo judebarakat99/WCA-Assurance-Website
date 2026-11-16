@@ -1307,6 +1307,10 @@ main.wide {
 .amap .maplibregl-ctrl-attrib {
   font-size: 10px;
 }
+/* Zoom buttons sit above the floating Ask Nabd button. */
+.amap .maplibregl-ctrl-bottom-right .maplibregl-ctrl-group {
+  margin-bottom: 76px;
+}
 .amap-pin {
   position: relative;
   width: 0;
@@ -1753,11 +1757,11 @@ a.abrief-cta:hover b {
   height: 8px;
   margin: 1px;
 }
-/* Bottom left of the map, clear of the map credit and the floating Ask Nabd button. */
+/* Beside the floating Ask Nabd button. */
 .abottom {
   position: absolute;
-  left: 416px;
-  bottom: 18px;
+  right: 152px;
+  bottom: 26px;
   display: flex;
   gap: 12px;
 }

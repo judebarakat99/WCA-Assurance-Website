@@ -251,6 +251,7 @@ export default function AssuranceMap({ cities, year, selected, onSelect, onOpenS
           compact: true,
           customAttribution: "© OpenStreetMap contributors · geoBoundaries · stadium locations partly approximate",
         }),
+        "bottom-left",
       );
       map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
       // Keep the country clear of the briefing card on wide screens.
