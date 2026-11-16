@@ -8,6 +8,7 @@ import { pct } from "@/lib/format";
 import { TIMELINE } from "@/lib/domain/cityAssurance.mjs";
 import { ReopenedLink } from "@/components/organisms/ChangeImpactPanel";
 import { loadSampleAssessments, resetAssessments } from "@/lib/store/assessments";
+import { clearIntake, loadSampleIntake } from "@/lib/store/intake";
 import { updateMap } from "@/lib/store/state";
 
 const TONE_COLOR = { good: "var(--good)", warn: "var(--warn)", bad: "var(--bad)", mute: "var(--muted)" };
@@ -50,19 +51,31 @@ function Coverage({ a }) {
   );
 }
 
+// Sample assessments for the map and queue, plus sample contractor documents
+// filed and checked on the Intake page.
+function loadSamples() {
+  loadSampleAssessments();
+  void loadSampleIntake();
+}
+
+function clearSamples() {
+  resetAssessments();
+  void clearIntake();
+}
+
 function SampleControl({ sample }) {
   return sample ? (
     <p className="abrief-sample">
-      <StatusPill tone="warn">Sample data</StatusPill> Generated assessments for the demo.{" "}
-      <button type="button" className="linkish" onClick={resetAssessments}>
+      <StatusPill tone="warn">Sample data</StatusPill> Generated assessments and contractor documents for the demo.{" "}
+      <button type="button" className="linkish" onClick={clearSamples}>
         Clear
       </button>
     </p>
   ) : (
     <p className="abrief-sample">
       Only declared capacities are recorded so far.{" "}
-      <button type="button" className="linkish" onClick={loadSampleAssessments}>
-        Load sample assessments
+      <button type="button" className="linkish" onClick={loadSamples}>
+        Load sample data
       </button>
     </p>
   );

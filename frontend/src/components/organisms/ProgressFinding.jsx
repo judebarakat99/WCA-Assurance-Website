@@ -186,6 +186,11 @@ export default function ProgressFinding({ check }) {
         </div>
       </div>
       <p className="pf-summary">{check.summary}</p>
+      {check.offline && (
+        <p className="muted small">
+          Offline demo: figures come from bundled readings of the sample documents; the summary is a plain template.
+        </p>
+      )}
       <p className="muted small">
         Claim source: {check.report.name}, p. {check.report.page} · “{check.report.quote}”
         {check.stale && (

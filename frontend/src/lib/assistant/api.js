@@ -21,10 +21,13 @@ export async function assistantRequest(path, options = {}) {
   } catch (error) {
     if (error.name === "AbortError")
       throw new Error("The request timed out. Please try again.");
-    if (error instanceof TypeError)
-      throw new Error(
+    if (error instanceof TypeError) {
+      const offline = new Error(
         "Cannot reach the backend. Start it on port 8000 (see backend/README.md).",
       );
+      offline.offline = true; // lets the Intake page fall back to its offline demo
+      throw offline;
+    }
     throw error;
   } finally {
     clearTimeout(timer);

@@ -42,7 +42,9 @@ function useMenuDismiss(ref) {
     const closeAll = () => ref.current?.querySelectorAll("details.menu[open]").forEach((d) => d.removeAttribute("open"));
     const onClick = (e) => {
       ref.current?.querySelectorAll("details.menu[open]").forEach((d) => {
-        if (!d.contains(e.target) || e.target.closest(".pop button,.pop a")) d.removeAttribute("open");
+        // Reset demo asks for a second click, so it closes the menu itself (ResetButton).
+        const item = e.target.closest(".pop button,.pop a");
+        if (!d.contains(e.target) || (item && item.id !== "reset")) d.removeAttribute("open");
       });
     };
     const onKey = (e) => e.key === "Escape" && closeAll();
@@ -68,9 +70,10 @@ function ResetButton() {
       type="button"
       id="reset"
       className={armed ? "danger" : undefined}
-      onClick={() => {
+      onClick={(e) => {
         if (armed) {
           setArmed(false);
+          e.currentTarget.closest("details")?.removeAttribute("open");
           resetDemo();
         } else {
           setArmed(true);

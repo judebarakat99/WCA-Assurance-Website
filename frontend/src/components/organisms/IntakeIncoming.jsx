@@ -36,7 +36,10 @@ function DropZone() {
     >
       <b>Drop contractor documents here</b>
       <span className="muted small">
-        Progress reports and detailed plans · PDF, TXT or Markdown, 10 MB each. Text is sent to Azure to read it.
+        Progress reports and detailed plans · PDF, TXT or Markdown, 10 MB each.{" "}
+        {intake.mode === "offline"
+          ? "Offline demo: only the sample documents in data/progress can be read."
+          : "Text is sent to Azure to read it."}
       </span>
       <button type="button" onClick={() => input.current?.click()}>
         Choose files

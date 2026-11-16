@@ -12,8 +12,10 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000. No environment variables are required; Nabd and
-the Intake page need the backend.
+Open http://localhost:3000. No environment variables are required. Nabd needs
+the backend; without it the Intake page runs as a labelled offline demo of the
+sample documents (see `data/progress/README.md`). "Load sample data" on the map
+loads sample assessments and files and checks the sample documents.
 
 ## Check and build
 

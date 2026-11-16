@@ -12,7 +12,7 @@ import { criterionLabel } from "@/lib/domain/fifa-catalogue.mjs";
 import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
 import { QUEUE_REASON, queueCounts, reviewQueue } from "@/lib/domain/reviewQueue.mjs";
 import { getAssessments, hasSampleAssessments, loadSampleAssessments, reviewAssessment } from "@/lib/store/assessments";
-import { CHECK_STATUS, decideCheck, ensureIntake, intake, needsDecision } from "@/lib/store/intake";
+import { CHECK_STATUS, decideCheck, ensureIntake, intake, loadSampleIntake, needsDecision } from "@/lib/store/intake";
 import { updateMap } from "@/lib/store/state";
 
 const REASON_TONE = { fail: "bad", "needs-review": "warn", pass: "good", "non-compliant": "bad" };
@@ -312,8 +312,15 @@ function Queue({ ui }) {
             ) : (
               <>
                 Only declared capacities are recorded so far.{" "}
-                <button type="button" className="linkish" onClick={loadSampleAssessments}>
-                  Load sample assessments
+                <button
+                  type="button"
+                  className="linkish"
+                  onClick={() => {
+                    loadSampleAssessments();
+                    void loadSampleIntake();
+                  }}
+                >
+                  Load sample data
                 </button>
               </>
             )}

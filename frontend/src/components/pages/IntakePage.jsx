@@ -115,8 +115,19 @@ function Intake() {
       <PageHead
         chip="Intake · contractor documents"
         title="Document intake"
+        wideLead
         lead="Contractors' progress reports claim how far each stadium has come; their detailed plans show the work behind the claim. The agent sorts what comes in, recalculates progress from the plans and flags claims the evidence does not support. A person files every document and decides on every finding."
       />
+      {intake.mode === "offline" && intake.loaded && (
+        <div className="block intake-alert intake-offline" role="status">
+          <StatusPill tone="info">Offline demo</StatusPill>
+          <span className="muted small">
+            The backend isn&apos;t running, so the sample documents in <span className="mono">data/progress</span> are
+            read from bundled readings of them instead of by the model, and only those files can be added. Filing,
+            checks and decisions work the same way and are kept in this browser.
+          </span>
+        </div>
+      )}
       {intake.error && (
         <div className="block intake-alert" role="alert">
           <b>{intake.error}</b>{" "}
@@ -129,8 +140,8 @@ function Intake() {
         <div className="block intake-alert">
           <b>No documents yet.</b>{" "}
           <span className="muted small">
-            Load the sample documents for Aramco and Prince Faisal bin Fahad (filed and checked; about half a minute),
-            or drop your own below.
+            Load the sample documents for Aramco and Prince Faisal bin Fahad (filed and checked
+            {intake.mode === "online" ? "; about half a minute" : ""}), or drop your own below.
           </span>{" "}
           <button type="button" className="primary" disabled={intake.seeding} onClick={seedIntake}>
             {intake.seeding ? "Loading and checking…" : "Load sample documents"}

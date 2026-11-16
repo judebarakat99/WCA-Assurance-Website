@@ -1948,6 +1948,9 @@ a.abrief-cta:hover b {
 }
 
 /* ---------- Document intake ---------- */
+.comp-block-head > button {
+  flex-shrink: 0;
+}
 .intake-alert,
 .intake-stadium,
 .pc-card,

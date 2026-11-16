@@ -67,6 +67,9 @@ h3 {
 .page-head .lead {
   margin-bottom: 0;
 }
+.lead.wide {
+  max-width: none;
+}
 .muted {
   color: var(--muted);
 }
