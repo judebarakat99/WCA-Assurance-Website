@@ -84,3 +84,16 @@ class ChatResponse(BaseModel):
     reply: str
     sources: list[Source]
     warnings: list[str] = Field(default_factory=list)
+
+
+class Filing(BaseModel):
+    kind: Literal["progress-report", "detailed-plan", "other"]
+    stadium_id: str = Field(max_length=80)
+    element: Literal["pitch-turf", "floodlighting", "seating-stands", "broadcast-media"] | None = None
+    as_of: str | None = Field(default=None, pattern=r"^\d{4}-\d{2}-\d{2}$")
+    revision: str | None = Field(default=None, max_length=20)
+
+
+class Decision(BaseModel):
+    decision: Literal["accepted", "rejected"]
+    note: str = Field(default="", max_length=1000)

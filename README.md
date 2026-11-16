@@ -12,8 +12,8 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000. No environment variables are required; only the
-Nabd assistant needs the backend.
+Open http://localhost:3000. No environment variables are required; Nabd and
+the Intake page need the backend.
 
 ## Check and build
 
@@ -45,7 +45,7 @@ thin.
 
 - `src/app/`: App Router routes only — `page.jsx` files with metadata, plus
   `layout.jsx`. `/` is the assurance map, `/review` the review queue,
-  `/compliance` the requirements (FIFA source library and facility register)
+  `/intake` document intake and progress verification, `/compliance` the requirements (FIFA source library and facility register)
   and `/facilities/[facilityId]` a stadium's assessments.
 - `src/components/atoms/` → `molecules/` → `organisms/` → `templates/` →
   `pages/`: React components from smallest to a whole screen. A route renders
@@ -65,6 +65,8 @@ thin.
 - `src/lib/tour/`: guided demo steps, player, voice selection and highlight.
 - `src/lib/assistant/`: Nabd chat state, API client and the assurance snapshot
   sent with each question.
+- `src/lib/store/intake.js`: intake documents and progress checks, loaded from
+  the backend.
 - `src/lib/runtime.js`: view-key routing for the tour.
 - `src/styles/`: `tokens.css` (Saudi 2034 brand, light and dark), `base.css`
   (elements, layout, controls) and `components.css` (component styles; class
@@ -76,8 +78,9 @@ thin.
   `public/fonts/` (SIL Open Font License).
 - `public/Assets/`: the Saudi 2034 logo.
 - `tests/`: Vitest + React Testing Library (`npm test`).
-- `data/`: the FIFA catalogue and change scenarios, the facility register and
-  region boundaries (each folder has a README).
+- `data/`: the FIFA catalogue and change scenarios, the facility register,
+  region boundaries and the sample contractor documents (each folder has a
+  README).
 - `Archive/`: historical standalone HTML snapshots.
 
 ## Azure-backed assistant

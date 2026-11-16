@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     azure_openai_embedding_dimensions: int = 1536
     cors_origins: list[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
     data_dir: Path = BACKEND_DIR / "data"
+    # Repository data shared with the frontend (facility register, sample documents).
+    repo_data_dir: Path = BACKEND_DIR.parent / "data"
     max_upload_bytes: int = 10 * 1024 * 1024
 
     @property

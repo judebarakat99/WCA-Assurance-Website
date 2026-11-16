@@ -82,6 +82,11 @@ class DocumentStore:
                     text TEXT NOT NULL, embedding TEXT NOT NULL,
                     FOREIGN KEY(document_id) REFERENCES documents(id) ON DELETE CASCADE
                 );
+                CREATE TABLE IF NOT EXISTS pages (
+                    document_id TEXT NOT NULL, page INTEGER NOT NULL, text TEXT NOT NULL,
+                    PRIMARY KEY(document_id, page),
+                    FOREIGN KEY(document_id) REFERENCES documents(id) ON DELETE CASCADE
+                );
             """)
 
     def connect(self):
@@ -107,7 +112,7 @@ class DocumentStore:
             ).fetchone()
             return dict(row) if row else None
 
-    def add(self, name, content, chunks, vectors, profile):
+    def add(self, name, content, chunks, vectors, profile, pages=None):
         digest = hashlib.sha256(content).hexdigest()
         existing = self.find_duplicate(digest, profile)
         if existing:
@@ -125,8 +130,29 @@ class DocumentStore:
                     for c, v in zip(chunks, vectors, strict=True)
                 ],
             )
+            # Full page text, for structured extraction (progress verification).
+            db.executemany(
+                "INSERT INTO pages VALUES(?,?,?)",
+                [(identifier, page, text) for page, text in (pages or [])],
+            )
         # Store only extracted text and vectors; uploaded binary files are not retained.
         return next(d for d in self.list_documents() if d["id"] == identifier)
+
+    def get(self, identifier):
+        with self.connect() as db:
+            row = db.execute(
+                "SELECT id,name,pages,created_at FROM documents WHERE id=?", (identifier,)
+            ).fetchone()
+            return dict(row) if row else None
+
+    def page_texts(self, identifier) -> list[tuple[int, str]]:
+        with self.connect() as db:
+            return [
+                (row["page"], row["text"])
+                for row in db.execute(
+                    "SELECT page,text FROM pages WHERE document_id=? ORDER BY page", (identifier,)
+                )
+            ]
 
     def search(self, vector, profile, document_ids=None, limit=6):
         query = "SELECT c.*,d.name FROM chunks c JOIN documents d ON c.document_id=d.id WHERE d.profile=?"

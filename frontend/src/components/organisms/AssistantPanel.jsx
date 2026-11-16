@@ -1,13 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import AssistantSource from "@/components/molecules/AssistantSource";
-import { assistantRequest } from "@/lib/assistant/api";
 import { QUICK_QUESTIONS, aiAsk, setAssistantOpen } from "@/lib/assistant/chat";
 import { ai } from "@/lib/store/state";
 import { useProgramme } from "@/lib/store/useProgramme";
-
-const MAX_UPLOAD = 10 * 1024 * 1024;
 
 function Message({ m }) {
   return (
@@ -30,83 +28,15 @@ function Message({ m }) {
   );
 }
 
-// Reference documents indexed by the backend for retrieval.
-function ReferenceDocuments() {
-  const input = useRef(null);
-  const [docs, setDocs] = useState([]);
-  const [status, setStatus] = useState("");
-  const [busy, setBusy] = useState(false);
-
-  async function refresh(message = "") {
-    try {
-      const list = await assistantRequest("/documents");
-      setDocs(list);
-      setStatus(message || `${list.length} document(s) available for retrieval`);
-    } catch (error) {
-      setStatus(error.message);
-    }
-  }
-
-  async function upload() {
-    const file = input.current?.files?.[0];
-    if (!file || busy) return;
-    if (file.size > MAX_UPLOAD) return setStatus("Choose a document under 10 MB.");
-    setBusy(true);
-    setStatus("Extracting text and indexing with Azure…");
-    try {
-      const form = new FormData();
-      form.append("file", file);
-      await assistantRequest("/documents", { method: "POST", body: form });
-      input.current.value = "";
-      await refresh("Document indexed. You can now ask Nabd about it.");
-    } catch (error) {
-      setStatus(error.message);
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function remove(id) {
-    if (busy || !window.confirm("Remove this document from the local assistant index?")) return;
-    setBusy(true);
-    try {
-      await assistantRequest(`/documents/${encodeURIComponent(id)}`, { method: "DELETE" });
-      await refresh();
-    } catch (error) {
-      setStatus(error.message);
-    } finally {
-      setBusy(false);
-    }
-  }
-
+// Documents come in through the Intake page; Nabd can search all of them.
+function DocumentsNote() {
   return (
-    <details className="ai-reference" onToggle={(e) => e.currentTarget.open && refresh()}>
-      <summary>Reference documents</summary>
-      <p>
-        Upload PDF, TXT, or Markdown (10 MB max). Text is sent to Azure for indexing and answers. Uploading does not
-        validate compliance.
-      </p>
-      <input ref={input} id="aiDocument" type="file" accept=".pdf,.txt,.md" aria-label="Reference document" />
-      <button id="aiUpload" type="button" disabled={busy} onClick={upload}>
-        Index document
-      </button>
-      <div id="aiDocs">
-        {status && <p role="status">{status}</p>}
-        {docs.map((d) => (
-          <div key={d.id} className="ai-document">
-            <span>
-              {d.name}
-              <small>{d.pages} text page(s)</small>
-            </span>
-            <button type="button" aria-label={`Remove ${d.name}`} disabled={busy} onClick={() => remove(d.id)}>
-              Remove
-            </button>
-          </div>
-        ))}
-      </div>
-    </details>
+    <p className="ai-reference">
+      Nabd can also answer from documents filed on the <Link href="/intake">Intake page</Link>.
+    </p>
   );
 }
+
 
 /** Nabd: floating button and chat panel, available on every page. */
 export default function AssistantPanel() {
@@ -180,7 +110,7 @@ export default function AssistantPanel() {
             </button>
           </div>
         </header>
-        <ReferenceDocuments />
+        <DocumentsNote />
         <div className="ai-msgs" id="aiMsgs" ref={msgsRef} aria-live="polite" aria-relevant="additions text">
           {msgs.map((m, k) => (
             <Message key={k} m={m} />

@@ -12,6 +12,7 @@ import { criterionLabel } from "@/lib/domain/fifa-catalogue.mjs";
 import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
 import { QUEUE_REASON, queueCounts, reviewQueue } from "@/lib/domain/reviewQueue.mjs";
 import { getAssessments, hasSampleAssessments, loadSampleAssessments, reviewAssessment } from "@/lib/store/assessments";
+import { CHECK_STATUS, decideCheck, ensureIntake, intake, needsDecision } from "@/lib/store/intake";
 import { updateMap } from "@/lib/store/state";
 
 const REASON_TONE = { fail: "bad", "needs-review": "warn", pass: "good", "non-compliant": "bad" };
@@ -198,15 +199,79 @@ function Item({ item }) {
   );
 }
 
+// Progress claims the agent flagged, awaiting a reviewer (from the Intake page).
+// They follow the city and due-year filters and show only under "Everything".
+function progressClaims(filters) {
+  if (filters.status) return [];
+  return Object.values(intake.checks).filter((c) => {
+    const stadium = FACILITY_REGISTER.stadiums.find((s) => s.id === c.stadium_id);
+    return (
+      needsDecision(c) &&
+      stadium &&
+      (!filters.cityId || stadium.cityId === filters.cityId) &&
+      (!filters.year || stadium.completionYear <= filters.year)
+    );
+  });
+}
+
+function ProgressClaims({ claims }) {
+  if (!claims.length) return null;
+  return (
+    <>
+      <h3 className="rq-heading">Progress claims not supported by evidence</h3>
+      <ol className="rq-list">
+        {claims.map((c) => (
+          <li key={c.stadium_id} className="rq-item">
+            <div className="rq-where">
+              <Link href={`/facilities/${c.stadium_id}`}>
+                <b>{c.stadium_name}</b>
+              </Link>
+              <span className="muted small">
+                {c.city} · report as at {c.as_of}
+              </span>
+            </div>
+            <div className="rq-what">
+              <div>
+                <b>
+                  Reported {c.claimed}%, recalculated {c.recalculated}% from the detailed plans
+                </b>
+              </div>
+              <div className="muted small">{c.summary}</div>
+              <div>
+                <StatusPill tone={CHECK_STATUS[c.status].tone}>{CHECK_STATUS[c.status].label}</StatusPill>{" "}
+                <Link className="small" href={`/intake?stadium=${encodeURIComponent(c.stadium_id)}`}>
+                  View finding →
+                </Link>
+              </div>
+            </div>
+            <div className="rq-act">
+              <button type="button" className="primary" onClick={() => decideCheck(c.stadium_id, "accepted")}>
+                Accept finding
+              </button>
+              <button type="button" className="ghost" onClick={() => decideCheck(c.stadium_id, "rejected")}>
+                Reject finding
+              </button>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <h3 className="rq-heading">Requirement evidence</h3>
+    </>
+  );
+}
+
 function Queue({ ui }) {
   const [filters, set, clear] = useFilters(ui);
+  useEffect(ensureIntake, []);
+  const claims = progressClaims(filters);
+  const allClaims = progressClaims({});
   const records = getAssessments();
   const items = reviewQueue(records, filters);
   const all = queueCounts(reviewQueue(records));
   const c = queueCounts(items);
   const filtered = Object.values(filters).some(Boolean);
   const tiles = [
-    [c.total, filtered ? `shown of ${all.total}` : "need attention", ""],
+    [c.total + claims.length, filtered ? `shown of ${all.total + allClaims.length}` : "need attention", ""],
     [c["evidence-submitted"], "awaiting review", c["evidence-submitted"] ? "warn" : ""],
     [c.fail, "evidence below criterion", c.fail ? "bad" : ""],
     [c["non-compliant"], "non-compliant, awaiting new evidence", c["non-compliant"] ? "bad" : ""],
@@ -227,6 +292,7 @@ function Queue({ ui }) {
         ))}
       </div>
       <Filters filters={filters} set={set} />
+      <ProgressClaims claims={claims} />
       {items.length ? (
         <ol className="rq-list">
           {items.map((item) => (

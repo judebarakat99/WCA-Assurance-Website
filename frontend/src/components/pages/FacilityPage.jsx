@@ -5,6 +5,7 @@ import StatusPill from "@/components/atoms/StatusPill";
 import Breadcrumbs from "@/components/molecules/Breadcrumbs";
 import PageHead from "@/components/molecules/PageHead";
 import AssessmentTable from "@/components/organisms/AssessmentTable";
+import ProgressClaim from "@/components/organisms/ProgressClaim";
 import PageTemplate from "@/components/templates/PageTemplate";
 import { fmtN, pct } from "@/lib/format";
 import { facilitySummary, stadiumRequirements } from "@/lib/domain/assessment.mjs";
@@ -53,6 +54,7 @@ function Facility({ stadium }) {
         lead={`${fmtN(stadium.grossCapacity)} seats (declared) · ${STATUS_LABEL[stadium.status]}, complete ${stadium.completionYear} · highest match: ${MATCH_LABEL[stadium.highestMatch]}. Each FIFA requirement is assessed for this facility separately; nothing counts as compliant until a reviewer accepts the evidence.`}
       />
       <Summary summary={summary} />
+      <ProgressClaim stadiumId={stadium.id} />
       <div className="filters mt">
         <label className="f inline">
           <input type="checkbox" checked={showAll} onChange={(e) => setShowAll(e.target.checked)} /> Show requirements

@@ -23,7 +23,7 @@ export async function assistantRequest(path, options = {}) {
       throw new Error("The request timed out. Please try again.");
     if (error instanceof TypeError)
       throw new Error(
-        "Cannot reach the assistant backend. Start Poetry/Uvicorn on port 8000.",
+        "Cannot reach the backend. Start it on port 8000 (see backend/README.md).",
       );
     throw error;
   } finally {

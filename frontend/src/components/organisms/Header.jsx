@@ -7,6 +7,7 @@ import ThemeToggle from "@/components/atoms/ThemeToggle";
 import { publicAssetUrl } from "@/lib/assets.mjs";
 import { resetMapUi, rerender } from "@/lib/store/state";
 import { resetAssessments } from "@/lib/store/assessments";
+import { clearIntake } from "@/lib/store/intake";
 import { startTour, ASSURANCE, ASSURANCE_FULL } from "@/lib/tour/player";
 import { toast } from "@/lib/ui/toast";
 
@@ -14,6 +15,7 @@ import { toast } from "@/lib/ui/toast";
 const TABS = [
   { href: "/", label: "Assurance map" },
   { href: "/review", label: "Review queue" },
+  { href: "/intake", label: "Intake" },
   { href: "/compliance", label: "Requirements", also: ["/facilities"] },
 ];
 
@@ -29,8 +31,9 @@ function activeTab(pathname) {
 function resetDemo() {
   resetAssessments();
   resetMapUi();
+  void clearIntake();
   rerender();
-  toast("Demo reset. Assessments and applied changes cleared.");
+  toast("Demo reset. Assessments, applied changes and intake documents cleared.");
 }
 
 // Close open header menus on an outside click, a menu item click or Escape.
