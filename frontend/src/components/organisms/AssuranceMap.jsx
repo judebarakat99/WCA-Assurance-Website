@@ -6,6 +6,7 @@ import regions from "../../../../data/geo/sa-regions.geo.json" with { type: "jso
 import { fmtN, pct } from "@/lib/format";
 import { STATUS_LABEL } from "@/lib/domain/facilities.mjs";
 import { OUTCOME_LABEL } from "@/lib/domain/requirementChange.mjs";
+import { cityPhoto, stadiumPhoto } from "@/lib/placePhotos";
 
 // Saudi Arabia's extent ([west, south], [east, north]), from the region data.
 const BOUNDS = [
@@ -111,9 +112,35 @@ function paintStadiumPin(el, s) {
   el.querySelector("b").textContent = s.name.replace(/ Stadium$/, "");
 }
 
+// Photo across the top of a hover card, with its credit; a plain band when
+// there is no photo. tag: optional note over the photo.
+function cardPhoto(photo, tag) {
+  const fig = document.createElement("figure");
+  fig.className = "amap-photo";
+  if (photo) {
+    const img = document.createElement("img");
+    img.src = photo.src;
+    img.alt = "";
+    img.style.objectPosition = photo.position;
+    const cap = document.createElement("figcaption");
+    cap.textContent = `Photo: ${photo.credit}`;
+    fig.append(img, cap);
+  } else {
+    fig.classList.add("empty");
+  }
+  if (tag || !photo) {
+    const t = document.createElement("span");
+    t.className = "amap-photo-tag";
+    t.textContent = tag || "No photo available";
+    fig.append(t);
+  }
+  return fig;
+}
+
 // Hover card content, built with textContent only.
-function card(title, lines) {
+function card(title, lines, figure) {
   const root = document.createElement("div");
+  if (figure) root.append(figure);
   const h = document.createElement("b");
   h.textContent = title;
   root.append(h);
@@ -130,24 +157,27 @@ function card(title, lines) {
 function cityCard(city, year) {
   const a = city.assurance;
   const imp = city.impact;
+  const figure = cardPhoto(cityPhoto(city.id));
   if (imp)
     return card(city.name, [
       [imp.stadiums ? `${imp.reopened} compliant would reopen` : "No stadium affected", imp.reopened ? "bad" : "muted"],
       [imp.flipped ? `${imp.flipped} in review would now fail` : null, "warn"],
       [imp.stadiums ? `Assured ${pct(imp.assuredBefore)}% → ${pct(imp.assuredAfter)}%` : null],
       [year ? `${city.dueCount} of ${city.stadiums.length} stadiums due by ${year}` : null, "muted"],
-    ]);
+    ], figure);
   return card(city.name, [
     [`${reviewedLine(a)} · ${pct(a.coverage)}% assessed`],
     [a["non-compliant"] ? `${a["non-compliant"]} non-compliant` : null, "bad"],
     [a["evidence-submitted"] ? `${a["evidence-submitted"]} awaiting review` : null, "warn"],
     [year ? `${city.dueCount} of ${city.stadiums.length} stadiums due by ${year}` : `${city.stadiums.length} stadiums`, "muted"],
-  ]);
+  ], figure);
 }
 
-function stadiumCard(s, year) {
+function stadiumCard(s, year, city) {
   const a = s.assurance;
   const approx = s.location.accuracy === "approximate";
+  const photo = stadiumPhoto(s.id, s.cityId);
+  const figure = cardPhoto(photo, photo?.standIn ? `${STATUS_LABEL[s.status]} · photo shows ${city.name}` : null);
   if (s.impact !== undefined) {
     const r = s.impact;
     return card(s.name, [
@@ -156,7 +186,7 @@ function stadiumCard(s, year) {
       [r ? OUTCOME_LABEL[r.outcome] : "Not affected by this change", r?.outcome === "reopened" ? "bad" : r?.flipped ? "warn" : null],
       [r?.value != null ? `Value on record ${r.value}: ${r.oldCheck} before, ${r.newCheck} after` : null, "muted"],
       [approx ? "Approximate location" : "Location from OpenStreetMap", "fine muted"],
-    ]);
+    ], figure);
   }
   return card(s.name, [
     [`${STATUS_LABEL[s.status]} · due ${s.completionYear} · ${fmtN(s.grossCapacity)} seats`, "muted"],
@@ -164,7 +194,7 @@ function stadiumCard(s, year) {
     [`${reviewedLine(a)} · ${pct(a.coverage)}% assessed`],
     [a.needsAttention ? `${a.needsAttention} need attention` : null, a["non-compliant"] ? "bad" : "warn"],
     [approx ? "Approximate location" : "Location from OpenStreetMap", "fine muted"],
-  ]);
+  ], figure);
 }
 
 /** Fit the selected city's stadiums, or the whole country when none is selected. */
@@ -314,7 +344,7 @@ export default function AssuranceMap({ cities, year, selected, onSelect, onOpenS
           const findStadium = () => findCity().stadiums.find((x) => x.id === s.id);
           const sel = markerButton("amap-stadium", '<i></i><b></b>', {
             onClick: () => live.current.onOpenStadium(s.id),
-            onEnter: hover(s.location.coordinates, () => stadiumCard(findStadium(), live.current.year)),
+            onEnter: hover(s.location.coordinates, () => stadiumCard(findStadium(), live.current.year, findCity())),
             onLeave: leave,
           });
           const m = new maplibregl.Marker({ element: sel, anchor: "center" })

@@ -1411,6 +1411,10 @@ main.wide {
 .amap-stadium:focus-visible b {
   font-weight: 700;
 }
+/* Above the briefing, timeline and legend panels that float over the map. */
+.amap-card {
+  z-index: 5;
+}
 .amap-card .maplibregl-popup-content {
   display: grid;
   gap: 3px;
@@ -1429,6 +1433,51 @@ main.wide {
 }
 .amap-card b {
   font-size: 13.5px;
+}
+/* Photo across the top of a hover card, bleeding to the card's edges. */
+.amap-card .amap-photo {
+  position: relative;
+  width: 236px;
+  height: 118px;
+  margin: -10px -12px 6px;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+  background: linear-gradient(135deg, var(--panel-1), var(--panel-2));
+}
+.amap-card .amap-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.amap-card .amap-photo figcaption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  max-width: 100%;
+  padding: 2px 6px;
+  border-top-left-radius: 6px;
+  background: rgb(0 0 0 / 0.5);
+  color: #fff;
+  font-size: 9px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.amap-card .amap-photo-tag {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  max-width: calc(100% - 12px);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.55);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+.amap-card .amap-photo.empty {
+  height: 64px;
 }
 .amap-card .bad {
   color: var(--bad);

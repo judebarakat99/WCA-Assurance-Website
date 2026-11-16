@@ -1,0 +1,69 @@
+{
+  "note": "Wikimedia Commons photos shown on the map's hover cards, resized to 640px. Stadiums without a free photo show their host city's photo, labelled.",
+  "photos": [
+    {
+      "id": "city-abha",
+      "file": "city-abha.jpg",
+      "title": "File:Abha city.png",
+      "author": "Various contributors",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Abha_city.png",
+      "position": "50% 60%",
+      "note": "Cropped to one tile of the Commons collage."
+    },
+    {
+      "id": "city-al-khobar",
+      "file": "city-al-khobar.jpg",
+      "title": "File:Khobar water tower.jpg",
+      "author": "Francisco Anzola",
+      "license": "CC BY 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Khobar_water_tower.jpg",
+      "position": "50% 55%"
+    },
+    {
+      "id": "city-jeddah",
+      "file": "city-jeddah.jpg",
+      "title": "File:Jeddah Waterfront, Western Saudi Arabia (2026).jpg",
+      "author": "Unknown author",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Jeddah_Waterfront,_Western_Saudi_Arabia_(2026).jpg",
+      "position": "50% 40%"
+    },
+    {
+      "id": "city-riyadh",
+      "file": "city-riyadh.jpg",
+      "title": "File:Riyadh Skyline.jpg",
+      "author": "B.alotaby",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Riyadh_Skyline.jpg",
+      "position": "50% 60%"
+    },
+    {
+      "id": "stadium-king-abdullah-sports-city",
+      "file": "stadium-king-abdullah-sports-city.jpg",
+      "title": "File:Jawhara Stadium.jpg",
+      "author": "saudipics",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Jawhara_Stadium.jpg",
+      "position": "50% 50%"
+    },
+    {
+      "id": "stadium-king-fahad-sports-city",
+      "file": "stadium-king-fahad-sports-city.jpg",
+      "title": "File:King Fahd Int. Stadium- Opening Arabian Gulf Cup 2014.jpg",
+      "author": "على المزارقه",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:King_Fahd_Int._Stadium-_Opening_Arabian_Gulf_Cup_2014.jpg",
+      "position": "50% 50%"
+    },
+    {
+      "id": "stadium-king-saud-university",
+      "file": "stadium-king-saud-university.jpg",
+      "title": "File:Entire King Saud University Stadium.jpg",
+      "author": "Alina.chiorean",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Entire_King_Saud_University_Stadium.jpg",
+      "position": "50% 50%"
+    }
+  ]
+}

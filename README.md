@@ -76,7 +76,10 @@ thin.
   shows the required credit). No basemap tiles are loaded.
 - Fonts: Barlow (brand typeface) from `@fontsource/barlow`; IBM Plex Mono in
   `public/fonts/` (SIL Open Font License).
-- `public/Assets/`: the Saudi 2034 logo.
+- `public/Assets/`: the Saudi 2034 logo, and `places/` photos for the map's
+  hover cards (Wikimedia Commons, CC BY / CC BY-SA, credited on each card;
+  sources in `src/lib/placePhotos.json`). Stadiums without a free photo show
+  their host city's photo, labelled; NEOM has none.
 - `tests/`: Vitest + React Testing Library (`npm test`).
 - `data/`: the FIFA catalogue and change scenarios, the facility register,
   region boundaries and the sample contractor documents (each folder has a
