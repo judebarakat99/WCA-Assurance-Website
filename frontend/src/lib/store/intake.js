@@ -28,8 +28,9 @@ export const intake = {
   elements: [],
   documents: [],
   checks: {},
-  uploads: [], // in flight or failed: { key, name, error }
+  uploads: [], // in flight or failed: { key, name, stage, error }
   running: {}, // stadium id -> true while a check runs
+  runs: {}, // stadium id -> { steps, shown } while a check's steps play back
   errors: {}, // stadium id -> last check error
   seeding: false,
   busy: {}, // document id -> true while filing or removing
@@ -54,6 +55,22 @@ function apply(state) {
 }
 
 const offline = () => intake.mode === "offline";
+
+// Pacing for the agent's visible progress. Online, the stages run while the
+// backend works and its real steps play back once it answers; offline, the
+// same stages and steps play back from the bundled readings. Instant when the
+// system asks for reduced motion.
+const reducedMotion = () =>
+  typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, reducedMotion() ? 0 : ms));
+
+/** What the agent is doing with an uploaded file, in order. */
+export const UPLOAD_STAGES = ["Uploading", "Reading the text", "Identifying the document"];
+
+// Reload without the loading guard, so results appear as each file finishes.
+async function reload() {
+  apply(offline() ? localState() : await assistantRequest("/intake"));
+}
 
 // Online when the backend answers and has Azure configured; otherwise offline.
 async function detectMode() {
@@ -101,14 +118,29 @@ export async function uploadFiles(files) {
   intake.uploads = [...intake.uploads, ...queue];
   notify();
   const send = async (item) => {
+    const stage = (n) => {
+      item.stage = n;
+      notify();
+    };
+    let request = null;
     try {
-      if (offline()) localUpload(item.file);
-      else {
+      stage(0);
+      if (!offline()) {
         const form = new FormData();
         form.append("file", item.file);
-        await assistantRequest("/intake/documents", { method: "POST", body: form });
+        request = assistantRequest("/intake/documents", { method: "POST", body: form });
+        request.catch(() => {}); // awaited below; avoid an unhandled rejection meanwhile
       }
+      await wait(450);
+      stage(1);
+      await wait(650);
+      stage(2);
+      if (offline()) {
+        await wait(750);
+        localUpload(item.file);
+      } else await request;
       intake.uploads = intake.uploads.filter((u) => u.key !== item.key);
+      await reload();
     } catch (error) {
       item.error = error.message;
     }
@@ -154,27 +186,49 @@ export const removeDocument = (id) =>
     offline() ? localRemove(id) : assistantRequest(`/documents/${encodeURIComponent(id)}`, { method: "DELETE" }),
   );
 
-/** Recalculate one stadium's progress from its filed plans. */
+/**
+ * Recalculate one stadium's progress from its filed plans. The agent's steps
+ * are shown one at a time (intake.runs) before the finding replaces the old one.
+ */
 export async function runCheck(stadiumId) {
   intake.running = { ...intake.running, [stadiumId]: true };
   const { [stadiumId]: _old, ...errors } = intake.errors;
   intake.errors = errors;
+  const run = { steps: [], shown: 0 };
+  intake.runs = { ...intake.runs, [stadiumId]: run };
   notify();
   try {
-    const check = offline() ? localCheck(stadiumId) : await post(`/intake/checks/${encodeURIComponent(stadiumId)}`);
+    let check;
+    if (offline()) {
+      await wait(600);
+      check = localCheck(stadiumId);
+    } else check = await post(`/intake/checks/${encodeURIComponent(stadiumId)}`);
+    run.steps = check.steps;
+    notify();
+    for (let i = 1; i <= run.steps.length; i++) {
+      await wait(offline() ? 650 : 320);
+      run.shown = i;
+      notify();
+    }
+    await wait(500);
     intake.checks = { ...intake.checks, [stadiumId]: check };
   } catch (error) {
     intake.errors = { ...intake.errors, [stadiumId]: error.message };
   } finally {
     const { [stadiumId]: _done, ...rest } = intake.running;
+    const { [stadiumId]: _run, ...runs } = intake.runs;
     intake.running = rest;
+    intake.runs = runs;
     notify();
   }
 }
 
-/** Check every stadium that has a progress report filed, one after another. */
-export async function runAllChecks() {
-  for (const id of checkableStadiums().map((s) => s.id)) await runCheck(id);
+/** Check every stadium that has a progress report filed, one after another. onStart(id) runs before each. */
+export async function runAllChecks(onStart) {
+  for (const id of checkableStadiums().map((s) => s.id)) {
+    onStart?.(id);
+    await runCheck(id);
+  }
 }
 
 /** A reviewer accepts or rejects the agent's finding. */

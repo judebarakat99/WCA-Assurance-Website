@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import CountUp from "@/components/atoms/CountUp";
 import StatusPill from "@/components/atoms/StatusPill";
 import { CHECK_STATUS, decideCheck, needsDecision } from "@/lib/store/intake";
 
@@ -169,19 +170,27 @@ export default function ProgressFinding({ check }) {
       </div>
       <div className="mini-grid four">
         <div className="mini">
-          <b>{pct(check.claimed)}</b>
+          <b>
+            <CountUp value={check.claimed} suffix="%" />
+          </b>
           <span>reported by the contractor</span>
         </div>
         <div className={`mini ${check.status === "overstated" ? "bad" : ""}`.trim()}>
-          <b>{pct(check.recalculated)}</b>
+          <b>
+            <CountUp value={check.recalculated} suffix="%" />
+          </b>
           <span>recalculated from the plans</span>
         </div>
         <div className="mini">
-          <b>{pct(check.planned)}</b>
+          <b>
+            <CountUp value={check.planned} suffix="%" />
+          </b>
           <span>planned by this date</span>
         </div>
         <div className="mini">
-          <b>{check.gap > 0 ? `+${check.gap}` : check.gap}</b>
+          <b>
+            {check.gap < 0 ? check.gap : <CountUp value={check.gap} prefix={check.gap > 0 ? "+" : ""} />}
+          </b>
           <span>points claimed above evidence (tolerance {check.tolerance})</span>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 import StatusPill from "@/components/atoms/StatusPill";
 import PageHead from "@/components/molecules/PageHead";
+import AgentRun from "@/components/organisms/AgentRun";
 import IntakeIncoming from "@/components/organisms/IntakeIncoming";
 import IntakeLibrary from "@/components/organisms/IntakeLibrary";
 import ProgressFinding from "@/components/organisms/ProgressFinding";
@@ -22,16 +23,26 @@ import {
 function CheckCard({ stadium, selected, onOpen }) {
   const check = intake.checks[stadium.id];
   const running = !!intake.running[stadium.id];
+  const run = intake.runs[stadium.id];
   const error = intake.errors[stadium.id];
   const s = check && CHECK_STATUS[check.status];
   return (
-    <div className={`block pc-card ${selected ? "sel" : ""}`.trim()}>
+    <div className={`block pc-card ${selected ? "sel" : ""} ${run ? "working" : ""}`.trim()}>
       <div className="pc-top">
         <b>{stadium.name}</b>
         {s && <StatusPill tone={s.tone}>{s.label}</StatusPill>}
       </div>
       <span className="muted small">{stadium.city}</span>
-      {check ? (
+      {run ? (
+        <div className="pc-working">
+          <span className="small intake-working">
+            {run.steps.length ? run.steps[Math.min(run.shown, run.steps.length - 1)].label : "Reading the filed documents"}…
+          </span>
+          <div className="agent-bar" aria-hidden="true">
+            <i style={{ width: `${run.steps.length ? Math.round((100 * run.shown) / run.steps.length) : 6}%` }} />
+          </div>
+        </div>
+      ) : check ? (
         <div className="pc-figs">
           <span>
             <b>{check.claimed}%</b> reported
@@ -53,10 +64,18 @@ function CheckCard({ stadium, selected, onOpen }) {
         </p>
       )}
       <div className="pc-actions">
-        <button type="button" className={check ? "ghost" : "primary"} disabled={running} onClick={() => runCheck(stadium.id)}>
+        <button
+          type="button"
+          className={check ? "ghost" : "primary"}
+          disabled={running}
+          onClick={() => {
+            onOpen(stadium.id);
+            runCheck(stadium.id);
+          }}
+        >
           {running ? "Checking…" : check ? "Re-run check" : "Run check"}
         </button>
-        {check && (
+        {check && !run && (
           <button type="button" className="linkish" onClick={() => onOpen(stadium.id)}>
             View finding →
           </button>
@@ -78,6 +97,7 @@ function Verification() {
     setTimeout(() => document.getElementById("finding")?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
   };
   const check = selected && intake.checks[selected];
+  const live = selected && intake.runs[selected] && stadiums.find((s) => s.id === selected);
   return (
     <section className="comp-block" aria-labelledby="intake-verify">
       <div className="comp-block-head">
@@ -91,7 +111,7 @@ function Verification() {
           </p>
         </div>
         {stadiums.length > 1 && (
-          <button type="button" className="primary" disabled={anyRunning} onClick={runAllChecks}>
+          <button type="button" className="primary" disabled={anyRunning} onClick={() => runAllChecks(open)}>
             {anyRunning ? "Checking…" : `Run all ${stadiums.length}`}
           </button>
         )}
@@ -102,7 +122,7 @@ function Verification() {
           <CheckCard key={s.id} stadium={s} selected={s.id === selected} onOpen={open} />
         ))}
       </div>
-      {check && <ProgressFinding check={check} />}
+      {live ? <AgentRun stadium={live} /> : check && <ProgressFinding key={check.checked_at} check={check} />}
     </section>
   );
 }
@@ -118,7 +138,7 @@ function Intake() {
         wideLead
         lead="Contractors' progress reports claim how far each stadium has come; their detailed plans show the work behind the claim. The agent sorts what comes in, recalculates progress from the plans and flags claims the evidence does not support. A person files every document and decides on every finding."
       />
-      {intake.mode === "offline" && intake.loaded && (
+      {/* {intake.mode === "offline" && intake.loaded && (
         <div className="block intake-alert intake-offline" role="status">
           <StatusPill tone="info">Offline demo</StatusPill>
           <span className="muted small">
@@ -127,7 +147,7 @@ function Intake() {
             checks and decisions work the same way and are kept in this browser.
           </span>
         </div>
-      )}
+      )} */}
       {intake.error && (
         <div className="block intake-alert" role="alert">
           <b>{intake.error}</b>{" "}

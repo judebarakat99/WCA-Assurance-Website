@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import StatusPill from "@/components/atoms/StatusPill";
 import {
   KIND_LABEL,
+  UPLOAD_STAGES,
   dismissUpload,
   fileDocument,
   intake,
@@ -195,7 +196,21 @@ export default function IntakeIncoming() {
                     <StatusPill tone="bad">Not uploaded</StatusPill> {u.error}
                   </span>
                 ) : (
-                  <span className="muted small intake-working">Reading and classifying…</span>
+                  <div className="intake-stages" aria-live="polite">
+                    {u.stage == null ? (
+                      <span className="small muted">Waiting…</span>
+                    ) : (
+                      <span className="small intake-working">{UPLOAD_STAGES[u.stage]}…</span>
+                    )}
+                    <ol aria-hidden="true">
+                      {UPLOAD_STAGES.map((label, k) => (
+                        <li
+                          key={label}
+                          className={u.stage == null ? undefined : k < u.stage ? "done" : k === u.stage ? "now" : undefined}
+                        />
+                      ))}
+                    </ol>
+                  </div>
                 )}
               </div>
               <div className="rq-act">

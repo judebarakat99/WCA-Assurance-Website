@@ -2189,3 +2189,113 @@ a.abrief-cta:hover b {
     grid-column: 2;
   }
 }
+
+/* ---------- Agent activity (intake) ---------- */
+.intake-stages {
+  display: grid;
+  gap: 6px;
+}
+.intake-stages ol {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  max-width: 260px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.intake-stages li {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+}
+.intake-stages li.done {
+  background: var(--accent);
+}
+.intake-stages li.now {
+  background: linear-gradient(90deg, var(--accent) 0 30%, var(--line) 30%);
+  background-size: 300% 100%;
+  animation: agent-sweep 1s linear infinite;
+}
+.agent-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+.agent-bar i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+.agent-run .agent-bar {
+  margin: 4px 0 14px;
+}
+.agent-pulse {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: 1px;
+  animation: agent-pulse 1.2s ease-in-out infinite;
+}
+.pf-steps li.running::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  margin: 2px;
+  border: 2px solid var(--accent);
+  border-right-color: transparent;
+  background: none;
+  animation: intake-spin 0.8s linear infinite;
+}
+.pc-card.working {
+  border-color: var(--accent);
+}
+.pc-working {
+  display: grid;
+  gap: 8px;
+  padding: 6px 0;
+}
+/* New rows, steps and findings ease in. */
+.intake-row,
+.intake-stadium li,
+.pf-steps li,
+.pf {
+  animation: agent-in 0.35s ease-out;
+}
+@keyframes agent-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@keyframes agent-pulse {
+  50% {
+    opacity: 0.3;
+    transform: scale(0.7);
+  }
+}
+@keyframes agent-sweep {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intake-row,
+  .intake-stadium li,
+  .pf-steps li,
+  .pf,
+  .agent-pulse,
+  .intake-stages li.now,
+  .pf-steps li.running::before,
+  .intake-working::before {
+    animation: none;
+  }
+}
