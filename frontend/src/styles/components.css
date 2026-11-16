@@ -1753,43 +1753,17 @@ a.abrief-cta:hover b {
   height: 8px;
   margin: 1px;
 }
-/* right: clear of the floating Ask Nabd button */
+/* Bottom left of the map, clear of the map credit and the floating Ask Nabd button. */
 .abottom {
   position: absolute;
   left: 416px;
-  right: 170px;
   bottom: 18px;
   display: flex;
   gap: 12px;
-  justify-content: flex-end;
 }
 .arecenter {
   background: var(--surface);
   box-shadow: var(--shadow);
-}
-.askbar {
-  display: flex;
-  gap: 8px;
-  width: min(520px, 100%);
-  padding: 6px 6px 6px 16px;
-  border-radius: 999px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-}
-.askbar input {
-  flex: 1;
-  border: 0;
-  background: transparent;
-  padding: 6px 0;
-}
-.askbar input:focus-visible {
-  outline: none;
-}
-.askbar button {
-  width: 36px;
-  height: 36px;
-  padding: 0;
 }
 @media (max-width: 860px) {
   .ahome {
@@ -1806,7 +1780,7 @@ a.abrief-cta:hover b {
   .arail hr {
     display: none;
   }
-  /* Stack: map, briefing, legend, ask bar. */
+  /* Stack: map, briefing, legend, recenter. */
   .astage {
     display: flex;
     flex-direction: column;
@@ -1825,12 +1799,6 @@ a.abrief-cta:hover b {
     position: static;
     width: auto;
     margin: 0 12px;
-  }
-  .abottom {
-    justify-content: stretch;
-  }
-  .askbar {
-    width: 100%;
   }
 }
 

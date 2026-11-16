@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import AskBar from "@/components/molecules/AskBar";
 import DeliveryTimeline from "@/components/molecules/DeliveryTimeline";
 import AssuranceBriefing from "@/components/organisms/AssuranceBriefing";
 import AssuranceMap from "@/components/organisms/AssuranceMap";
@@ -114,7 +113,6 @@ function AssuranceHome({ ui }) {
           >
             Recenter
           </button>
-          <AskBar />
         </div>
       </div>
     </div>
