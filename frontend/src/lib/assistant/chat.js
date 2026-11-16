@@ -4,15 +4,14 @@ import { buildAssistantContext } from "@/lib/assistant/context";
 import { assistantRequest } from "@/lib/assistant/api";
 
 export const QUICK_QUESTIONS = [
-  "Which venue is highest risk?",
-  "Why is Jeddah at risk?",
-  "Which critical obligations are unverified?",
-  "What decisions are open?",
+  "Which stadium has the lowest assured share?",
+  "How many items are waiting for review?",
+  "Which requirement changes have been applied?",
   "What do the uploaded documents require?",
 ];
 
 const GREETING =
-  "Hi, I'm Nabd. Ask me about programme readiness, stadiums, gates, decisions or your reference documents. Programme metrics are illustrative; answers include supporting references.";
+  "Hi, I'm Nabd. Ask me about stadium assurance, the review queue, requirement changes or your reference documents. Assessment figures come from the demo data in this browser; answers include supporting references.";
 
 const MAX_QUESTION = 4000;
 
@@ -23,7 +22,7 @@ export function setAssistantOpen(open) {
   notify();
 }
 
-/** Ask Nabd a question: opens the panel, sends the programme snapshot and recent history. */
+/** Ask Nabd a question: opens the panel, sends the assurance snapshot and recent history. */
 export async function aiAsk(question) {
   const q = String(question || "").trim();
   if (!q || ai.pending) return;

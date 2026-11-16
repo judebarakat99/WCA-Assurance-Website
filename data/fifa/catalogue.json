@@ -1693,23 +1693,6 @@
       "Representative signed illuminance and power test reports",
       "Named engineering reviewer for interpretation decisions"
     ],
-    "legacyDifferences": [
-      {
-        "legacyCode": "LGT-01",
-        "detail": "Legacy vertical threshold differs from sourced horizontal and vertical definitions. Reassessment requires plane-specific evidence.",
-        "requirementIds": [
-          "FL-A-EH-AVG",
-          "FL-A-EV-AVG"
-        ]
-      },
-      {
-        "legacyCode": "LGT-02",
-        "detail": "Legacy vertical U2 differs from the sourced Standard A vertical criterion. Existing results require reassessment.",
-        "requirementIds": [
-          "FL-A-EV-U2"
-        ]
-      }
-    ],
     "measurementDefinitions": [
       {
         "name": "U1",

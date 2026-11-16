@@ -5,7 +5,7 @@ import AssistantSource from "@/components/molecules/AssistantSource";
 
 const sourceHtml = (source) => renderToStaticMarkup(<AssistantSource source={source} />);
 import { buildAssistantContext } from "@/lib/assistant/context.js";
-import { resetS } from "@/lib/store/state.js";
+import { loadSampleAssessments, resetAssessments } from "@/lib/store/assessments";
 
 test("forecast source renders named facts instead of raw JSON", () => {
   const html = sourceHtml({
@@ -59,12 +59,15 @@ test("source content is escaped and documents retain page references", () => {
   assert.ok(html.includes("&lt;img"));
   assert.ok(html.includes("&amp; text"));
 });
-test("the snapshot includes separate calculated gate and venue readiness", () => {
-  globalThis.localStorage = { setItem: () => {} };
-  resetS();
+test("the snapshot carries assurance roll-ups for every stadium", () => {
+  globalThis.localStorage = { getItem: () => null, setItem: () => {} };
+  resetAssessments();
+  loadSampleAssessments();
   const snapshot = buildAssistantContext();
-  const venue = snapshot.venues.find((v) => v.id === "JED");
-  assert.notEqual(venue.readiness.assured, venue.gate.assured_readiness);
-  assert.equal(venue.gate.required_assured_readiness, 0.9);
+  assert.equal(snapshot.source, "browser-demo");
+  assert.equal(snapshot.venues.length, 15);
+  assert.ok(snapshot.summary.assured > 0 && snapshot.summary.assured < 1);
+  assert.ok(snapshot.summary.review_queue.total > 0);
+  for (const v of snapshot.venues) assert.ok(v.assurance.in_scope > 0, v.id);
   assert.ok(JSON.stringify(snapshot).length < 100000);
 });

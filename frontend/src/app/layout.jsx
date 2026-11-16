@@ -8,10 +8,8 @@ import "@/styles/base.css";
 import "@/styles/components.css";
 import Header from "@/components/organisms/Header";
 import AssistantPanel from "@/components/organisms/AssistantPanel";
-import ObligationDrawer from "@/components/organisms/ObligationDrawer";
 import TourDock from "@/components/organisms/TourDock";
 import AppRuntime from "@/components/providers/AppRuntime";
-import TwinScripts from "@/components/providers/TwinScripts";
 import { themeInitScript } from "@/lib/theme.mjs";
 
 export const metadata = {
@@ -39,12 +37,10 @@ export default function RootLayout({ children }) {
       <body>
         <Header />
         {children}
-        <ObligationDrawer />
         <div id="toastRoot"></div>
         <TourDock />
         <AssistantPanel />
         <AppRuntime />
-        <TwinScripts />
       </body>
     </html>
   );

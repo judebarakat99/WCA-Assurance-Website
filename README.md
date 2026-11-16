@@ -12,7 +12,8 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000. No environment variables or backend are required.
+Open http://localhost:3000. No environment variables are required; only the
+Nabd assistant needs the backend.
 
 ## Check and build
 
@@ -43,47 +44,41 @@ alias (`frontend/jsconfig.json`). Components follow atomic design; routes stay
 thin.
 
 - `src/app/`: App Router routes only — `page.jsx` files with metadata, plus
-  `layout.jsx`. Main sections (header): `/` (map-first FIFA assurance home),
-  `/compliance` (requirements library, facility register) with
-  `/facilities/[facilityId]` (facility assessments), `/requirements-evidence`
-  (intake and change impact) and `/design-review`. The earlier programme
-  simulation stays reachable from the Demo menu and is used by the guided
-  demos: `/overview`, `/readiness`, `/control-tower`
-  (with `/register`, `/gates` and `/[venueId]`), `/decisions-actions` and
-  `/dossiers`.
+  `layout.jsx`. `/` is the assurance map, `/review` the review queue,
+  `/compliance` the requirements (FIFA source library and facility register)
+  and `/facilities/[facilityId]` a stadium's assessments.
 - `src/components/atoms/` → `molecules/` → `organisms/` → `templates/` →
   `pages/`: React components from smallest to a whole screen. A route renders
-  one page component. `PageTemplate` waits for the programme store (it lives in
-  localStorage, so pages render after hydration). `FifaLibrary` is a Server
-  Component rendered at build time.
-- `src/components/providers/`: `AppRuntime` (boots the store, connects
-  navigation to the Next router) and `TwinScripts` (loads Three.js and the 3D
-  twin).
-- `src/lib/domain/`: programme logic — reference data, scoring, the Monte
-  Carlo forecast, actions (validation, escalation, decisions, change impact),
-  readiness analysis, intake, the dossier and the sourced FIFA catalogue.
-- `src/lib/store/`: the programme model (`state.js`, persisted to
-  localStorage) exposed to React as an external store through
-  `useProgramme()` (`useSyncExternalStore`). Domain actions mutate the model
-  and call `rerender()`; UI state changes go through `updateUi()`.
-- `src/lib/tour/`: guided demo script, player, voice selection and highlight.
-- `src/lib/assistant/`: Nabd chat state, API client and context builder.
-- `src/lib/runtime.js`, `navigation.js`, `drawer.js`: view-key routing,
-  navigation helpers and the obligation drawer actions.
+  one page component. `PageTemplate` waits for hydration (assessments live in
+  localStorage). `FifaLibrary` and `FacilityRegister` are Server Components
+  rendered at build time.
+- `src/components/providers/AppRuntime`: loads the assessments once and
+  connects tour navigation to the Next router.
+- `src/lib/domain/`: assurance logic — the sourced FIFA catalogue and its
+  versions, the facility register, applicability and evaluation
+  (`assessment.mjs`), city and programme roll-ups, the review queue,
+  requirement-change impact and the labelled sample assessments.
+- `src/lib/store/`: `assessments.js` (assessment records and applied
+  requirement changes, persisted to localStorage) and `state.js` (shared UI
+  state for the map, queue, tour and assistant), exposed to React through
+  `useProgramme()` (`useSyncExternalStore`).
+- `src/lib/tour/`: guided demo steps, player, voice selection and highlight.
+- `src/lib/assistant/`: Nabd chat state, API client and the assurance snapshot
+  sent with each question.
+- `src/lib/runtime.js`: view-key routing for the tour.
 - `src/styles/`: `tokens.css` (Saudi 2034 brand, light and dark), `base.css`
   (elements, layout, controls) and `components.css` (component styles; class
   names are shared with the tour's selectors).
 - Map: MapLibre GL JS (BSD-3-Clause, no account or API key) draws
   `data/geo/sa-regions.geo.json` (geoBoundaries / OpenStreetMap, ODbL; the map
   shows the required credit). No basemap tiles are loaded.
-- `public/scripts/stadium-twin.js`, `public/vendor/`: the imperative 3D twin,
-  Three.js r128 and OrbitControls (licenses retained).
 - Fonts: Barlow (brand typeface) from `@fontsource/barlow`; IBM Plex Mono in
   `public/fonts/` (SIL Open Font License).
-- `public/Assets/`: images, including the Saudi 2034 logo.
+- `public/Assets/`: the Saudi 2034 logo.
 - `tests/`: Vitest + React Testing Library (`npm test`).
+- `data/`: the FIFA catalogue and change scenarios, the facility register and
+  region boundaries (each folder has a README).
 - `Archive/`: historical standalone HTML snapshots.
-
 
 ## Azure-backed assistant
 

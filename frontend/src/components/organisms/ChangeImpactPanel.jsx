@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import StatusPill from "@/components/atoms/StatusPill";
-import { toast } from "@/lib/domain/actions";
-import { pct } from "@/lib/domain/data";
+import { toast } from "@/lib/ui/toast";
+import { pct } from "@/lib/format";
 import { criterionLabel } from "@/lib/domain/fifa-catalogue.mjs";
 import { CHANGE_NOTE, CHANGE_SCENARIOS, currentRequirement } from "@/lib/domain/requirementVersions.mjs";
 import { applyRequirementChange, getAppliedChanges } from "@/lib/store/assessments";

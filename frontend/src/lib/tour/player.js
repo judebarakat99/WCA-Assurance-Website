@@ -1,20 +1,16 @@
 // Guided demo player: step navigation, narration and timing. State lives in
 // the shared `tour` object; every change calls notify() so TourDock re-renders.
-import { ui, tour, resetS, notify } from "@/lib/store/state";
-import { toast } from "@/lib/domain/actions";
-import { closeDrawer } from "@/lib/drawer";
-import { TOUR, EXEC } from "@/lib/tour/steps";
+import { tour, notify } from "@/lib/store/state";
+import { toast } from "@/lib/ui/toast";
 import { ASSURANCE, ASSURANCE_FULL } from "@/lib/tour/assuranceSteps";
 import { applyHL } from "@/lib/tour/highlight";
 import { hasVoice, pickVoice } from "@/lib/tour/voice";
 
-export { EXEC, TOUR, ASSURANCE, ASSURANCE_FULL };
+export { ASSURANCE, ASSURANCE_FULL };
 
 const NAMES = new Map([
   [ASSURANCE, "Assurance demo"],
   [ASSURANCE_FULL, "Full assurance demo"],
-  [EXEC, "Simulation demo · executive"],
-  [TOUR, "Simulation demo"],
 ]);
 
 export const steps = () => tour.list || ASSURANCE;
@@ -101,15 +97,10 @@ function step(d) {
   runStep();
 }
 
-/** Start a demo from fresh sample data. list: ASSURANCE (default), ASSURANCE_FULL, EXEC or TOUR. */
+/** Start a demo; its first step loads fresh sample data. list: ASSURANCE (default) or ASSURANCE_FULL. */
 export function startTour(list) {
   tour.list = list || null;
   stopVoice();
-  resetS();
-  closeDrawer();
-  window.WNSTwin?.reset();
-  ui.filters = { venue: "all", family: "all", state: "all", q: "" };
-  ui.decoOut = null;
   tour.active = true;
   tour.i = 0;
   tour.playing = true;
@@ -122,7 +113,6 @@ export function startTour(list) {
 
 export function endTour(finished) {
   stopVoice();
-  window.WNSTwin?.stop();
   tour.active = false;
   tour.playing = false;
   tour.sel = null;

@@ -53,19 +53,12 @@ That comparison is a **declared** check, not an assessment: the result is
 needs reviewed evidence (seating plan and confirmed match allocation) and
 belongs in the assessment store keyed by facility, requirement and version.
 
-## Link to the simulation
-
-Five stadiums carry a `simulationId` (RUH, JED, KHO, AHB, NEO): the venues the
-existing demo simulation uses. The simulation's own capacities are approximate
-and are not yet driven by this register.
-
 ## Assessments
 
 Assessments are one record per facility × requirement × version
 (`frontend/src/lib/domain/assessment.mjs`, stored by
 `frontend/src/lib/store/assessments.js` in the browser under
-`wca-assessments-v1`, separate from the demo simulation; "Reset demo" restores
-the seed).
+`wca-assessments-v1`; "Reset demo" restores the seed).
 
 - **Applicability** is decided by rule for each stadium: requirements for other
   asset types do not apply; of the capacity rules only the one for the

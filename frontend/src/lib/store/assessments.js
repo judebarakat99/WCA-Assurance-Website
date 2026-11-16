@@ -1,6 +1,5 @@
 // Assessment store: facility × requirement × version records, persisted in the
-// browser (separately from the demo simulation). Changes call notify() so
-// components using useProgramme() re-render.
+// browser. Changes call notify() so components using useProgramme() re-render.
 import { assessmentKey, evaluate, seedAssessments } from "@/lib/domain/assessment.mjs";
 import { changeImpact, changedRecords } from "@/lib/domain/requirementChange.mjs";
 import { appliedChanges, scenarioById, setAppliedChanges } from "@/lib/domain/requirementVersions.mjs";

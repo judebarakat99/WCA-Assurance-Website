@@ -3,7 +3,7 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
 import regions from "../../../../data/geo/sa-regions.geo.json" with { type: "json" };
-import { fmtN, pct } from "@/lib/domain/data";
+import { fmtN, pct } from "@/lib/format";
 import { STATUS_LABEL } from "@/lib/domain/facilities.mjs";
 import { OUTCOME_LABEL } from "@/lib/domain/requirementChange.mjs";
 

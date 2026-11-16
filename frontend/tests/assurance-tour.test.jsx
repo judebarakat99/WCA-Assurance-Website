@@ -46,7 +46,6 @@ test("tour destinations resolve to app paths", () => {
   assert.equal(pathFor("home"), "/");
   assert.equal(pathFor("review?city=riyadh"), "/review?city=riyadh");
   assert.equal(pathFor("facility-neom"), "/facilities/neom");
-  assert.equal(pathFor("venue-JED"), "/control-tower/JED");
 });
 
 test("the change steps preview first, then apply once and fill the queue", async () => {

@@ -6,7 +6,7 @@ import { Suspense, useEffect } from "react";
 import StatusPill from "@/components/atoms/StatusPill";
 import PageHead from "@/components/molecules/PageHead";
 import PageTemplate from "@/components/templates/PageTemplate";
-import { toast } from "@/lib/domain/actions";
+import { toast } from "@/lib/ui/toast";
 import { PILLARS, TIMELINE } from "@/lib/domain/cityAssurance.mjs";
 import { criterionLabel } from "@/lib/domain/fifa-catalogue.mjs";
 import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";

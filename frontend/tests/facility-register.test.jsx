@@ -13,7 +13,6 @@ import {
   registerSummary,
   stadiumRecords,
 } from "@/lib/domain/facilities.mjs";
-import { VENUES } from "@/lib/domain/data";
 
 test("register matches the bid's headline counts", () => {
   const s = registerSummary();
@@ -60,14 +59,7 @@ test("a declared shortfall is reported as declared-short", () => {
   assert.equal(short.margin, -5000);
 });
 
-test("simulated venues link to register entries in the same city", () => {
-  const linked = FACILITY_REGISTER.stadiums.filter((s) => s.simulationId);
-  assert.equal(linked.length, 5);
-  for (const s of linked) {
-    const v = VENUES.find((x) => x.id === s.simulationId);
-    assert.ok(v, s.simulationId);
-    assert.equal(v.name, s.name);
-  }
+test("every stadium has a host city", () => {
   assert.ok(stadiumRecords().every((s) => s.city));
 });
 

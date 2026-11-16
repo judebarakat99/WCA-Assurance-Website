@@ -6,7 +6,7 @@ import Breadcrumbs from "@/components/molecules/Breadcrumbs";
 import PageHead from "@/components/molecules/PageHead";
 import AssessmentTable from "@/components/organisms/AssessmentTable";
 import PageTemplate from "@/components/templates/PageTemplate";
-import { fmtN, pct } from "@/lib/domain/data";
+import { fmtN, pct } from "@/lib/format";
 import { facilitySummary, stadiumRequirements } from "@/lib/domain/assessment.mjs";
 import { FACILITY_REGISTER, MATCH_LABEL, STATUS_LABEL } from "@/lib/domain/facilities.mjs";
 import { getAssessments } from "@/lib/store/assessments";
@@ -46,7 +46,7 @@ function Facility({ stadium }) {
   const categories = CATEGORY_ORDER.filter((c) => visible.some((r) => r.requirement.category === c));
   return (
     <>
-      <Breadcrumbs parent={{ href: "/compliance", label: "Compliance" }} label={stadium.name} />
+      <Breadcrumbs parent={{ href: "/compliance", label: "Requirements" }} label={stadium.name} />
       <PageHead
         chip={`Facility assessment · ${city.name} · Stadium`}
         title={stadium.name}

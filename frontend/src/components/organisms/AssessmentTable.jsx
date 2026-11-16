@@ -3,7 +3,7 @@
 import StatusPill from "@/components/atoms/StatusPill";
 import { APPLICABILITY, STATUS } from "@/lib/domain/assessment.mjs";
 import { criterionLabel } from "@/lib/domain/fifa-catalogue.mjs";
-import { fmtN } from "@/lib/domain/data";
+import { fmtN } from "@/lib/format";
 import { recordEvidence, reviewAssessment } from "@/lib/store/assessments";
 
 const STATUS_TONE = {

@@ -16,11 +16,9 @@ Each record preserves its source, printed page and PDF page, scope, conditions, 
 - Geography, asset type and requirement category are separate dimensions. Match allocation must be confirmed before assigning a capacity criterion.
 - Source editions are immutable. Add a new source/version when requirements change, then explicitly reassess affected records.
 
-## Remaining migration
+## Next steps
 
-The existing operational simulation uses `frontend/lib/state.js` and browser localStorage. Its illustrative definitions remain in `frontend/lib/data.js`. The old Compliance dashboard still uses `frontend/lib/complianceData.js`; its generated statuses are labelled as a legacy simulation in the UI. Neither dataset has been mapped to these sourced requirements. Existing evidence cannot be transferred automatically because criteria and applicability differ.
-
-Next, agree facility types and match allocations, introduce explicit requirement-to-facility assessments, and migrate Compliance to that store. Then move the other dashboards and assistant to the same assessment selectors. A server database will be needed for shared multi-user persistence; this catalogue is currently version-controlled and bundled at build time.
+Agree facility types and match allocations with partners. A server database will be needed for shared multi-user persistence; this catalogue is currently version-controlled and bundled at build time.
 
 ## Lighting increment
 
@@ -31,8 +29,6 @@ The catalogue links each technical record to the applicable class specified in t
 Numeric operators preserve strict versus inclusive comparisons. Vertical metrics apply separately to every listed plane. Maintenance factors are design defaults with a variation reference. U1 and U2 definitions are stored alongside their source references. Manual power-profile checks require specialist assessment of the referenced sections. The table subset does not cover the full engineering design, all control obligations, entertainment lighting or environmental design.
 
 Open interpretation records preserve source inconsistencies and uncertain boundary/counting rules. They must be resolved before automatic pass/fail assessment. Recommendations carry their own authority type. Evidence specifications describe our proposed submission format; they are not assertions that FIFA mandates that exact packaging.
-
-Legacy `LGT-01` and `LGT-02` metrics have incompatible plane/threshold definitions. Existing simulated evidence and verified statuses cannot safely be reused. The new catalogue displays the differences and keeps all facility applicability pending. The next implementation step is an assessment model keyed by facility, requirement ID and version, with separate evidence and reviewer records.
 
 ## Extending the catalogue
 

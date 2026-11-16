@@ -5,29 +5,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "@/components/atoms/ThemeToggle";
 import { publicAssetUrl } from "@/lib/assets.mjs";
-import { advance, toast } from "@/lib/domain/actions";
-import { resetMapUi, resetS, ui, rerender } from "@/lib/store/state";
+import { resetMapUi, rerender } from "@/lib/store/state";
 import { resetAssessments } from "@/lib/store/assessments";
-import { closeDrawer } from "@/lib/drawer";
-import { startTour, ASSURANCE, ASSURANCE_FULL, TOUR } from "@/lib/tour/player";
+import { startTour, ASSURANCE, ASSURANCE_FULL } from "@/lib/tour/player";
+import { toast } from "@/lib/ui/toast";
 
 // Primary sections. `also` lists other paths that belong to a section.
 const TABS = [
   { href: "/", label: "Assurance map" },
   { href: "/review", label: "Review queue" },
   { href: "/compliance", label: "Requirements", also: ["/facilities"] },
-  { href: "/requirements-evidence", label: "Intake & change" },
-  { href: "/design-review", label: "Design review" },
-];
-
-// The earlier programme simulation: out of the main navigation, still used by
-// the guided demos.
-const LEGACY = [
-  { href: "/overview", label: "Programme overview" },
-  { href: "/readiness", label: "Readiness Room" },
-  { href: "/control-tower", label: "Control Tower" },
-  { href: "/decisions-actions", label: "Decisions & actions" },
-  { href: "/dossiers", label: "Inspection dossier" },
 ];
 
 const LOGO = publicAssetUrl("/Assets/saudi-2034-logo.svg", process.env.NEXT_PUBLIC_BASE_PATH || "");
@@ -40,14 +27,10 @@ function activeTab(pathname) {
 }
 
 function resetDemo() {
-  resetS();
   resetAssessments();
   resetMapUi();
-  closeDrawer();
-  window.WNSTwin?.reset();
-  ui.filters = { venue: "all", family: "all", state: "all", q: "" };
   rerender();
-  toast("Sample data restored.");
+  toast("Demo reset. Assessments and applied changes cleared.");
 }
 
 // Close open header menus on an outside click, a menu item click or Escape.
@@ -140,26 +123,7 @@ export default function Header() {
                   Full assurance demo
                 </button>
                 <hr />
-                <small>Simulation</small>
-                <button
-                  type="button"
-                  id="advance"
-                  title="Move the simulated clock forward and run escalation rules"
-                  onClick={advance}
-                >
-                  Advance 7 days
-                </button>
                 <ResetButton />
-                <hr />
-                <small>Programme simulation</small>
-                <button type="button" id="simTourStart" onClick={() => startTour(TOUR)}>
-                  Simulation demo
-                </button>
-                {LEGACY.map(({ href, label }) => (
-                  <Link key={href} href={href}>
-                    {label}
-                  </Link>
-                ))}
               </div>
             </details>
           </div>

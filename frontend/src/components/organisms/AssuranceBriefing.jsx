@@ -4,7 +4,7 @@ import Link from "next/link";
 import Meter from "@/components/atoms/Meter";
 import Ring from "@/components/atoms/Ring";
 import StatusPill from "@/components/atoms/StatusPill";
-import { pct } from "@/lib/domain/data";
+import { pct } from "@/lib/format";
 import { TIMELINE } from "@/lib/domain/cityAssurance.mjs";
 import { ReopenedLink } from "@/components/organisms/ChangeImpactPanel";
 import { loadSampleAssessments, resetAssessments } from "@/lib/store/assessments";

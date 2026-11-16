@@ -164,12 +164,6 @@ function LightingReview() {
             <li key={input}>{input}</li>
           ))}
         </ul>
-        <h3>Existing demo migration</h3>
-        {lightingScope.legacyDifferences.map((d) => (
-          <p key={d.legacyCode}>
-            <b>{d.legacyCode}</b> · {d.detail} Reference {d.requirementIds.join(" · ")}.
-          </p>
-        ))}
       </div>
     </details>
   );
@@ -191,7 +185,7 @@ export default function FifaLibrary() {
         </div>
       </div>
       <p>{FIFA_CATALOGUE.scopeNote}</p>
-      <p>Facility applicability awaits review. Facility assessments will be linked after applicability is confirmed.</p>
+      <p>Each stadium&apos;s page shows which of these criteria apply to it and the evidence assessed against them.</p>
       <SourceInventory />
       <h3>{lightingScope.title}</h3>
       <p>{lightingScope.scopeNote}</p>

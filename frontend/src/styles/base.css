@@ -82,17 +82,8 @@ h3 {
 .m0 {
   margin: 0;
 }
-.note {
-  margin: 12px 0 0;
-}
 .clickable {
   cursor: pointer;
-}
-.mt-sm {
-  margin-top: 8px;
-}
-.mt-lg {
-  margin-top: 24px;
 }
 label.f.inline {
   flex-direction: row;
@@ -113,21 +104,7 @@ label.f.inline {
   flex-wrap: wrap;
   align-items: center;
 }
-.grid {
-  display: grid;
-  gap: 24px;
-}
-.cols {
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-}
-@media (max-width: 900px) {
-  .cols {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-.eyebrow,
-.tw-eyebrow,
-.tw-sec {
+.eyebrow {
   font-size: 11px;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -164,33 +141,6 @@ label.f.inline {
 }
 .block {
   margin-top: 56px;
-}
-.block-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-}
-.block-head h3 {
-  margin: 0;
-  font-size: 22px;
-}
-.legend {
-  display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-  font-size: 12.5px;
-  color: var(--muted);
-}
-.legend i {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  margin-right: 5px;
-  vertical-align: -1px;
 }
 
 /* ---------- Buttons & form controls ---------- */
@@ -237,7 +187,6 @@ button.primary:hover {
   border-color: var(--brand-deep);
   color: var(--accent-ink);
 }
-button.gold,
 button.tourbtn {
   background: var(--accent);
   border-color: var(--accent);

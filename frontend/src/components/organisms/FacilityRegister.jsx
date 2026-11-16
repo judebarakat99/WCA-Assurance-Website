@@ -2,7 +2,7 @@
 // FIFA capacity requirement that applies to each stadium.
 import Link from "next/link";
 import StatusPill from "@/components/atoms/StatusPill";
-import { fmtN } from "@/lib/domain/data";
+import { fmtN } from "@/lib/format";
 import {
   FACILITY_REGISTER,
   MATCH_LABEL,

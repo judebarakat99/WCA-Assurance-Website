@@ -1,8 +1,8 @@
 // Guided demo of the FIFA assurance flow: country → city → review → back.
-// Same step shape as steps.js: run() sets up the page and returns the
+// Each step: run() sets up the page and returns the
 // selector to highlight; say is the narration (computed after run()).
 // Figures are read from the live (sample) data, so the script stays true.
-import { pct } from "@/lib/domain/data";
+import { pct } from "@/lib/format";
 import { assuranceMap } from "@/lib/domain/cityAssurance.mjs";
 import { criterionLabel } from "@/lib/domain/fifa-catalogue.mjs";
 import { changeImpact } from "@/lib/domain/requirementChange.mjs";
@@ -16,7 +16,6 @@ import {
   reviewAssessment,
 } from "@/lib/store/assessments";
 import { goView, resetMapUi, rerender, updateMap } from "@/lib/store/state";
-import { EXEC } from "@/lib/tour/steps";
 
 const CITY = "riyadh";
 const go = (key) => goView(key);
@@ -215,8 +214,6 @@ const DEEPER = [
     },
     say: "The requirements come from FIFA's own documents. Each one keeps its source section and page, its criterion and its version. When FIFA publishes a new version, that version is what new evidence is checked against.",
   },
-  // Design review, from the simulation demo: designs checked before they are built.
-  ...EXEC.filter((s) => ["Designs checked before they are built", "Fixed, re-checked, passed"].includes(s.title)),
 ];
 
 /** Short assurance demo (about 4 minutes) and the full one. */

@@ -1,88 +1,48 @@
-import { VENUES, DECISIONS } from "@/lib/domain/data";
-import { S } from "@/lib/store/state";
-import { scores, oblsOf, gateEval } from "@/lib/domain/scoring";
-import { forecasts } from "@/lib/domain/forecast";
+import { assuranceMap } from "@/lib/domain/cityAssurance.mjs";
+import { queueCounts, reviewQueue } from "@/lib/domain/reviewQueue.mjs";
+import { getAppliedChanges, getAssessments } from "@/lib/store/assessments";
 
-// Send a bounded snapshot of the currently displayed demo, never credentials or DOM HTML.
+// Ratios rounded for a compact payload.
+const r3 = (x) => Math.round(x * 1000) / 1000;
+
+const rollup = (a) => ({
+  assured: r3(a.assured),
+  coverage: r3(a.coverage),
+  in_scope: a.inScope,
+  compliant: a.compliant,
+  non_compliant: a["non-compliant"],
+  evidence_submitted: a["evidence-submitted"],
+  unassessed: a.unassessed,
+  needs_attention: a.needsAttention,
+});
+
+/**
+ * A bounded snapshot of the assurance state shown in the browser: programme
+ * roll-up, one entry per stadium, the review queue size and the applied
+ * requirement changes. Never credentials or DOM HTML.
+ */
 export function buildAssistantContext() {
-  const score = scores(S.obligations);
+  const records = getAssessments();
+  const map = assuranceMap(records);
+  const queue = queueCounts(reviewQueue(records));
   return {
     source: "browser-demo",
-    as_of: S.today,
+    as_of: new Date().toISOString().slice(0, 10),
     summary: {
-      assured: score.assured,
-      declared: score.declared,
-      scenario: S.scn,
+      assured: r3(map.programme.assured),
+      ...rollup(map.programme),
+      review_queue: queue,
+      applied_changes: getAppliedChanges().map((c) => c.scenarioId ?? c),
     },
-    venues: VENUES.map((v) => ({
-      id: v.id,
-      name: v.name,
-      city: v.city,
-      type: v.type,
-      readiness: scores(oblsOf(v.id)),
-      gate: gateSummary(v.id),
-    })),
-    obligations: S.obligations.map((o) => ({
-      id: o.id,
-      venue: o.venue,
-      text: o.text,
-      owner: o.owner,
-      criticality: o.crit,
-      state: o.state,
-      declared_complete: o.claim,
-      gate: o.gate,
-      criterion: {
-        operator: o.op,
-        value: o.value,
-        unit: o.unit,
-        clause: o.clause,
-      },
-      depends_on: o.dependsOn || null,
-      evidence: o.evidence.slice(-1),
-    })),
-    issues: S.issues.map((i) => ({
-      id: i.id,
-      obligation: i.obl,
-      title: i.title,
-      status: i.status,
-      criticality: i.crit,
-      level: i.level,
-      due: i.due,
-    })),
-    decisions: S.decisions.map((record) => ({
-      ...DECISIONS.find((d) => d.id === record.id),
-      ...record,
-    })),
-    forecasts: forecasts().map(
-      ({ id, gate, gateDate, d50, d80, prob, late80, pmc }) => ({
-        id,
-        gate,
-        gateDate,
-        p50: d50,
-        p80: d80,
-        on_time_probability: prob,
-        days_beyond_milestone: late80,
-        pmc,
-      }),
+    venues: map.cities.flatMap((city) =>
+      city.stadiums.map((s) => ({
+        id: s.id,
+        name: s.name,
+        city: city.name,
+        type: "Stadium",
+        completion_year: s.completionYear,
+        assurance: rollup(s.assurance),
+      })),
     ),
   };
-}
-
-function gateSummary(id) {
-  const gate = gateEval(id);
-  return gate
-    ? {
-        id: gate.gate.id,
-        name: gate.gate.name,
-        pass: gate.pass,
-        assured_readiness: gate.sc.assured,
-        required_assured_readiness: 0.9,
-        scope_size: gate.scope.length,
-        rules: gate.rules.map((rule) => ({
-          met: rule.ok,
-          text: rule.text,
-          blockers: rule.blockers.map((o) => o.id),
-        })),
-      }
-    : null;
 }
