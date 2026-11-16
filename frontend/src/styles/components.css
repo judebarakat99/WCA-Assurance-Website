@@ -1416,6 +1416,8 @@ main.wide {
   z-index: 5;
 }
 .amap-card .maplibregl-popup-content {
+  /* One width for every card (the popup's maxWidth), so the photo always fits. */
+  width: 260px;
   display: grid;
   gap: 3px;
   padding: 10px 12px;
@@ -1437,7 +1439,8 @@ main.wide {
 /* Photo across the top of a hover card, bleeding to the card's edges. */
 .amap-card .amap-photo {
   position: relative;
-  width: 236px;
+  /* Stretches across the card; the negative margins reach its edges. */
+  width: auto;
   height: 118px;
   margin: -10px -12px 6px;
   overflow: hidden;
