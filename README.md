@@ -50,7 +50,8 @@ thin.
   `layout.jsx`. `/` is the assurance map, with a toggle to the national
   portfolio (`/?view=portfolio`), `/review` the review queue,
   `/evidence` contractor documents (evidence checked against the register,
-  progress verification and owner alerts), `/reports` report
+  progress verification and owner alerts), `/progress` project progress
+  (delivery Gantt, schedule and cost performance), `/reports` report
   export (Word, Excel, PDF), `/compliance` the requirements (FIFA source library and facility register)
   and `/facilities/[facilityId]` a stadium's assessments.
 - `src/components/atoms/` → `molecules/` → `organisms/` → `templates/` →
@@ -75,6 +76,9 @@ thin.
   and filing, all in the browser; `alerts.js`: owner alerts;
   `src/lib/domain/evidenceReader.mjs` reads a document and checks it against
   the register.
+- `src/lib/domain/delivery.mjs`: project progress per stadium (earned schedule
+  and earned value) from the sample `data/progress/programme.json`, using a
+  checked progress report's recalculated figure where there is one.
 - `src/lib/domain/report.mjs` builds one format-neutral report model; the preview
   and `src/lib/export/` (docx, exceljs, jsPDF + AutoTable, loaded on first export)
   render it, entirely in the browser.

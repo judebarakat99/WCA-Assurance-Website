@@ -34,3 +34,7 @@ file (its filing proposal and extracted figures), exported by
 `poetry run python -m scripts.export_offline_intake` from `backend/`. The Evidence
 page uses these readings; the arithmetic runs in the browser with the same
 rules. Re-export after regenerating samples.
+
+`programme.json` is sample delivery data for the Project progress page: start,
+planned handover, budget, spend to date and reported progress per stadium
+(SAR millions), plus a sample FIFA readiness milestone. It is illustrative.
