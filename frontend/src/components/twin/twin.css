@@ -157,6 +157,7 @@ body.touring .tw-main{height:max(460px,calc(100vh - 360px))}
 .twin.tw-mode-areas .tw-steps-wrap,.twin.tw-mode-areas .tw-metric,.twin.tw-mode-areas [data-tw="play"]{display:none}
 .twin.tw-mode-areas .tw-reset-mode{display:inline-flex}
 .twin.tw-mode-areas .tw-bar{grid-template-columns:1fr auto}
+.twin.tw-mode-areas .tw-legend{display:none!important}
 /* zone pins on the model */
 .tw-zone{position:absolute;transform:translate(-50%,-100%);pointer-events:auto;cursor:pointer;border:0!important;background:none!important;padding:0!important;display:flex;flex-direction:column;align-items:center;transition:opacity .3s;--lc:#46c389}
 .tw-zone.lvl-critical{--lc:#f05d4e}

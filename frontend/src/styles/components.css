@@ -1850,6 +1850,9 @@ a.abrief-cta:hover b {
   display: grid;
   gap: 10px;
 }
+.rq-list + .rq-list {
+  margin-top: 10px;
+}
 .rq-new {
   color: var(--gold);
   font-weight: 700;
