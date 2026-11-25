@@ -43,10 +43,10 @@ Known source issues:
 
 ## How it links to the FIFA catalogue
 
-Each stadium's `highestMatch` selects its capacity requirement from
-`data/fifa/catalogue.json`: opening and final → `F34-ST-CAP-03` (80,000),
-semi-final → `F34-ST-CAP-02` (60,000), every other match → `F34-ST-CAP-01`
-(40,000). The register compares the declared gross capacity with that minimum.
+Each stadium's `highestMatch` selects its threshold for the capacity check
+`STA-0004` in `data/fifa/catalogue.json`: opening and final 80,000 seats,
+semi-final 60,000, every other match 40,000. The register compares the declared
+gross capacity with that minimum.
 
 That comparison is a **declared** check, not an assessment: the result is
 "declared meets" or "declared short", with evidence pending. An assessment
@@ -60,11 +60,11 @@ Assessments are one record per facility × requirement × version
 `frontend/src/lib/store/assessments.js` in the browser under
 `wca-assessments-v1`; "Reset demo" restores the seed).
 
-- **Applicability** is decided by rule for each stadium: requirements for other
-  asset types do not apply; of the capacity rules only the one for the
-  stadium's highest match applies; lighting criteria are **provisional** (the
-  2020 Lighting Guide is a provisional 2034 baseline); everything else that
-  names all match allocations applies.
+- **Applicability** is decided by rule for each stadium: checks for other
+  sites (training sites, fan festivals, IBC) do not apply; checks with a FIFA
+  book criterion apply; working targets apply **provisionally** until the 2034
+  contract clause confirms their threshold; capacity uses the threshold for the
+  stadium's highest match.
 - **Status** runs unassessed → declared (from the register) → evidence
   submitted → compliant or non-compliant. Numeric criteria are checked when
   evidence is recorded (strict and inclusive operators are respected);

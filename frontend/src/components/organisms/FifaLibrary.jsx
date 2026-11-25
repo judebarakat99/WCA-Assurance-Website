@@ -1,111 +1,49 @@
-// Server Component: renders the bundled FIFA catalogue at build time.
+// Server Component: the FIFA venue requirements register, by chapter, rendered at build time.
 import StatusPill from "@/components/atoms/StatusPill";
-import { FIFA_CATALOGUE, fifaRequirementRecords, criterionLabel } from "@/lib/domain/fifa-catalogue.mjs";
+import { CHAPTERS, FIFA_CATALOGUE, criterionLabel, fifaRequirementRecords } from "@/lib/domain/fifa-catalogue.mjs";
 
-const words = (s) => s.replaceAll("-", " ");
-const sourceById = (id) => FIFA_CATALOGUE.sources.find((s) => s.id === id);
+const SITE_ORDER = ["Stadium", "Training site", "Fan festival", "IBC"];
 
-function ExternalLink({ href, children }) {
-  return (
-    <a href={href} target="_blank" rel="noopener noreferrer">
-      {children}
-    </a>
-  );
-}
-
-function SourceInventory() {
-  const { sources } = FIFA_CATALOGUE;
-  return (
-    <details className="comp-detail">
-      <summary>Source inventory · {sources.length} entries</summary>
-      <div className="comp-detail-body tablewrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Publication</th>
-              <th>Authority and coverage</th>
-              <th>Review status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sources.map((s) => (
-              <tr key={s.id}>
-                <td>
-                  {s.url ? <ExternalLink href={s.url}>{s.title}</ExternalLink> : s.title}
-                  <br />
-                  {s.edition}
-                </td>
-                <td>
-                  {s.authority}
-                  <br />
-                  <span className="muted">{s.coverage.join(" · ")}</span>
-                </td>
-                <td>
-                  {words(s.availability)} · {words(s.reviewStatus)}
-                  <p>{s.limitations}</p>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </details>
-  );
-}
-
-function RequirementTable({ records }) {
+function Requirements({ records }) {
   return (
     <div className="tablewrap">
-      <table>
+      <table className="fifa-reqs">
         <thead>
           <tr>
-            <th scope="col">Requirement</th>
-            <th scope="col">Scope</th>
-            <th scope="col">Criterion and review</th>
-            <th scope="col">Source and evidence</th>
+            <th>ID</th>
+            <th>Requirement</th>
+            <th>Criterion</th>
+            <th>Applies to</th>
+            <th>Section</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
           {records.map((r) => (
             <tr key={r.id}>
+              <td className="mono small">{r.id === "FAN-UNREADABLE" ? "–" : r.id}</td>
               <td>
-                <span className="mono">{r.id}</span>
-                <br />
-                {r.title}
-                <br />
-                <small>{words(r.authority)}</small>
+                <b>{r.title}</b>
+                {r.transcriptionNote && <div className="muted fine">{r.transcriptionNote}</div>}
               </td>
               <td>
-                {r.assetType}
-                <br />
-                <span className="muted">{r.condition}</span>
-                {r.planes && <p>Each plane · {r.planes.join(" · ")}</p>}
-                {r.measurementLocation && <p>{r.measurementLocation}</p>}
+                {r.threshold && <b className="mono">{criterionLabel(r.criterion)}</b>}
+                <div className={r.threshold ? "muted small" : "small"}>{r.detail || r.summary}</div>
               </td>
+              <td>{r.assetType}</td>
+              <td className="mono small">{r.section}</td>
               <td>
-                {criterionLabel(r.criterion)}
-                <br />
-                <StatusPill tone="mute">Applicability pending</StatusPill>
-                {r.criterion.aggregation && <p>{r.criterion.aggregation}</p>}
-                {r.reviewIssues.map((issue) => (
-                  <p key={issue.id} className="pill p-warn">
-                    {issue.title} · review required
-                  </p>
-                ))}
-              </td>
-              <td>
-                <ExternalLink href={r.sourceUrl}>
-                  {r.source.shortTitle} · p. {r.printedPage}
-                </ExternalLink>
-                <br />
-                <span className="muted">
-                  {r.section} · {r.topic}
-                </span>
-                {r.basisRequirementId && <p>2034 basis · {r.basisRequirementId}</p>}
-                <p>
-                  Proposed evidence ·{" "}
-                  {r.evidence.length ? r.evidence.map((e) => e.name).join(" · ") : r.suggestedEvidence}
-                </p>
+                {r.status === "Book" ? (
+                  <StatusPill tone="info">Book</StatusPill>
+                ) : (
+                  <StatusPill tone="warn">Working target</StatusPill>
+                )}
+                {r.partial && (
+                  <>
+                    {" "}
+                    <StatusPill tone="mute">Partial</StatusPill>
+                  </>
+                )}
               </td>
             </tr>
           ))}
@@ -115,101 +53,54 @@ function RequirementTable({ records }) {
   );
 }
 
-function LightingReview() {
-  const { lightingScope, evidenceSpecifications, reviewIssues } = FIFA_CATALOGUE;
-  return (
-    <details className="comp-detail">
-      <summary>Evidence and interpretation review</summary>
-      <div className="comp-detail-body">
-        <h3>Measurement definitions</h3>
-        {lightingScope.measurementDefinitions.map((d) => (
-          <p key={d.name}>
-            <b>{d.name}</b> · {d.description}{" "}
-            <ExternalLink href={`${sourceById(d.sourceId).url}#page=${d.pdfPage}`}>p. {d.printedPage}</ExternalLink>
-          </p>
-        ))}
-        <h3>Proposed evidence packs</h3>
-        {evidenceSpecifications.map((e) => (
-          <div key={e.id}>
-            <h4>{e.name}</h4>
-            <p>{e.reviewPurpose}</p>
-            <ul>
-              {e.fields.map((field) => (
-                <li key={field}>{field}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-        <h3>Open source interpretations</h3>
-        {reviewIssues.map((issue) => {
-          const source = sourceById(issue.sourceId);
-          return (
-            <div key={issue.id}>
-              <h4>{issue.title}</h4>
-              <p>
-                {issue.detail}{" "}
-                {issue.pages.map((p, k) => (
-                  <span key={p}>
-                    {k > 0 && " · "}
-                    <ExternalLink href={`${source.url}#page=${p + 1}`}>p. {p}</ExternalLink>
-                  </span>
-                ))}
-              </p>
-            </div>
-          );
-        })}
-        <h3>Inputs to confirm with partners</h3>
-        <ul>
-          {lightingScope.businessInputs.map((input) => (
-            <li key={input}>{input}</li>
-          ))}
-        </ul>
-      </div>
-    </details>
-  );
-}
-
-/** The sourced FIFA requirements catalogue, with sources, lighting profiles and open issues. */
+/** The venue requirements register: provenance, then every check by chapter. */
 export default function FifaLibrary() {
   const records = fifaRequirementRecords();
-  const { lightingScope, lightingProfiles } = FIFA_CATALOGUE;
+  const bySite = SITE_ORDER.map((site) => [site, records.filter((r) => r.assetType === site).length]);
+  const book = records.filter((r) => r.status === "Book").length;
   return (
     <section className="comp-block fifa-library" aria-labelledby="fifa-library-title">
       <div className="comp-block-head">
         <div>
-          <span className="eyebrow">FIFA source library</span>
-          <h2 id="fifa-library-title">Sourced requirements</h2>
+          <span className="eyebrow">FIFA venue requirements register</span>
+          <h2 id="fifa-library-title">
+            {records.length} checks in {CHAPTERS.length} chapters
+          </h2>
           <p>
-            {records.length} criteria · Source subset checked {FIFA_CATALOGUE.reviewedOn}
+            Register dated {FIFA_CATALOGUE.registerDate} · {bySite.map(([site, n]) => `${n} ${site === "IBC" ? site : site.toLowerCase()}`).join(" · ")}
           </p>
         </div>
       </div>
-      <p>{FIFA_CATALOGUE.scopeNote}</p>
-      <p>Each stadium&apos;s page shows which of these criteria apply to it and the evidence assessed against them.</p>
-      <SourceInventory />
-      <h3>{lightingScope.title}</h3>
-      <p>{lightingScope.scopeNote}</p>
-      {lightingProfiles.map((profile) => {
-        const selected = records.filter((r) => r.profileId === profile.id);
+      <p>{FIFA_CATALOGUE.provenance}</p>
+      <p className="small">
+        <StatusPill tone="warn">Working target</StatusPill> {FIFA_CATALOGUE.status.WT}; assessed as provisional.{" "}
+        <StatusPill tone="info">Book</StatusPill> {FIFA_CATALOGUE.status.Book}. {book} checks have a book criterion;
+        numerical ones are checked automatically when evidence is recorded. {FIFA_CATALOGUE.capacityTiers.note}
+      </p>
+      {CHAPTERS.map((c, i) => {
+        const mine = records.filter((r) => r.chapter === c.id);
         return (
-          <details key={profile.id} className="comp-detail">
+          <details key={c.id} className="comp-detail" open={i === 0}>
             <summary>
-              {profile.name} · {selected.length} criteria
+              <div>
+                <span>
+                  {c.id} · {c.name}
+                </span>
+                <small>
+                  {c.summary} Book page {c.bookPage}.
+                </small>
+              </div>
+              <div className="fifa-chapter-count">
+                <b>{c.checks}</b>
+                <small>{c.stadiumChecks} for stadiums</small>
+              </div>
             </summary>
             <div className="comp-detail-body">
-              <p>{profile.scopeNote}</p>
-              <RequirementTable records={selected} />
+              <Requirements records={mine} />
             </div>
           </details>
         );
       })}
-      <LightingReview />
-      <details className="comp-detail">
-        <summary>Initial infrastructure subset</summary>
-        <div className="comp-detail-body">
-          <RequirementTable records={records.filter((r) => !r.profileId)} />
-        </div>
-      </details>
     </section>
   );
 }

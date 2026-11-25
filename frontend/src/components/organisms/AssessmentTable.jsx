@@ -120,7 +120,9 @@ export default function AssessmentTable({ facilityId, title, rows, records }) {
                     <span className="mono">{row.requirement.id}</span>
                     <div>{row.requirement.title}</div>
                   </td>
-                  <td className="mono">{criterionLabel(row.requirement.criterion)}</td>
+                  <td className={row.requirement.criterion.operator === "manual" ? "small" : "mono"}>
+                    {criterionLabel(row.requirement.criterion)}
+                  </td>
                   <td>
                     <StatusPill tone={APPLICABILITY_TONE[row.applicability.value]}>
                       {APPLICABILITY[row.applicability.value]}

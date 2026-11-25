@@ -10,9 +10,10 @@ import PageTemplate from "@/components/templates/PageTemplate";
 import { fmtN, pct } from "@/lib/format";
 import { facilitySummary, stadiumRequirements } from "@/lib/domain/assessment.mjs";
 import { FACILITY_REGISTER, MATCH_LABEL, STATUS_LABEL } from "@/lib/domain/facilities.mjs";
+import { CHAPTERS } from "@/lib/domain/fifa-catalogue.mjs";
 import { getAssessments } from "@/lib/store/assessments";
 
-const CATEGORY_ORDER = ["Capacity", "Pitch", "Lighting", "Access"];
+const CATEGORY_ORDER = CHAPTERS.map((c) => c.name);
 
 function Summary({ summary: s }) {
   const tiles = [
@@ -62,13 +63,13 @@ function Facility({ stadium }) {
         </label>
         <span className="spacer" />
         <StatusPill tone="warn">Provisional</StatusPill>
-        <span className="muted small">= 2020 lighting baseline, pending the tournament package</span>
+        <span className="muted small">= working target, threshold to be confirmed against the 2034 clause</span>
       </div>
       {categories.map((c) => (
         <AssessmentTable
           key={c}
           facilityId={stadium.id}
-          title={c}
+          title={`${CHAPTERS.find((x) => x.name === c).id} ${c}`}
           rows={visible.filter((r) => r.requirement.category === c)}
           records={records}
         />

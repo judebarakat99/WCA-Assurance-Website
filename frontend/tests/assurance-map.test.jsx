@@ -20,10 +20,11 @@ test("declared-only data rolls up with nothing reviewed and a neutral tone", () 
 test("pillar filter narrows the scope to one category", () => {
   const records = seedAssessments();
   const all = assuranceMap(records).programme.inScope;
-  const capacity = assuranceMap(records, "Capacity").programme;
-  assert.equal(capacity.inScope, 15); // one applicable capacity rule per stadium
-  assert.equal(capacity.declared, 15);
-  assert.ok(assuranceMap(records, "Lighting").programme.inScope < all);
+  const pre = assuranceMap(records, "Pre-construction decisions").programme;
+  assert.equal(pre.inScope, 15 * 11); // 11 stadium checks in chapter 01, capacity among them
+  assert.equal(pre.declared, 15);
+  assert.equal(assuranceMap(records, "Lighting and power supply").programme.inScope, 15 * 7);
+  assert.equal(all, 15 * 123);
 });
 
 test("sample assessments are labelled, deterministic and vary by stadium progress", () => {

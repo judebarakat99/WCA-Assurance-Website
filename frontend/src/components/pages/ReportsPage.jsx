@@ -6,7 +6,8 @@ import PageHead from "@/components/molecules/PageHead";
 import ReportPreview from "@/components/organisms/ReportPreview";
 import PageTemplate from "@/components/templates/PageTemplate";
 import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
-import { AREAS, REPORT_KINDS, buildReport } from "@/lib/domain/report.mjs";
+import { PILLARS } from "@/lib/domain/cityAssurance.mjs";
+import { REPORT_KINDS, buildReport } from "@/lib/domain/report.mjs";
 import { FORMATS, exportReport } from "@/lib/export";
 import { getAssessments, hasSampleAssessments } from "@/lib/store/assessments";
 import { ensureIntake, intake } from "@/lib/store/intake";
@@ -60,12 +61,12 @@ function Scope({ kind, scope, setScope }) {
   if (kind === "contractor" || kind === "executive") return null;
   return (
     <label className="f rpt-scope">
-      {kind === "area" ? "Requirement area" : "Limit to one requirement area (optional)"}
+      {kind === "area" ? "Chapter" : "Limit to one chapter (optional)"}
       <select value={scope.area || ""} onChange={set("area")}>
-        <option value="">{kind === "area" ? "Choose an area…" : "No limit"}</option>
-        {AREAS.map((a) => (
-          <option key={a} value={a}>
-            {a}
+        <option value="">{kind === "area" ? "Choose a chapter…" : "No limit"}</option>
+        {PILLARS.filter((p) => p.id).map((p) => (
+          <option key={p.id} value={p.id}>
+            {p.number} {p.label}
           </option>
         ))}
       </select>
@@ -117,7 +118,7 @@ function Reports() {
         chip="Reports · export"
         title="Reports"
         wideLead
-        lead="Create a compliance report for the programme, a host city, a stadium or a FIFA requirement area, or an oversight report on contractor reporting, or an executive report for leadership. Choose a format and what the report is for; a preview appears below, and Export is enabled once both are chosen."
+        lead="Create a compliance report for the programme, a host city, a stadium or a chapter of the FIFA stadium book, or an oversight report on contractor reporting, or an executive report for leadership. Choose a format and what the report is for; a preview appears below, and Export is enabled once both are chosen."
       />
       {!hasSampleAssessments() && !Object.values(getAssessments()).some((a) => a.review) && (
         <p className="block intake-alert small">

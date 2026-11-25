@@ -1,44 +1,57 @@
 # FIFA reference data
 
-`catalogue.json` is the shared source of sourced requirement definitions. Both applications can consume this JSON. The Compliance page renders it directly through `frontend/lib/fifa-catalogue.mjs`.
+`catalogue.json` is the requirements catalogue the application assesses against:
+the **FIFA World Cup 2034 venue requirements register** dated 20 November 2026,
+**181 checks in 11 chapters** of the FIFA stadium book, **123 of them for
+stadiums** (38 training site, 14 fan festival, 6 IBC). The frontend reads it
+through `frontend/src/lib/domain/fifa-catalogue.mjs`; the Requirements page
+lists it chapter by chapter.
 
-## First increment
+## Source and limits
 
-The initial subset covers stadium capacity, pitch dimensions and training-site criteria from FIFA's public 2034 hosting overview linked in its 31 October 2023 announcement. Section 1.3 explains the document's limits and later specifications. The publication date records the announcement date, not an asserted PDF revision date. Requirement IDs and categories are local catalogue identifiers.
+`requirements-register-2026-11-20.md` is the source: a transcription of
+screenshots of a 52-page register. It is **not an independently verified
+statement of FIFA's contractual requirements**. Source titles, URLs, page
+numbers and the evidence column were cropped in the screenshots and have not
+been reconstructed. One fan-festival check's ID and opening words are not
+legible; it is stored as `FAN-UNREADABLE` with `partial: true`, and no ID or
+wording has been invented.
 
-Each record preserves its source, printed page and PDF page, scope, conditions, and structured criterion. Text is paraphrased. `source-checked` means checked against the cited publication. Tournament applicability still needs business review. Suggested evidence is a PoC assessment design choice.
+`catalogue.json` was converted from that file mechanically; counts reconcile
+with the source (13 + 16 + 12 + 23 + 34 + 15 + 8 + 20 + 9 + 8 + 23 = 181).
+
+## Record shape
+
+Each requirement keeps its `id`, `chapter` (`"01"`–`"11"`), `category` (the
+chapter name), `title`, `summary` (the criterion as worded), `assetType`
+(Stadium, Training site, Fan festival or IBC), book `section`, and `status`:
+
+- `WT`: working target, threshold to be confirmed against the 2034 contract
+  clause. Assessed as **provisional**; evidence goes to a reviewer.
+- `Book`: a criterion from the FIFA stadium book or guidance (still subject to
+  the 2034 clause). Numerical ones have a structured `criterion`
+  (`min`, `max` or `range`, with `value` and `unit`) and are checked
+  automatically when evidence is recorded; the rest are `manual`.
+
+`STA-0004` (capacity) has thresholds by match category in `criterion.tiers`:
+40,000 seats up to the quarter-final and the third-place play-off, 60,000 for a
+semi-final, 80,000 for the opening match and final. Each stadium's
+`highestMatch` in the facility register selects its threshold.
 
 ## Data ownership
 
-- Source metadata and requirement definitions belong here. Views consume records and calculate counts.
-- Facility assessments, submitted evidence and review decisions belong in a separate operational store, linked by requirement ID and version plus facility ID.
-- A published requirement does not establish a facility's assessment result. Missing assessments must display as unassessed.
-- Geography, asset type and requirement category are separate dimensions. Match allocation must be confirmed before assigning a capacity criterion.
-- Source editions are immutable. Add a new source/version when requirements change, then explicitly reassess affected records.
-
-## Next steps
-
-Agree facility types and match allocations with partners. A server database will be needed for shared multi-user persistence; this catalogue is currently version-controlled and bundled at build time.
-
-## Lighting increment
-
-Schema version 2 adds a source inventory, stadium and training lighting profiles, evidence specifications, and open interpretation issues. The official FIFA Lighting Guide 2020.01 PDF was retrieved from FIFA's Digital Hub through its Stadium Guidelines annexe. Its SHA-256 digest is recorded in the source inventory. The Standard A and Grade 1 tables were visually checked against printed pages 11 and 41.
-
-The catalogue links each technical record to the applicable class specified in the public 2034 overview. This is a provisional baseline pending the issued tournament package and amendments. Sources marked `inventory-only` have no extracted criteria. The complete hosting package is recorded as `not-obtained`; the partner request is an input checklist and has not been sent.
-
-Numeric operators preserve strict versus inclusive comparisons. Vertical metrics apply separately to every listed plane. Maintenance factors are design defaults with a variation reference. U1 and U2 definitions are stored alongside their source references. Manual power-profile checks require specialist assessment of the referenced sections. The table subset does not cover the full engineering design, all control obligations, entertainment lighting or environmental design.
-
-Open interpretation records preserve source inconsistencies and uncertain boundary/counting rules. They must be resolved before automatic pass/fail assessment. Recommendations carry their own authority type. Evidence specifications describe our proposed submission format; they are not assertions that FIFA mandates that exact packaging.
-
-## Extending the catalogue
-
-Check the primary publication and table qualifications, preserve source links and page references, distinguish mandatory text from recommendations, and record any unresolved applicability. Add regression coverage for conditional requirements. Avoid inferring criticality, official domains, or compliance status from a source title.
+- Requirement definitions belong here. Views consume records and calculate counts.
+- Facility assessments, evidence and review decisions belong in the
+  assessment store, linked by requirement ID and version plus facility ID.
+- A requirement does not establish a facility's assessment result. Missing
+  assessments display as unassessed.
+- When a requirement changes, add a new version and reassess affected records.
 
 ## Change scenarios (hypothetical)
 
 `change-scenarios.json` holds requirement changes used to demonstrate change
 impact on the assurance map. **None has been announced by FIFA.** Each names a
-catalogue requirement and a replacement criterion. Applying one (in the app)
+register check and a replacement criterion. Applying one (in the app)
 moves that requirement to its next version and re-checks every stadium's
 evidence against the new criterion; compliant items that no longer pass are
 reopened for review. Applied changes are kept in the browser

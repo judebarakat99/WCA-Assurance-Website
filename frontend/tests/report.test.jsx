@@ -25,7 +25,7 @@ const SCOPES = {
   programme: {},
   city: { cityId: "riyadh" },
   stadium: { stadiumId: "king-fahad-sports-city" },
-  area: { area: "Lighting" },
+  area: { area: "Media" },
   contractor: {},
   executive: {},
 };
@@ -54,8 +54,8 @@ test("programme report counts agree with its stadium table", () => {
 
 test("scoped reports: city, area, stadium, contractor", () => {
   assert.equal(buildReport("city", { cityId: "riyadh" }, data).sections.find((s) => s.title === "Stadiums").rows.length, 8);
-  const area = buildReport("area", { area: "Lighting" }, data);
-  assert.ok(area.sections.find((s) => s.title === "Findings").rows.every((row) => row.area === "Lighting"));
+  const area = buildReport("area", { area: "Media" }, data);
+  assert.ok(area.sections.find((s) => s.title === "Findings").rows.every((row) => row.area === "08 Media"));
   const kf = buildReport("stadium", { stadiumId: "king-fahad-sports-city" }, data);
   assert.match(kf.sections[1].text, /reported 70% progress/);
   const contractor = buildReport("contractor", {}, data);

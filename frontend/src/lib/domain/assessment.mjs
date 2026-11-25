@@ -3,7 +3,8 @@
 // facility, evaluates submitted values against a criterion, and summarises a
 // facility's assessments. The records themselves live in lib/store/assessments.
 import { currentRequirements } from "@/lib/domain/requirementVersions.mjs";
-import { FACILITY_REGISTER, capacityRequirement } from "@/lib/domain/facilities.mjs";
+import { FACILITY_REGISTER, MATCH_LABEL, capacityRequirement } from "@/lib/domain/facilities.mjs";
+import { resolveForStadium } from "@/lib/domain/fifa-catalogue.mjs";
 
 export const APPLICABILITY = {
   applicable: "Applies",
@@ -23,39 +24,32 @@ export const assessmentKey = (facilityId, requirement) => `${facilityId}::${requ
 
 /**
  * Whether a requirement applies to a stadium, and why.
- * - Other asset types' requirements do not apply.
- * - Capacity: only the rule for the stadium's highest match applies.
- * - Lighting: the 2020 Lighting Guide is a provisional 2034 baseline, so its
- *   criteria apply provisionally until the tournament package confirms them.
- * - Everything else that names "All match allocations" applies.
+ * - Checks for other sites (training sites, fan festivals, IBC) do not apply.
+ * - A check with a numerical book criterion applies.
+ * - A working target applies provisionally: its threshold is still to be
+ *   confirmed against the 2034 contract clause.
+ * - Capacity (STA-0004): the threshold follows the stadium's highest match.
  */
 export function stadiumApplicability(stadium, requirement) {
   if (requirement.assetType !== "Stadium")
-    return { value: "not-applicable", reason: `${requirement.assetType} requirement` };
-  if (requirement.category === "Capacity") {
-    const selected = capacityRequirement(stadium);
-    return selected?.id === requirement.id
-      ? { value: "applicable", reason: `Highest match: ${requirement.condition}` }
-      : { value: "not-applicable", reason: `Applies to ${requirement.condition.toLowerCase()} venues` };
-  }
-  if (requirement.category === "Lighting")
-    return {
-      value: "provisional",
-      reason:
-        requirement.authority === "recommendation"
-          ? "Recommendation; provisional 2020 lighting baseline"
-          : "Provisional 2020 lighting baseline pending the tournament package",
-    };
-  return { value: "applicable", reason: requirement.condition };
+    return { value: "not-applicable", reason: `${requirement.assetType} check` };
+  if (requirement.criterion.tiers || requirement.id === "STA-0004")
+    return { value: "applicable", reason: `Highest match: ${MATCH_LABEL[stadium.highestMatch]}` };
+  if (requirement.status === "WT")
+    return { value: "provisional", reason: "Working target · threshold to be confirmed (2034 clause)" };
+  return { value: "applicable", reason: "FIFA stadium book criterion" };
 }
 
 /** Current requirements (after any applied changes) with their applicability for one stadium. */
 export function stadiumRequirements(stadium, requirements = currentRequirements()) {
-  return requirements.map((requirement) => ({
-    requirement,
-    key: assessmentKey(stadium.id, requirement),
-    applicability: stadiumApplicability(stadium, requirement),
-  }));
+  return requirements.map((raw) => {
+    const requirement = resolveForStadium(raw, stadium);
+    return {
+      requirement,
+      key: assessmentKey(stadium.id, requirement),
+      applicability: stadiumApplicability(stadium, raw),
+    };
+  });
 }
 
 const NUMERIC = {

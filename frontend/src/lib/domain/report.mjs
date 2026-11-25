@@ -15,7 +15,7 @@ export const REPORT_KINDS = {
   programme: { group: "compliance", label: "Programme", hint: "Every stadium in the programme" },
   city: { group: "compliance", label: "Host city", hint: "The stadiums in one host city" },
   stadium: { group: "compliance", label: "Stadium", hint: "One stadium, requirement by requirement" },
-  area: { group: "compliance", label: "Requirement area", hint: "One FIFA requirement area across the stadiums" },
+  area: { group: "compliance", label: "Chapter", hint: "One chapter of the FIFA stadium book across the stadiums" },
   contractor: { group: "oversight", label: "Contractor reporting", hint: "Who has reported, who is late and what is missing" },
   executive: { group: "oversight", label: "Executive report", hint: "One consolidated report for the programme's leadership" },
 };
@@ -26,6 +26,10 @@ export const DOC_ROW_LIMIT = 40;
 export const LATE_AFTER_DAYS = 35;
 
 export const AREAS = PILLARS.filter((p) => p.id).map((p) => p.id);
+const chapterLabel = (name) => {
+  const p = PILLARS.find((x) => x.id === name);
+  return p ? `${p.number} ${name}` : name;
+};
 const CITY = Object.fromEntries(FACILITY_REGISTER.hostCities.map((c) => [c.id, c]));
 const RISK_LABEL = { bad: "Critical", warn: "At risk", good: "On track", mute: "Not started" };
 const pct = (x) => `${Math.round(x * 100)}%`;
@@ -115,7 +119,7 @@ function stadiumTable(prows, records, area, subtitle) {
 }
 
 const AREA_COLUMNS = [
-  { key: "area", label: "Requirement area", width: 18 },
+  { key: "area", label: "Chapter", width: 24 },
   { key: "inScope", label: "In scope", align: "center", width: 9 },
   { key: "compliant", label: "Compliant", align: "center", width: 9 },
   { key: "nonCompliant", label: "Non-compliant", align: "center", width: 10 },
@@ -128,7 +132,7 @@ function areaTable(stadiums, records) {
   const rows = AREAS.map((area) => {
     const c = counts(requirementRows(stadiums, records, area));
     return {
-      area,
+      area: chapterLabel(area),
       inScope: c.inScope,
       compliant: c.compliant,
       nonCompliant: cell(c["non-compliant"], c["non-compliant"] ? "bad" : null),
@@ -137,13 +141,13 @@ function areaTable(stadiums, records) {
       assured: cell(pct(c.assured), c.assured >= 0.85 ? "good" : c.assured >= 0.5 ? "warn" : "bad"),
     };
   });
-  return table("Requirement areas", "Compliance by FIFA requirement area", AREA_COLUMNS, rows);
+  return table("Chapters", "Compliance by chapter of the FIFA stadium book", AREA_COLUMNS, rows);
 }
 
 const FINDING_COLUMNS = [
   { key: "stadium", label: "Stadium", width: 20 },
   { key: "requirement", label: "Requirement", width: 26 },
-  { key: "area", label: "Area", width: 9 },
+  { key: "area", label: "Chapter", width: 12 },
   { key: "status", label: "Status", width: 13 },
   { key: "value", label: "Value on record", width: 10 },
   { key: "next", label: "Next step", width: 30 },
@@ -162,7 +166,7 @@ function findingsTable(rows) {
     .map((r) => ({
       stadium: r.stadium.name,
       requirement: `${r.requirement.id} ${r.requirement.title}`,
-      area: r.requirement.category,
+      area: chapterLabel(r.requirement.category),
       status: r.status === "non-compliant" ? cell("Non-compliant", "bad") : cell("Evidence fails check", "warn"),
       value: r.evidence?.value ?? "",
       next: nextStep(r),
@@ -221,7 +225,7 @@ function about(date, sample, extra = []) {
     "Risk: Critical for an overstated progress claim, more than 30 days behind plan, or a non-compliance on a stadium due within two years; At risk for any other non-compliance, slip or failing evidence; On track otherwise. Schedule is days behind the contractor's detailed plans at the report date (earned schedule).",
     ...extra,
     ...(sample ? ["This report uses the demo's labelled sample data. Use it to illustrate the process, not as a certification."] : []),
-    "Lighting criteria are a provisional baseline (the 2020 FIFA Lighting Guide) pending the 2034 tournament package.",
+    "Requirements come from the venue requirements register (181 checks in 11 chapters, dated 20 November 2026). Most are working targets whose threshold is still to be confirmed against the 2034 contract clause; they are marked provisional.",
   ];
 }
 
@@ -249,7 +253,7 @@ export function buildReport(kind, scope, data) {
       "Every FIFA requirement in scope for this stadium",
       [
         { key: "requirement", label: "Requirement", width: 28 },
-        { key: "area", label: "Area", width: 9 },
+        { key: "area", label: "Chapter", width: 12 },
         { key: "applies", label: "Applies", width: 10 },
         { key: "criterion", label: "Criterion", width: 16 },
         { key: "status", label: "Status", width: 13 },
@@ -259,7 +263,7 @@ export function buildReport(kind, scope, data) {
       ],
       rows.map((r) => ({
         requirement: `${r.requirement.id} ${r.requirement.title}`,
-        area: r.requirement.category,
+        area: chapterLabel(r.requirement.category),
         applies: r.applicability.value === "provisional" ? cell("Provisional", "warn") : "Applies",
         criterion: criterionLabel(r.requirement.criterion),
         status: cell(
@@ -448,7 +452,7 @@ export function buildReport(kind, scope, data) {
   const titles = {
     programme: ["Programme compliance report", `All ${prows.length} stadiums`, "programme"],
     city: ["Host city compliance report", cityId && `${CITY[cityId].name} · ${prows.length} stadiums`, `city-${cityId}`],
-    area: ["Requirement area report", `${area} · all ${prows.length} stadiums`, `area-${area}`],
+    area: ["Chapter compliance report", `${chapterLabel(area)} · all ${prows.length} stadiums`, `chapter-${area}`],
   };
   const [title, subtitle, file] = titles[kind];
   return {

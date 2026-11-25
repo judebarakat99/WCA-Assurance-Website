@@ -4,6 +4,8 @@ import { assessmentKey, evaluate, seedAssessments } from "@/lib/domain/assessmen
 import { changeImpact, changedRecords } from "@/lib/domain/requirementChange.mjs";
 import { appliedChanges, scenarioById, setAppliedChanges } from "@/lib/domain/requirementVersions.mjs";
 import { sampleAssessments } from "@/lib/domain/sampleAssessments.mjs";
+import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
+import { FIFA_CATALOGUE, resolveForStadium } from "@/lib/domain/fifa-catalogue.mjs";
 import { notify } from "@/lib/store/state";
 
 const KEY = "wca-assessments-v1";
@@ -13,21 +15,33 @@ let records = null;
 
 const today = () => new Date().toISOString().slice(0, 10);
 
+// Requirements in the current catalogue. Stored records and applied changes for
+// checks that are no longer in it (an earlier catalogue) are dropped on load.
+const KNOWN = new Set(FIFA_CATALOGUE.requirements.map((r) => r.id));
+
 function load() {
   // Requirement versions first: record keys depend on them.
+  let changes = [];
   try {
-    setAppliedChanges(JSON.parse(localStorage.getItem(CHANGES_KEY) || "[]"));
-  } catch {
-    setAppliedChanges([]);
-  }
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (raw) {
-      records = JSON.parse(raw);
-      return;
-    }
+    changes = JSON.parse(localStorage.getItem(CHANGES_KEY) || "[]");
   } catch {}
-  records = seedAssessments();
+  const knownChanges = changes.filter((c) => KNOWN.has(c.requirementId));
+  setAppliedChanges(knownChanges);
+  let stored = null;
+  try {
+    stored = JSON.parse(localStorage.getItem(KEY) || "null");
+  } catch {}
+  if (!stored) {
+    records = seedAssessments();
+    return;
+  }
+  const kept = Object.entries(stored).filter(([, a]) => KNOWN.has(a.requirementId));
+  records = stored;
+  if (kept.length < Object.keys(stored).length || knownChanges.length < changes.length) {
+    // Keep what still applies; restore the register's declared capacities.
+    records = { ...seedAssessments(), ...Object.fromEntries(kept) };
+    save();
+  }
 }
 
 function save() {
@@ -63,8 +77,11 @@ function upsert(facilityId, requirement, change) {
 
 /** Record evidence against a requirement; numeric criteria are checked at once. */
 export function recordEvidence(facilityId, requirement, { file, value, note = "" }) {
+  // A threshold by match category is checked against this stadium's own.
+  const stadium = FACILITY_REGISTER.stadiums.find((x) => x.id === facilityId);
+  const criterion = stadium ? resolveForStadium(requirement, stadium).criterion : requirement.criterion;
   return upsert(facilityId, requirement, (a) => {
-    const check = evaluate(requirement.criterion, value);
+    const check = evaluate(criterion, value);
     return {
       ...a,
       status: "evidence-submitted",

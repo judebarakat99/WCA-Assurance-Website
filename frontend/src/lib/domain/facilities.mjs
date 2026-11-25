@@ -3,6 +3,7 @@
 // that applies to its highest match, and checks the declared capacity
 // against it. A declared check is not an assessment: evidence is still pending.
 import register from "../../../../data/facilities/register.json" with { type: "json" };
+import { resolveForStadium } from "@/lib/domain/fifa-catalogue.mjs";
 import { currentRequirement } from "@/lib/domain/requirementVersions.mjs";
 
 export const FACILITY_REGISTER = register;
@@ -22,22 +23,18 @@ export const STATUS_LABEL = {
   planned: "Planned",
 };
 
-// Capacity requirement by highest match (catalogue conditions F34-ST-CAP-01..03).
-const CAPACITY_REQUIREMENT = {
-  "opening-final": "F34-ST-CAP-03",
-  "semi-final": "F34-ST-CAP-02",
-  "third-place": "F34-ST-CAP-01",
-  "quarter-final": "F34-ST-CAP-01",
-  "round-of-16": "F34-ST-CAP-01",
-  "round-of-32": "F34-ST-CAP-01",
-};
+// Capacity (STA-0004) has a threshold per match category; the stadium's highest
+// match selects it (40,000 up to the quarter-final, 60,000 semi-final, 80,000
+// opening match and final).
+const CAPACITY_ID = "STA-0004";
 
 const requirementById = (id) => currentRequirement(id);
 const cityById = (id) => register.hostCities.find((c) => c.id === id);
 
-/** The capacity requirement that applies to a stadium, from its highest match. */
+/** The capacity requirement as it applies to a stadium, with the threshold for its highest match. */
 export function capacityRequirement(stadium) {
-  return requirementById(CAPACITY_REQUIREMENT[stadium.highestMatch]) || null;
+  const requirement = requirementById(CAPACITY_ID);
+  return requirement ? resolveForStadium(requirement, stadium) : null;
 }
 
 /**

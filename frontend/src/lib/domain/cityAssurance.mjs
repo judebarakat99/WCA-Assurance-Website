@@ -3,6 +3,7 @@
 // requirements in scope; coverage = anything assessed beyond unassessed.
 import { STATUS, stadiumRequirements } from "@/lib/domain/assessment.mjs";
 import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
+import { CHAPTERS } from "@/lib/domain/fifa-catalogue.mjs";
 
 const EMPTY = () => ({ inScope: 0, ...Object.fromEntries(Object.keys(STATUS).map((s) => [s, 0])) });
 
@@ -76,13 +77,8 @@ export function assuranceMap(records, category = null, year = null) {
   };
 }
 
-/** Categories present in the catalogue for stadiums, in display order. */
+/** Requirement chapters, in book order, as filters ("pillars"); id null is everything. */
 export const PILLARS = [
-  { id: null, label: "All requirements" },
-  { id: "Capacity", label: "Capacity" },
-  { id: "Pitch", label: "Pitch" },
-  { id: "Lighting", label: "Lighting" },
+  { id: null, label: "All requirements", short: "All", number: null },
+  ...CHAPTERS.map((c) => ({ id: c.name, label: c.name, short: c.short, number: c.id })),
 ];
-
-/** Dimensions the catalogue does not cover yet (shown disabled). */
-export const UPCOMING_PILLARS = ["Safety & security", "Sustainability", "Human rights", "Media & broadcast"];

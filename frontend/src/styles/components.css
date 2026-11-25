@@ -1189,6 +1189,15 @@ body.touring .ai-panel {
 }
 
 /* ---------- Facility assessments ---------- */
+.assess-table td:first-child {
+  min-width: 200px;
+}
+.assess-table td:nth-child(3) {
+  min-width: 150px;
+}
+.assess-table td:nth-child(4) .pill {
+  white-space: nowrap;
+}
 .assess-table tbody + tbody {
   border-top: 1px solid var(--line);
 }
@@ -1253,11 +1262,19 @@ main.wide {
 .arail button:disabled {
   opacity: 0.4;
 }
-.arail hr {
-  width: 36px;
-  border: 0;
-  border-top: 1px solid var(--line);
-  margin: 6px 0;
+.arail {
+  gap: 2px;
+}
+.arail button {
+  padding: 6px 2px;
+}
+.arail button b {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.arail button.on b {
+  color: var(--highlight);
 }
 .astage {
   position: relative;
@@ -2917,4 +2934,23 @@ a.pv-kpi:hover {
     margin: 0 -14px 8px;
     padding: 16px 14px;
   }
+}
+
+/* Requirements register (FifaLibrary) */
+.fifa-chapter-count {
+  align-items: flex-end;
+  text-align: right;
+  flex: none;
+}
+.fifa-reqs td {
+  vertical-align: top;
+}
+.fifa-reqs .pill {
+  white-space: nowrap;
+}
+.fifa-reqs td:nth-child(2) {
+  min-width: 180px;
+}
+.fifa-reqs td:nth-child(3) {
+  min-width: 260px;
 }
