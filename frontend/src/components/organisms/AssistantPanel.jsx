@@ -28,11 +28,11 @@ function Message({ m }) {
   );
 }
 
-// Documents come in through the Intake page; Nabd can search all of them.
+// Documents come in through the Evidence page; Nabd can search all of them.
 function DocumentsNote() {
   return (
     <p className="ai-reference">
-      Nabd can also answer from documents filed on the <Link href="/intake">Intake page</Link>.
+      Nabd can also answer from documents filed on the <Link href="/evidence">Evidence page</Link>.
     </p>
   );
 }

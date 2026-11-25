@@ -199,7 +199,7 @@ function Item({ item }) {
   );
 }
 
-// Progress claims the agent flagged, awaiting a reviewer (from the Intake page).
+// Progress claims the agent flagged, awaiting a reviewer (from the Evidence page).
 // They follow the city and due-year filters and show only under "Everything".
 function progressClaims(filters) {
   if (filters.status) return [];
@@ -239,7 +239,7 @@ function ProgressClaims({ claims }) {
               <div className="muted small">{c.summary}</div>
               <div>
                 <StatusPill tone={CHECK_STATUS[c.status].tone}>{CHECK_STATUS[c.status].label}</StatusPill>{" "}
-                <Link className="small" href={`/intake?stadium=${encodeURIComponent(c.stadium_id)}`}>
+                <Link className="small" href={`/evidence?tab=onfile&stadium=${encodeURIComponent(c.stadium_id)}`}>
                   View finding →
                 </Link>
               </div>

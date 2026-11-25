@@ -24,14 +24,13 @@ what was done: floodlighting is reported at 75% but its plan shows 40%.
 (60% complete). Uploading it supersedes rev C; the recalculated figure rises to
 58.4%, still overstated.
 
-"Load sample documents" on the Intake page files and checks the `preloaded`
+"Load sample data" on the map (or the Evidence page) files and checks the `preloaded`
 folders. Drag the `to-upload` and `revised` files onto the page during a demo.
 `expected.json` holds the figures the generator computed, used by the backend
 tests.
 
 `offline-readings.json` is what the backend pipeline reads from each sample
 file (its filing proposal and extracted figures), exported by
-`poetry run python -m scripts.export_offline_intake` from `backend/`. When the
-backend isn't running, the Intake page uses it as an **offline demo**: only
-these files can be added, the arithmetic runs in the browser with the same
-rules, and the page says it is offline. Re-export after regenerating samples.
+`poetry run python -m scripts.export_offline_intake` from `backend/`. The Evidence
+page uses these readings; the arithmetic runs in the browser with the same
+rules. Re-export after regenerating samples.

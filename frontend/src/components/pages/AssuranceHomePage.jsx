@@ -80,7 +80,7 @@ function AssuranceHome({ ui }) {
   const router = useRouter();
   const { city: selected, pillar, year, recenter, change, view, stadium } = ui.map;
   const records = getAssessments();
-  // Progress checks (Intake) feed the portfolio's schedule and issues.
+  // Progress checks (Evidence page) feed the portfolio's schedule and issues.
   useEffect(ensureIntake, []);
   // The view is mirrored in the address (?view=portfolio), so it survives a
   // reload and can be linked.

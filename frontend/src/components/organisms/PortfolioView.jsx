@@ -8,15 +8,24 @@ import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
 import { pct } from "@/lib/format";
 
 const SHOWN = 6; // exceptions shown before the rest collapse into a summary row
-const RISK_LABEL = { bad: "Critical", warn: "At risk", good: "On track", mute: "Not started" };
-const REGION = Object.fromEntries(FACILITY_REGISTER.hostCities.map((c) => [c.id, c.region]));
+const RISK_LABEL = {
+  bad: "Critical",
+  warn: "At risk",
+  good: "On track",
+  mute: "Not started",
+};
+const REGION = Object.fromEntries(
+  FACILITY_REGISTER.hostCities.map((c) => [c.id, c.region]),
+);
 
 function Kpi({ label, value, note, tone, href }) {
   const body = (
     <>
       <span className="pv-kpi-label">{label}</span>
       <b>{value}</b>
-      {note && <span className={`pv-kpi-note ${tone || ""}`.trim()}>{note}</span>}
+      {note && (
+        <span className={`pv-kpi-note ${tone || ""}`.trim()}>{note}</span>
+      )}
     </>
   );
   return href ? (
@@ -47,7 +56,11 @@ function Kpis({ kpis }) {
       <Kpi
         label="Critical issues"
         value={issues.total}
-        note={issues.awaiting ? `${issues.awaiting} awaiting review` : `${issues.nonCompliant} non-compliant`}
+        note={
+          issues.awaiting
+            ? `${issues.awaiting} awaiting review`
+            : `${issues.nonCompliant} non-compliant`
+        }
         tone={issues.total ? "bad" : "good"}
         href="/review"
       />
@@ -98,7 +111,9 @@ function Row({ r, selected, onSelect }) {
         {r.schedule.label}
         {r.overstated && <small className="bad">claim overstated</small>}
       </td>
-      <td className={`num ${r.issues.total ? (r.risk === "bad" ? "bad" : "warn") : "good"}`}>
+      <td
+        className={`num ${r.issues.total ? (r.risk === "bad" ? "bad" : "warn") : "good"}`}
+      >
         {r.issues.total}
         {issueNote.length > 0 && <small>{issueNote.join(" · ")}</small>}
       </td>
@@ -117,7 +132,11 @@ function Selected({ r, onShowOnMap }) {
       <span className="pv-eyebrow">Selected stadium</span>
       <h3>{r.name}</h3>
       <p className="pv-sel-figs">
-        <b>{r.readiness == null ? "Not reviewed" : `${pct(r.readiness)}% readiness`}</b>
+        <b>
+          {r.readiness == null
+            ? "Not reviewed"
+            : `${pct(r.readiness)}% readiness`}
+        </b>
         <span aria-hidden="true"> · </span>
         <b>{r.schedule.label}</b>
       </p>
@@ -126,9 +145,18 @@ function Selected({ r, onShowOnMap }) {
       </p>
       <div className="pv-sel-actions">
         <Link href={`/facilities/${r.id}`}>
-          {r.issues.total ? `${r.issues.total} issue${r.issues.total === 1 ? "" : "s"} → ` : ""}Open detail
+          {r.issues.total
+            ? `${r.issues.total} issue${r.issues.total === 1 ? "" : "s"} → `
+            : ""}
+          Open detail
         </Link>
-        {r.check && <Link href={`/intake?stadium=${encodeURIComponent(r.id)}`}>Progress finding</Link>}
+        {r.check && (
+          <Link
+            href={`/evidence?tab=onfile&stadium=${encodeURIComponent(r.id)}`}
+          >
+            Progress finding
+          </Link>
+        )}
         <button type="button" className="linkish" onClick={onShowOnMap}>
           Show on map
         </button>
@@ -142,7 +170,16 @@ function Selected({ r, onShowOnMap }) {
  * exceptions first, and map navigation. A row or a city pin selects; the
  * selected stadium links to its detail, its progress finding and the map.
  */
-export default function PortfolioView({ data, view, onView, city, onCity, stadium, onStadium, onShowOnMap }) {
+export default function PortfolioView({
+  data,
+  view,
+  onView,
+  city,
+  onCity,
+  stadium,
+  onStadium,
+  onShowOnMap,
+}) {
   const [all, setAll] = useState(false);
   const rows = city ? data.rows.filter((r) => r.cityId === city) : data.rows;
   const selected = rows.find((r) => r.id === stadium) || rows[0] || null;
@@ -156,7 +193,8 @@ export default function PortfolioView({ data, view, onView, city, onCity, stadiu
           <span className="pv-eyebrow">FIFA assurance · Saudi Arabia 2034</span>
           <h2>National programme status</h2>
           <p className="muted m0">
-            Portfolio health and exceptions at a glance, without opening each stadium. Select a stadium for its detail.
+            Portfolio health and exceptions at a glance, without opening each
+            stadium. Select a stadium for its detail.
           </p>
         </div>
         <ViewToggle view={view} onChange={onView} />
@@ -166,10 +204,16 @@ export default function PortfolioView({ data, view, onView, city, onCity, stadiu
         <section className="pv-card pv-table" aria-labelledby="pv-portfolio">
           <div className="pv-card-head">
             <h3 id="pv-portfolio">
-              {cityName ? `${cityName} · ${rows.length}-stadium portfolio` : `${data.rows.length}-stadium portfolio`}
+              {cityName
+                ? `${cityName} · ${rows.length}-stadium portfolio`
+                : `${data.rows.length}-stadium portfolio`}
             </h3>
             {city && (
-              <button type="button" className="linkish small" onClick={() => onCity(null)}>
+              <button
+                type="button"
+                className="linkish small"
+                onClick={() => onCity(null)}
+              >
                 All host cities
               </button>
             )}
@@ -187,7 +231,12 @@ export default function PortfolioView({ data, view, onView, city, onCity, stadiu
               </thead>
               <tbody>
                 {shown.map((r) => (
-                  <Row key={r.id} r={r} selected={r.id === selected?.id} onSelect={onStadium} />
+                  <Row
+                    key={r.id}
+                    r={r}
+                    selected={r.id === selected?.id}
+                    onSelect={onStadium}
+                  />
                 ))}
                 {!all && rest.length > 0 && (
                   <tr className="pv-summary" onClick={() => setAll(true)}>
@@ -207,8 +256,17 @@ export default function PortfolioView({ data, view, onView, city, onCity, stadiu
                       </span>
                     </td>
                     <td className="num muted">Portfolio summary</td>
-                    <td>{rest.filter((r) => r.risk === "bad" || r.risk === "warn").length} at risk</td>
-                    <td className="num">{rest.reduce((t, r) => t + r.issues.total, 0)}</td>
+                    <td>
+                      {
+                        rest.filter(
+                          (r) => r.risk === "bad" || r.risk === "warn",
+                        ).length
+                      }{" "}
+                      at risk
+                    </td>
+                    <td className="num">
+                      {rest.reduce((t, r) => t + r.issues.total, 0)}
+                    </td>
                     <td>Multiple stages</td>
                   </tr>
                 )}
@@ -216,9 +274,11 @@ export default function PortfolioView({ data, view, onView, city, onCity, stadiu
             </table>
           </div>
           <p className="pv-foot muted">
-            Readiness is the share of in-scope FIFA requirements a reviewer has accepted. Schedule is days behind the
-            contractor&apos;s detailed plans on Intake, at the report date. Issues are non-compliant requirements,
-            evidence failing its check and progress claims not supported.
+            Readiness is the share of in-scope FIFA requirements a reviewer has
+            accepted. Schedule is days behind the contractor&apos;s detailed
+            plans on Evidence, at the report date. Issues are non-compliant
+            requirements, evidence failing its check and progress claims not
+            supported.
           </p>
         </section>
         <div className="pv-side">
@@ -231,9 +291,15 @@ export default function PortfolioView({ data, view, onView, city, onCity, stadiu
               highlightCity={selected?.cityId}
               onSelectCity={onCity}
             />
-            <p className="small muted m0">Click a city to filter the portfolio, or a row to select its stadium.</p>
+            <p className="small muted m0">
+              Click a city to filter the portfolio, or a row to select its
+              stadium.
+            </p>
           </section>
-          <Selected r={selected} onShowOnMap={() => selected && onShowOnMap(selected)} />
+          <Selected
+            r={selected}
+            onShowOnMap={() => selected && onShowOnMap(selected)}
+          />
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 // National portfolio: one row per stadium combining requirement assurance
-// (assessments) with delivery progress (Intake progress checks), plus the
+// (assessments) with delivery progress (Evidence page progress checks), plus the
 // headline figures. Everything is derived from data the app already holds.
 import { assuranceMap } from "@/lib/domain/cityAssurance.mjs";
 import { scheduleSlipDays } from "@/lib/domain/progressCheck.mjs";
@@ -45,7 +45,7 @@ function schedule(check) {
 }
 
 /**
- * records: assessments; checks: Intake progress checks by stadium id;
+ * records: assessments; checks: progress checks by stadium id;
  * category: requirement area (null for all); now: the current year.
  */
 export function portfolio(records, checks = {}, category = null, now = new Date().getFullYear()) {

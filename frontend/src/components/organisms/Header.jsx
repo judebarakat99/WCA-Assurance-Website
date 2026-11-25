@@ -15,7 +15,7 @@ import { toast } from "@/lib/ui/toast";
 const TABS = [
   { href: "/", label: "Assurance map" },
   { href: "/review", label: "Review queue" },
-  { href: "/intake", label: "Intake" },
+  { href: "/evidence", label: "Evidence" },
   { href: "/reports", label: "Reports" },
   { href: "/compliance", label: "Requirements", also: ["/facilities"] },
 ];

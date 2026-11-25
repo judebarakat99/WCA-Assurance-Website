@@ -52,7 +52,7 @@ function Coverage({ a }) {
 }
 
 // Sample assessments for the map and queue, plus sample contractor documents
-// filed and checked on the Intake page.
+// filed and checked on the Evidence page.
 function loadSamples() {
   loadSampleAssessments();
   void loadSampleIntake();

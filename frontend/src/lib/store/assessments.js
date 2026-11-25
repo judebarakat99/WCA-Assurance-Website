@@ -6,6 +6,8 @@ import { appliedChanges, scenarioById, setAppliedChanges } from "@/lib/domain/re
 import { sampleAssessments } from "@/lib/domain/sampleAssessments.mjs";
 import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
 import { FIFA_CATALOGUE, resolveForStadium } from "@/lib/domain/fifa-catalogue.mjs";
+import { CHAPTER_OWNER } from "@/lib/domain/evidenceReader.mjs";
+import { addAlerts } from "@/lib/store/alerts";
 import { notify } from "@/lib/store/state";
 
 const KEY = "wca-assessments-v1";
@@ -150,6 +152,21 @@ export function applyRequirementChange(scenarioId) {
     },
   ]);
   save();
+  // The chapter owner is alerted about every stadium the change reopens.
+  const reopened = impact.rows.filter((r) => r.outcome === "reopened");
+  const owner = CHAPTER_OWNER[impact.after.chapter];
+  addAlerts(
+    reopened.map((r) => ({
+      source: "change",
+      severity: "High",
+      owner,
+      stadiumId: r.stadium.id,
+      stadiumName: r.stadium.name,
+      requirementId: impact.after.id,
+      title: impact.after.title,
+      message: `${scenario.title}: ${impact.after.id} ${impact.after.title} moved to version ${impact.after.version}, and the evidence on record at ${r.stadium.name} no longer meets it.`,
+    })),
+  );
   notify();
   return impact;
 }

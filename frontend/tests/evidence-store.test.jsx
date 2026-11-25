@@ -33,14 +33,14 @@ test("planned progress builds up evenly", () => {
   assert.equal(plannedFraction("2026-11-01", "2026-11-30", "2026-11-30"), 1);
 });
 
-test("offline seed matches the backend's expected results", () => {
+test("seed matches the backend's expected results", () => {
   const state = localSeed();
   assert.equal(state.documents.length, 9);
   for (const id of ["aramco", "prince-faisal-bin-fahad"]) {
     const check = state.checks[id];
     assert.equal(check.recalculated, expected.stadiums[id].overall_actual, id);
     assert.equal(check.planned, expected.stadiums[id].overall_planned, id);
-    assert.ok(!check.stale && check.offline);
+    assert.ok(!check.stale);
   }
   assert.equal(state.checks.aramco.status, "supported");
   assert.equal(state.checks["prince-faisal-bin-fahad"].status, "behind-plan");
@@ -69,6 +69,8 @@ test("a missing plan is reported and only sample files are accepted", () => {
   for (const f of kfsc().filter((x) => !x.name.includes("broadcast"))) fileAsProposed(localUpload(asFile(f)));
   const check = localCheck("king-fahad-sports-city");
   assert.equal(check.packages.find((p) => p.element === "broadcast-media").status, "evidence-missing");
-  assert.throws(() => localUpload({ name: "other.pdf", size: 10 }), /only the sample documents/);
+  const unknown = localUpload({ name: "Digital & Technology BL.pdf", size: 10 });
+  assert.equal(unknown.reading.readable, false); // identified from the file name only
+  assert.equal(unknown.kind, "other");
   assert.throws(() => localCheck("aramco"), /No progress report is filed/);
 });

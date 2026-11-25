@@ -34,9 +34,12 @@ export default function IntakeLibrary() {
     <section className="comp-block" aria-labelledby="intake-library">
       <div className="comp-block-head">
         <div>
-          <span className="eyebrow">3 · Library</span>
+          <span className="eyebrow">Documents</span>
           <h2 id="intake-library">What&apos;s on file</h2>
-          <p>Only the newest revision of each document counts in checks; older ones are kept.</p>
+          <p>
+            Evidence is recorded against the requirements it states values for. Only the newest revision of a progress
+            report or plan counts in checks; older ones are kept.
+          </p>
         </div>
       </div>
       {!stadiums.length && <p className="muted small">Nothing filed yet.</p>}
@@ -44,6 +47,7 @@ export default function IntakeLibrary() {
         {stadiums.map((s) => {
           const docs = filed.filter((d) => d.stadium_id === s.id);
           const reports = docs.filter((d) => d.kind === "progress-report");
+          const evidence = docs.filter((d) => d.kind === "evidence");
           const others = docs.filter((d) => d.kind === "other");
           const byElement = intake.elements
             .map((e) => [e, docs.filter((d) => d.kind === "detailed-plan" && d.element === e.id)])
@@ -54,6 +58,24 @@ export default function IntakeLibrary() {
               <h3>
                 {s.name} <span className="muted small">{s.city}</span>
               </h3>
+              {evidence.length > 0 && (
+                <>
+                  <h4>Evidence</h4>
+                  <ul>
+                    {evidence.map((d) => (
+                      <li key={d.document_id}>
+                        <span className="intake-name">{d.name}</span>
+                        <span className="muted small">
+                          {d.evidenceType} ·{" "}
+                          {d.reading?.matches?.length
+                            ? d.reading.matches.map((m) => m.requirementId).join(", ")
+                            : "no requirement matched"}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
               <h4>Progress report</h4>
               {reports.length ? (
                 <ul>
@@ -61,10 +83,12 @@ export default function IntakeLibrary() {
                     <Doc key={d.document_id} d={d} newer={reports.find((x) => !x.superseded)} />
                   ))}
                 </ul>
-              ) : (
+              ) : byElement.length ? (
                 <p className="small">
                   <StatusPill tone="warn">No progress report on file</StatusPill>
                 </p>
+              ) : (
+                <p className="muted small">None on file.</p>
               )}
               {byElement.map(([e, list]) => (
                 <div key={e.id}>

@@ -25,7 +25,7 @@ export async function assistantRequest(path, options = {}) {
       const offline = new Error(
         "Cannot reach the backend. Start it on port 8000 (see backend/README.md).",
       );
-      offline.offline = true; // lets the Intake page fall back to its offline demo
+      offline.offline = true;
       throw offline;
     }
     throw error;

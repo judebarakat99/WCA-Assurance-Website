@@ -220,7 +220,7 @@ function claimsTable(prows) {
 
 function about(date, sample, extra = []) {
   return [
-    `Prepared by the ${APP_NAME} on ${longDate(date)}. Requirement figures come from the assessment register held in the application; progress figures come from contractor documents filed on the Intake page and checked against their detailed plans.`,
+    `Prepared by the ${APP_NAME} on ${longDate(date)}. Requirement figures come from the assessment register held in the application; progress figures come from contractor documents filed on the Evidence page and checked against their detailed plans.`,
     "Assured means a reviewer has accepted evidence that the requirement is met. Non-compliant means a reviewer found the evidence does not meet it. Awaiting review means evidence has been submitted and no reviewer has decided yet. Not assessed covers requirements with no evidence (including capacities only declared in the register).",
     "Risk: Critical for an overstated progress claim, more than 30 days behind plan, or a non-compliance on a stadium due within two years; At risk for any other non-compliance, slip or failing evidence; On track otherwise. Schedule is days behind the contractor's detailed plans at the report date (earned schedule).",
     ...extra,

@@ -1,7 +1,6 @@
-// Progress verification arithmetic and result, mirroring the backend
-// (backend/app/progress_calc.py and the result assembly in app/intake.py).
-// Used by the offline demo, which reads bundled sample readings instead of
-// asking the model; the backend remains the reference.
+// Progress verification arithmetic and result: recalculates a stadium's
+// progress from the readings of its contractor's detailed plans and compares it
+// with the progress report's claim. Runs in the browser.
 
 export const TOLERANCE = 5;
 
@@ -154,7 +153,6 @@ export function buildCheck(stadium, report, plans) {
     report: { document_id: report.document.document_id, name: report.document.name, page: r.overall_page, quote: r.overall_quote },
     packages,
     checked_at: new Date().toISOString().slice(0, 19) + "+00:00",
-    offline: true,
   };
   step(
     "Compared with the claim",
@@ -163,7 +161,7 @@ export function buildCheck(stadium, report, plans) {
   );
   result.summary = summary(result);
   result.summary_checked = true;
-  step("Wrote the finding", "Offline demo: a plain summary from the calculation (no model call).");
+  step("Wrote the finding", "Every figure in the finding comes from the calculation.");
   result.steps = steps;
   return result;
 }

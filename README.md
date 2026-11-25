@@ -13,9 +13,10 @@ npm run dev
 ```
 
 Open http://localhost:3000. No environment variables are required. Nabd needs
-the backend; without it the Intake page runs as a labelled offline demo of the
-sample documents (see `data/progress/README.md`). "Load sample data" on the map
-loads sample assessments and files and checks the sample documents.
+the backend; the Evidence page runs entirely in the browser on the bundled
+sample documents (see `data/progress/README.md` and `data/evidence/README.md`).
+"Load sample data" on the map loads sample assessments and files and checks the
+sample documents.
 
 ## Check and build
 
@@ -48,7 +49,8 @@ thin.
 - `src/app/`: App Router routes only — `page.jsx` files with metadata, plus
   `layout.jsx`. `/` is the assurance map, with a toggle to the national
   portfolio (`/?view=portfolio`), `/review` the review queue,
-  `/intake` document intake and progress verification, `/reports` report
+  `/evidence` contractor documents (evidence checked against the register,
+  progress verification and owner alerts), `/reports` report
   export (Word, Excel, PDF), `/compliance` the requirements (FIFA source library and facility register)
   and `/facilities/[facilityId]` a stadium's assessments.
 - `src/components/atoms/` → `molecules/` → `organisms/` → `templates/` →
@@ -69,8 +71,10 @@ thin.
 - `src/lib/tour/`: guided demo steps, player, voice selection and highlight.
 - `src/lib/assistant/`: Nabd chat state, API client and the assurance snapshot
   sent with each question.
-- `src/lib/store/intake.js`: intake documents and progress checks, loaded from
-  the backend.
+- `src/lib/store/intake.js` (with `intakeLocal.js`): documents, progress checks
+  and filing, all in the browser; `alerts.js`: owner alerts;
+  `src/lib/domain/evidenceReader.mjs` reads a document and checks it against
+  the register.
 - `src/lib/domain/report.mjs` builds one format-neutral report model; the preview
   and `src/lib/export/` (docx, exceljs, jsPDF + AutoTable, loaded on first export)
   render it, entirely in the browser.

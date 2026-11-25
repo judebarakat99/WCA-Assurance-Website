@@ -5,19 +5,22 @@ import { Suspense, useEffect } from "react";
 import StatusPill from "@/components/atoms/StatusPill";
 import PageHead from "@/components/molecules/PageHead";
 import AgentRun from "@/components/organisms/AgentRun";
-import IntakeIncoming from "@/components/organisms/IntakeIncoming";
+import EvidenceAlerts from "@/components/organisms/EvidenceAlerts";
+import EvidenceInbox, { DropZone, Uploads } from "@/components/organisms/EvidenceInbox";
 import IntakeLibrary from "@/components/organisms/IntakeLibrary";
 import ProgressFinding from "@/components/organisms/ProgressFinding";
 import PageTemplate from "@/components/templates/PageTemplate";
+import { openAlerts } from "@/lib/store/alerts";
 import {
   CHECK_STATUS,
   checkableStadiums,
   ensureIntake,
+  filedDocuments,
   intake,
-  refreshIntake,
+  proposedDocuments,
   runAllChecks,
   runCheck,
-  seedIntake,
+  uploadFiles,
 } from "@/lib/store/intake";
 
 function CheckCard({ stadium, selected, onOpen }) {
@@ -93,7 +96,7 @@ function Verification() {
   const stadiums = checkableStadiums();
   const anyRunning = Object.keys(intake.running).length > 0;
   const open = (id) => {
-    router.replace(`${path}?stadium=${encodeURIComponent(id)}`, { scroll: false });
+    router.replace(`${path}?tab=onfile&stadium=${encodeURIComponent(id)}`, { scroll: false });
     setTimeout(() => document.getElementById("finding")?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
   };
   const check = selected && intake.checks[selected];
@@ -102,7 +105,7 @@ function Verification() {
     <section className="comp-block" aria-labelledby="intake-verify">
       <div className="comp-block-head">
         <div>
-          <span className="eyebrow">2 · Verification</span>
+          <span className="eyebrow">Progress claims</span>
           <h2 id="intake-verify">Claimed against recalculated</h2>
           <p>
             The agent reads each stadium&apos;s progress report and detailed plans and checks every figure against the
@@ -116,7 +119,7 @@ function Verification() {
           </button>
         )}
       </div>
-      {!stadiums.length && <p className="muted small">File a progress report to check a stadium.</p>}
+      {!stadiums.length && <p className="muted small">Confirm a progress report to check a stadium&apos;s claim.</p>}
       <div className="pc-grid">
         {stadiums.map((s) => (
           <CheckCard key={s.id} stadium={s} selected={s.id === selected} onOpen={open} />
@@ -127,65 +130,63 @@ function Verification() {
   );
 }
 
-function Intake() {
+const TABS = [
+  ["confirm", "To confirm"],
+  ["onfile", "On file"],
+  ["alerts", "Alerts"],
+];
+
+function Evidence() {
   useEffect(ensureIntake, []);
-  const empty = intake.loaded && !intake.documents.length;
+  const params = useSearchParams();
+  const router = useRouter();
+  const path = usePathname();
+  const tab = params.get("tab") || (params.get("stadium") ? "onfile" : "confirm");
+  const go = (t) => router.replace(t === "confirm" ? path : `${path}?tab=${t}`, { scroll: false });
+  const counts = { confirm: proposedDocuments().length, onfile: filedDocuments().length, alerts: openAlerts().length };
   return (
     <>
       <PageHead
-        chip="Intake · contractor documents"
-        title="Document intake"
+        chip="Evidence · contractor documents"
+        title="Evidence"
         wideLead
-        lead="Contractors' progress reports claim how far each stadium has come; their detailed plans show the work behind the claim. The agent sorts what comes in, recalculates progress from the plans and flags claims the evidence does not support. A person files every document and decides on every finding."
+        lead="Add a contractor's document. The agent reads it, checks it against the FIFA requirements in the register or against the plans, and shows what would change. Nothing is recorded until you confirm."
       />
-      {/* {intake.mode === "offline" && intake.loaded && (
-        <div className="block intake-alert intake-offline" role="status">
-          <StatusPill tone="info">Offline demo</StatusPill>
-          <span className="muted small">
-            The backend isn&apos;t running, so the sample documents in <span className="mono">data/progress</span> are
-            read from bundled readings of them instead of by the model, and only those files can be added. Filing,
-            checks and decisions work the same way and are kept in this browser.
-          </span>
-        </div>
-      )} */}
-      {intake.error && (
-        <div className="block intake-alert" role="alert">
-          <b>{intake.error}</b>{" "}
-          <button type="button" className="linkish" onClick={refreshIntake}>
-            Try again
+      <DropZone
+        onFiles={(files) => {
+          if (tab !== "confirm") go("confirm");
+          void uploadFiles(files);
+        }}
+      />
+      <Uploads />
+      <div className="ev-tabs" role="tablist" aria-label="Evidence">
+        {TABS.map(([id, label]) => (
+          <button key={id} type="button" role="tab" aria-selected={tab === id} className={tab === id ? "on" : undefined} onClick={() => go(id)}>
+            {label} <em>{counts[id]}</em>
           </button>
-        </div>
-      )}
-      {empty && (
-        <div className="block intake-alert">
-          <b>No documents yet.</b>{" "}
-          <span className="muted small">
-            Load the sample documents for Aramco and Prince Faisal bin Fahad (filed and checked
-            {intake.mode === "online" ? "; about half a minute" : ""}), or drop your own below.
-          </span>{" "}
-          <button type="button" className="primary" disabled={intake.seeding} onClick={seedIntake}>
-            {intake.seeding ? "Loading and checking…" : "Load sample documents"}
-          </button>
-        </div>
-      )}
-      {intake.loaded && (
-        <>
-          <IntakeIncoming />
-          <Verification />
-          <IntakeLibrary />
-        </>
-      )}
-      {!intake.loaded && !intake.error && <p className="muted">Loading…</p>}
+        ))}
+      </div>
+      {intake.loaded && tab === "confirm" && <EvidenceInbox />}
+      {intake.loaded && tab === "onfile" &&
+        (filedDocuments().length ? (
+          <>
+            <Verification />
+            <IntakeLibrary />
+          </>
+        ) : (
+          <p className="muted small">Nothing on file yet. Documents you confirm appear here.</p>
+        ))}
+      {tab === "alerts" && <EvidenceAlerts />}
     </>
   );
 }
 
-export default function IntakePage() {
+export default function EvidencePage() {
   return (
-    <PageTemplate label="Document intake">
+    <PageTemplate label="Evidence">
       {() => (
         <Suspense>
-          <Intake />
+          <Evidence />
         </Suspense>
       )}
     </PageTemplate>
