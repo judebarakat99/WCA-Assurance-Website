@@ -1,0 +1,61 @@
+﻿stadium_id,party_id,party,role,days_vs_due,missing,history
+king-fahad-sports-city,king-fahad-sports-city:contractor,Najd Builders JV,contractor,,,OT|LT|MS
+king-fahad-sports-city,king-fahad-sports-city:pmc,Summit PM Consultants,pmc,-4,,OT|OT|OT
+king-fahad-sports-city,king-fahad-sports-city:engineering,Vertex Engineering,engineering,-1,,OT|OT|LT
+king-fahad-sports-city,king-fahad-sports-city:owner,King Fahad stadium owner,owner,-2,,OT|OT|OT
+aramco,aramco:contractor,Sahara Stadium Builders,contractor,,,OT|LT|MS
+aramco,aramco:pmc,Horizon Programme Management,pmc,,,OT|OT|OT
+aramco,aramco:engineering,Vertex Engineering,engineering,-3,,OT|OT|OT
+aramco,aramco:owner,Aramco stadium owner,owner,-2,,OT|OT|OT
+prince-faisal-bin-fahad,prince-faisal-bin-fahad:contractor,Tuwaiq Construction,contractor,,,OT|LT|MS
+prince-faisal-bin-fahad,prince-faisal-bin-fahad:pmc,Summit PM Consultants,pmc,19,,OT|OT|OT
+prince-faisal-bin-fahad,prince-faisal-bin-fahad:engineering,Vertex Engineering,engineering,,,OT|OT|OT
+prince-faisal-bin-fahad,prince-faisal-bin-fahad:owner,Prince Faisal bin Fahad stadium owner,owner,-4,,MS|OT|OT
+jeddah-central-development,jeddah-central-development:contractor,Red Sea Contracting,contractor,-3,,OT|OT|MS
+jeddah-central-development,jeddah-central-development:pmc,Summit PM Consultants,pmc,-3,Risk register|Progress verification,OT|MS|OT
+jeddah-central-development,jeddah-central-development:engineering,Dune Engineering Consultants,engineering,-4,,LT|OT|OT
+jeddah-central-development,jeddah-central-development:owner,Jeddah Central Development stadium owner,owner,-1,,OT|OT|OT
+king-salman-international,king-salman-international:contractor,Dunes Civil and Structures,contractor,-3,,LT|MS|OT
+king-salman-international,king-salman-international:pmc,Summit PM Consultants,pmc,,,OT|OT|LT
+king-salman-international,king-salman-international:engineering,Pillar Design Studio,engineering,-1,Drawing register,OT|OT|OT
+king-salman-international,king-salman-international:owner,King Salman International stadium owner,owner,3,Funding and approvals,OT|OT|LT
+prince-mohammed-bin-salman,prince-mohammed-bin-salman:contractor,Najd Builders JV,contractor,-4,,OT|OT|OT
+prince-mohammed-bin-salman,prince-mohammed-bin-salman:pmc,Meridian Project Controls,pmc,-1,,OT|OT|OT
+prince-mohammed-bin-salman,prince-mohammed-bin-salman:engineering,Dune Engineering Consultants,engineering,-3,,OT|OT|OT
+prince-mohammed-bin-salman,prince-mohammed-bin-salman:owner,Prince Mohammed bin Salman stadium owner,owner,0,,OT|OT|OT
+new-murabba,new-murabba:contractor,Hijaz Structural Group,contractor,5,,OT|OT|OT
+new-murabba,new-murabba:pmc,Meridian Project Controls,pmc,0,,OT|LT|OT
+new-murabba,new-murabba:engineering,Vertex Engineering,engineering,-4,,OT|OT|OT
+new-murabba,new-murabba:owner,New Murabba stadium owner,owner,0,,OT|OT|OT
+roshn,roshn:contractor,Gulf Arena Contracting,contractor,4,,OT|OT|OT
+roshn,roshn:pmc,Falcon Delivery Partners,pmc,13,Milestone forecast,OT|OT|OT
+roshn,roshn:engineering,Oasis Structural Design,engineering,-2,,MS|OT|OT
+roshn,roshn:owner,ROSHN stadium owner,owner,-2,,OT|OT|OT
+south-riyadh,south-riyadh:contractor,Hijaz Structural Group,contractor,-1,,OT|OT|OT
+south-riyadh,south-riyadh:pmc,Meridian Project Controls,pmc,-4,,OT|MS|OT
+south-riyadh,south-riyadh:engineering,Pillar Design Studio,engineering,-1,FIFA requirement mapping|Design change log,OT|OT|OT
+south-riyadh,south-riyadh:owner,South Riyadh stadium owner,owner,-4,,OT|MS|OT
+king-saud-university,king-saud-university:contractor,Gulf Arena Contracting,contractor,-1,,OT|LT|OT
+king-saud-university,king-saud-university:pmc,Atlas Project Management,pmc,-4,,LT|OT|LT
+king-saud-university,king-saud-university:engineering,Compass Technical Design,engineering,0,,LT|OT|OT
+king-saud-university,king-saud-university:owner,King Saud University stadium owner,owner,-3,,OT|OT|OT
+king-abdullah-sports-city,king-abdullah-sports-city:contractor,Sahara Stadium Builders,contractor,-3,,OT|OT|OT
+king-abdullah-sports-city,king-abdullah-sports-city:pmc,Atlas Project Management,pmc,-3,,OT|OT|OT
+king-abdullah-sports-city,king-abdullah-sports-city:engineering,Dune Engineering Consultants,engineering,-1,,MS|LT|OT
+king-abdullah-sports-city,king-abdullah-sports-city:owner,King Abdullah stadium owner,owner,,,OT|OT|MS
+qiddiya-coast,qiddiya-coast:contractor,Hijaz Structural Group,contractor,-1,Risk register,OT|OT|OT
+qiddiya-coast,qiddiya-coast:pmc,Meridian Project Controls,pmc,0,,OT|OT|OT
+qiddiya-coast,qiddiya-coast:engineering,Dune Engineering Consultants,engineering,-1,,OT|OT|OT
+qiddiya-coast,qiddiya-coast:owner,Qiddiya Coast stadium owner,owner,-3,Land and permits,OT|OT|OT
+king-abdullah-economic-city,king-abdullah-economic-city:contractor,Najd Builders JV,contractor,-1,,OT|OT|MS
+king-abdullah-economic-city,king-abdullah-economic-city:pmc,Atlas Project Management,pmc,14,,OT|OT|OT
+king-abdullah-economic-city,king-abdullah-economic-city:engineering,Pillar Design Studio,engineering,-3,,OT|MS|OT
+king-abdullah-economic-city,king-abdullah-economic-city:owner,King Abdullah Economic City stadium owner,owner,-3,,OT|OT|MS
+king-khalid-university,king-khalid-university:contractor,Dunes Civil and Structures,contractor,,,OT|LT|OT
+king-khalid-university,king-khalid-university:pmc,Meridian Project Controls,pmc,-4,,OT|OT|OT
+king-khalid-university,king-khalid-university:engineering,Pillar Design Studio,engineering,-1,,OT|OT|LT
+king-khalid-university,king-khalid-university:owner,King Khalid University stadium owner,owner,0,Funding and approvals,OT|LT|LT
+neom,neom:contractor,Khalij Projects JV,contractor,,,OT|OT|OT
+neom,neom:pmc,Meridian Project Controls,pmc,0,Cost and change control,OT|OT|OT
+neom,neom:engineering,Vertex Engineering,engineering,-1,Design status,OT|LT|OT
+neom,neom:owner,NEOM stadium owner,owner,0,,OT|OT|LT

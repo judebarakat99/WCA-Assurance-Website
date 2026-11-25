@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "note": "Hypothetical requirement changes for demonstrating change impact. None of these has been announced by FIFA; each changes one criterion of a catalogue requirement so its effect on existing evidence can be shown.",
+  "scenarios": [
+    {
+      "id": "CHG-LUX-2000",
+      "requirementId": "FL-A-EV-AVG",
+      "title": "Brighter pitch for 8K broadcast",
+      "summary": "Average vertical illuminance towards the fixed cameras rises from above 1,500 lux to above 2,000 lux.",
+      "criterion": { "operator": "gt", "value": 2000, "unit": "lux" }
+    },
+    {
+      "id": "CHG-UNIFORMITY",
+      "requirementId": "FL-A-EV-U1",
+      "title": "More even vertical lighting",
+      "summary": "Vertical uniformity U1 tightens from above 0.5 to above 0.6.",
+      "criterion": { "operator": "gt", "value": 0.6, "unit": "ratio" }
+    },
+    {
+      "id": "CHG-SEMI-65K",
+      "requirementId": "F34-ST-CAP-02",
+      "title": "Larger semi-final stadiums",
+      "summary": "Seating for semi-final venues rises from at least 60,000 to at least 65,000.",
+      "criterion": { "operator": "min", "value": 65000, "unit": "seats" }
+    }
+  ]
+}

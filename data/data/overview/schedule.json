@@ -1,0 +1,10 @@
+{
+  "asOf": "2026-11-24",
+  "note": "Forecast slip, in days, of each stadium's next gate against its planned date. These are working figures for the demonstration, not the programme schedule: replace them with the real forecast. A stadium that is not listed has no forecast slip. A delay logged on the 3D view's Critical areas tab adds its days to the stadium's forecast (see src/lib/overview/schedule.mjs).",
+  "slipDays": {
+    "aramco": 35,
+    "king-fahad-sports-city": 12,
+    "jeddah-central-development": 48,
+    "prince-faisal-bin-fahad": 21
+  }
+}

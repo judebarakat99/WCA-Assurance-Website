@@ -1,0 +1,163 @@
+{
+  "as_of": "2026-11-15",
+  "stadiums": {
+    "king-fahad-sports-city": {
+      "claimed": 70,
+      "report": "kfsc-progress-report-2026-11.pdf",
+      "packages": [
+        {
+          "element": "pitch-turf",
+          "budget": 40,
+          "claimed": 85,
+          "file": "kfsc-pitch-turf-plan-rev-C.pdf",
+          "planned": 85.0,
+          "actual": 80.0,
+          "weight_total": 100,
+          "activities_done": 7,
+          "activities": 10
+        },
+        {
+          "element": "floodlighting",
+          "budget": 95,
+          "claimed": 75,
+          "file": "kfsc-floodlighting-plan-rev-C.pdf",
+          "planned": 69.9,
+          "actual": 40.0,
+          "weight_total": 100,
+          "activities_done": 4,
+          "activities": 10
+        },
+        {
+          "element": "seating-stands",
+          "budget": 120,
+          "claimed": 65,
+          "file": "kfsc-seating-stands-plan-rev-B.pdf",
+          "planned": 68.0,
+          "actual": 55.0,
+          "weight_total": 100,
+          "activities_done": 5,
+          "activities": 10
+        },
+        {
+          "element": "broadcast-media",
+          "budget": 45,
+          "claimed": 60,
+          "file": "kfsc-broadcast-media-plan-rev-B.pdf",
+          "planned": 60.0,
+          "actual": 45.0,
+          "weight_total": 100,
+          "activities_done": 3,
+          "activities": 8
+        }
+      ],
+      "overall_planned": 69.7,
+      "overall_actual": 52.1,
+      "overall_budget": 300
+    },
+    "aramco": {
+      "claimed": 88,
+      "report": "ars-progress-report-2026-11.pdf",
+      "packages": [
+        {
+          "element": "pitch-turf",
+          "budget": 35,
+          "claimed": 95,
+          "file": "ars-pitch-turf-plan-rev-4.pdf",
+          "planned": 95.1,
+          "actual": 95.0,
+          "weight_total": 100,
+          "activities_done": 9,
+          "activities": 10
+        },
+        {
+          "element": "floodlighting",
+          "budget": 80,
+          "claimed": 90,
+          "file": "ars-floodlighting-plan-rev-3.pdf",
+          "planned": 90.1,
+          "actual": 88.0,
+          "weight_total": 100,
+          "activities_done": 8,
+          "activities": 10
+        },
+        {
+          "element": "seating-stands",
+          "budget": 140,
+          "claimed": 86,
+          "file": "ars-seating-stands-plan-rev-5.pdf",
+          "planned": 88.2,
+          "actual": 86.0,
+          "weight_total": 100,
+          "activities_done": 8,
+          "activities": 10
+        },
+        {
+          "element": "broadcast-media",
+          "budget": 40,
+          "claimed": 82,
+          "file": "ars-broadcast-media-plan-rev-2.pdf",
+          "planned": 81.9,
+          "actual": 80.0,
+          "weight_total": 100,
+          "activities_done": 6,
+          "activities": 8
+        }
+      ],
+      "overall_planned": 88.7,
+      "overall_actual": 86.8,
+      "overall_budget": 295
+    },
+    "prince-faisal-bin-fahad": {
+      "claimed": 58,
+      "report": "pfbf-progress-report-2026-11.pdf",
+      "packages": [
+        {
+          "element": "pitch-turf",
+          "budget": 30,
+          "claimed": 40,
+          "file": "pfbf-pitch-turf-plan-rev-B.pdf",
+          "planned": 55.0,
+          "actual": 40.0,
+          "weight_total": 100,
+          "activities_done": 4,
+          "activities": 10
+        },
+        {
+          "element": "floodlighting",
+          "budget": 70,
+          "claimed": 55,
+          "file": "pfbf-floodlighting-plan-rev-B.pdf",
+          "planned": 69.9,
+          "actual": 55.1,
+          "weight_total": 100,
+          "activities_done": 5,
+          "activities": 10
+        },
+        {
+          "element": "seating-stands",
+          "budget": 150,
+          "claimed": 62,
+          "file": "pfbf-seating-stands-plan-rev-C.pdf",
+          "planned": 74.9,
+          "actual": 62.0,
+          "weight_total": 100,
+          "activities_done": 5,
+          "activities": 10
+        }
+      ],
+      "overall_planned": 71.1,
+      "overall_actual": 57.4,
+      "overall_budget": 250
+    }
+  },
+  "revised": {
+    "stadium": "king-fahad-sports-city",
+    "element": "floodlighting",
+    "file": "kfsc-floodlighting-plan-rev-D.pdf",
+    "planned": 69.9,
+    "actual": 59.9,
+    "weight_total": 100,
+    "activities_done": 6,
+    "activities": 10
+  }
+}
