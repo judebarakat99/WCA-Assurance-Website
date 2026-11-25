@@ -16,6 +16,7 @@ const TABS = [
   { href: "/", label: "Assurance map" },
   { href: "/review", label: "Review queue" },
   { href: "/intake", label: "Intake" },
+  { href: "/reports", label: "Reports" },
   { href: "/compliance", label: "Requirements", also: ["/facilities"] },
 ];
 

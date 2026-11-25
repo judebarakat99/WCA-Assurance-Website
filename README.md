@@ -48,7 +48,8 @@ thin.
 - `src/app/`: App Router routes only — `page.jsx` files with metadata, plus
   `layout.jsx`. `/` is the assurance map, with a toggle to the national
   portfolio (`/?view=portfolio`), `/review` the review queue,
-  `/intake` document intake and progress verification, `/compliance` the requirements (FIFA source library and facility register)
+  `/intake` document intake and progress verification, `/reports` report
+  export (Word, Excel, PDF), `/compliance` the requirements (FIFA source library and facility register)
   and `/facilities/[facilityId]` a stadium's assessments.
 - `src/components/atoms/` → `molecules/` → `organisms/` → `templates/` →
   `pages/`: React components from smallest to a whole screen. A route renders
@@ -70,6 +71,9 @@ thin.
   sent with each question.
 - `src/lib/store/intake.js`: intake documents and progress checks, loaded from
   the backend.
+- `src/lib/domain/report.mjs` builds one format-neutral report model; the preview
+  and `src/lib/export/` (docx, exceljs, jsPDF + AutoTable, loaded on first export)
+  render it, entirely in the browser.
 - `src/lib/runtime.js`: view-key routing for the tour.
 - `src/styles/`: `tokens.css` (Saudi 2034 brand, light and dark), `base.css`
   (elements, layout, controls) and `components.css` (component styles; class
