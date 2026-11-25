@@ -5,6 +5,7 @@
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import { columnsFor, rowsFor } from "@/lib/reports/model.mjs";
 import { num } from "@/lib/reports/text.mjs";
+import { publicAssetUrl } from "@/lib/assets.mjs";
 
 const PAGE = [841.89, 595.28];
 const M = 36;
@@ -16,6 +17,8 @@ const LINE = hex("D6DAE8");
 const ZEBRA = hex("F6F7FB");
 const WHITE = rgb(1, 1, 1);
 const TONE = { good: ["E2F2E3", "2F7D37"], warn: ["FDEEDB", "B45F06"], bad: ["FDE4E0", "C9301E"], info: ["E6E8F3", "2E3569"], mute: ["ECEEF6", "5A5F80"] };
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const FIFA_COVER = publicAssetUrl("/reports/fifa-compliance-report-cover.png", BASE);
 
 const SWAP = { "≥": ">=", "≤": "<=", "→": "to", "−": "-", "‑": "-", "\u00a0": " ", "\u202f": " ", "‐": "-", "✓": "", "•": "-" };
 
@@ -99,7 +102,7 @@ function titleBlock(p, report) {
 }
 
 async function fifaCover(p, report) {
-  const response = await fetch("/reports/fifa-compliance-report-cover.png");
+  const response = await fetch(FIFA_COVER);
   if (!response.ok) throw new Error("The FIFA cover image could not be loaded.");
   const coverImage = await p.doc.embedPng(await response.arrayBuffer());
   const cover = p.doc.addPage([coverImage.width, coverImage.height]);

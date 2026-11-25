@@ -4,9 +4,12 @@ import { useState } from "react";
 import { rowsFor } from "@/lib/reports/model.mjs";
 import { sheetsOf } from "@/lib/reports/sheets.mjs";
 import { num } from "@/lib/reports/text.mjs";
+import { publicAssetUrl } from "@/lib/assets.mjs";
 
 const PAPER_ROWS = 6;
 const SHEET_ROWS = 10;
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const FIFA_COVER = publicAssetUrl("/reports/fifa-compliance-report-cover.png", BASE);
 
 const show = (c, v) => (c.kind === "pct" && typeof v === "number" ? `${Math.round(v * 100)}%` : c.kind === "num" && typeof v === "number" ? num(v) : v ?? "");
 const right = (c) => c.kind === "num" || c.kind === "year" || c.kind === "pct";
@@ -129,7 +132,7 @@ function Sheets({ report }) {
 function FifaCoverPreview({ report }) {
   return (
     <div className="rp-fifa-cover" role="img" aria-label="FIFA report cover preview">
-      <img src="/reports/fifa-compliance-report-cover.png" alt="FIFA World Cup 2034 report cover" />
+      <img src={FIFA_COVER} alt="FIFA World Cup 2034 report cover" />
       <div className="rp-fifa-cover-title">FIFA Compliance Report</div>
       <div className="rp-fifa-cover-subject">{report.coverSubject || "Saudi Arabia · All stadiums"}</div>
     </div>
