@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 /** Back link to a parent page (the assurance map by default) and the current page name. */
-export default function Breadcrumbs({ label, parent = { href: "/", label: "Assurance map" } }) {
+export default function Breadcrumbs({ label, parent = { href: "/", label: "Overview" } }) {
   return (
     <nav className="crumbs" aria-label="Breadcrumb">
       <Link href={parent.href}>← {parent.label}</Link>

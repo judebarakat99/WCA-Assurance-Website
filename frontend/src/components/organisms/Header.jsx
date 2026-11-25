@@ -13,12 +13,12 @@ import { toast } from "@/lib/ui/toast";
 
 // Primary sections. `also` lists other paths that belong to a section.
 const TABS = [
-  { href: "/", label: "Assurance map" },
+  { href: "/", label: "Overview" },
   { href: "/review", label: "Review queue" },
+  { href: "/compliance", label: "Requirements", also: ["/facilities"] },
   { href: "/evidence", label: "Evidence" },
   { href: "/progress", label: "Project progress" },
   { href: "/reports", label: "Reports" },
-  { href: "/compliance", label: "Requirements", also: ["/facilities"] },
 ];
 
 const LOGO = publicAssetUrl("/Assets/saudi-2034-logo.svg", process.env.NEXT_PUBLIC_BASE_PATH || "");
