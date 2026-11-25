@@ -6,6 +6,7 @@ import Breadcrumbs from "@/components/molecules/Breadcrumbs";
 import PageHead from "@/components/molecules/PageHead";
 import AssessmentTable from "@/components/organisms/AssessmentTable";
 import ProgressClaim from "@/components/organisms/ProgressClaim";
+import StadiumModel, { MODEL_STADIUM } from "@/components/organisms/StadiumModel";
 import PageTemplate from "@/components/templates/PageTemplate";
 import { fmtN, pct } from "@/lib/format";
 import { facilitySummary, stadiumRequirements } from "@/lib/domain/assessment.mjs";
@@ -56,6 +57,7 @@ function Facility({ stadium }) {
       />
       <Summary summary={summary} />
       <ProgressClaim stadiumId={stadium.id} />
+      {stadium.id === MODEL_STADIUM && <StadiumModel stadium={stadium} records={records} />}
       <div className="filters mt">
         <label className="f inline">
           <input type="checkbox" checked={showAll} onChange={(e) => setShowAll(e.target.checked)} /> Show requirements

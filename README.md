@@ -83,6 +83,11 @@ thin.
   shows the required credit). No basemap tiles are loaded.
 - Fonts: Barlow (brand typeface) from `@fontsource/barlow`; IBM Plex Mono in
   `public/fonts/` (SIL Open Font License).
+- `public/scripts/stadium-twin.js`, `public/vendor/`: the 3D model of King Salman
+  International Stadium (design review and critical areas), Three.js r128 and
+  OrbitControls (licenses retained), loaded only on that stadium's page.
+  `src/lib/domain/stadiumAreas.mjs` maps the register's 123 stadium checks to
+  the model's areas.
 - `public/Assets/`: the Saudi 2034 logo, and `places/` photos for the map's
   hover cards (Wikimedia Commons, CC BY / CC BY-SA, credited on each card;
   sources in `src/lib/placePhotos.json`). Stadiums without a free photo show

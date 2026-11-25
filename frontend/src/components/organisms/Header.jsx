@@ -33,6 +33,7 @@ function resetDemo() {
   resetAssessments();
   resetMapUi();
   void clearIntake();
+  window.WNSTwin?.reset(); // the 3D design review on King Salman International's page
   rerender();
   toast("Demo reset. Assessments, applied changes and intake documents cleared.");
 }
