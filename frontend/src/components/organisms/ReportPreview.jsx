@@ -10,6 +10,8 @@ const PAPER_ROWS = 6;
 const SHEET_ROWS = 10;
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const FIFA_COVER = publicAssetUrl("/reports/fifa-compliance-report-cover.png", BASE);
+const FIFA_MAP = publicAssetUrl("/reports/fifa-map-view-reference.svg", BASE);
+const FIFA_DESIGN = publicAssetUrl("/Assets/places/stadium-king-fahad-sports-city.jpg", BASE);
 
 const show = (c, v) => (c.kind === "pct" && typeof v === "number" ? `${Math.round(v * 100)}%` : c.kind === "num" && typeof v === "number" ? num(v) : v ?? "");
 const right = (c) => c.kind === "num" || c.kind === "year" || c.kind === "pct";
@@ -139,6 +141,56 @@ function FifaCoverPreview({ report }) {
   );
 }
 
+function FifaVisualPreview({ report }) {
+  const d = report.fifaVisuals?.design || {};
+  return (
+    <section className="rp-fifa-visuals" aria-label="FIFA report visuals preview">
+      <article className="rp-fifa-visual-card">
+        <h3>Overview map snapshot</h3>
+        <p>From the Overview page, with the same programme color codes.</p>
+        <img src={FIFA_MAP} alt="Overview map with color-coded stadium status markers" />
+        <ul className="rp-fifa-legend">
+          <li className="critical">
+            <i />
+            Critical
+          </li>
+          <li className="material">
+            <i />
+            Material
+          </li>
+          <li className="manageable">
+            <i />
+            Manageable
+          </li>
+          <li className="controlled">
+            <i />
+            Controlled
+          </li>
+        </ul>
+      </article>
+      <article className="rp-fifa-visual-card">
+        <h3>3D design capture</h3>
+        <p>Stadium design image with the review color codes used in the 3D view.</p>
+        <img src={FIFA_DESIGN} alt="Stadium design capture from the 3D review view" />
+        <ul className="rp-fifa-legend">
+          <li className="pass">
+            <i />
+            Pass: {d.pass || 0}
+          </li>
+          <li className="fail">
+            <i />
+            Fail: {d.fail || 0}
+          </li>
+          <li className="review">
+            <i />
+            Needs review: {d.review || 0}
+          </li>
+        </ul>
+      </article>
+    </section>
+  );
+}
+
 /** What the file will contain: a page for Word and PDF, sheets for Excel. Long tables show their first rows. */
 export default function ReportPreview({ report, format }) {
   if (format === "xlsx") return <Sheets report={report} />;
@@ -146,6 +198,7 @@ export default function ReportPreview({ report, format }) {
     return (
       <div className="rp-fifa-preview">
         <FifaCoverPreview report={report} />
+        <FifaVisualPreview report={report} />
         <Paper report={report} format={format} />
       </div>
     );

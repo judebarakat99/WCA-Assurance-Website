@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Saudi Arabia programme heat map</title>
+  <desc id="desc">Heat map style overview of Saudi Arabia with host-city intensity markers for FIFA assurance reporting.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8f9fd"/>
+      <stop offset="100%" stop-color="#eef1fa"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#5b6c9a" flood-opacity="0.28"/>
+    </filter>
+    <radialGradient id="hot-critical" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff7e74" stop-opacity="0.9"/>
+      <stop offset="55%" stop-color="#f54f3a" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#f54f3a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hot-material" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffc16b" stop-opacity="0.9"/>
+      <stop offset="55%" stop-color="#f3a337" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#f3a337" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hot-manageable" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#8793ff" stop-opacity="0.88"/>
+      <stop offset="55%" stop-color="#5f72ee" stop-opacity="0.42"/>
+      <stop offset="100%" stop-color="#5f72ee" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hot-controlled" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6fd28d" stop-opacity="0.85"/>
+      <stop offset="55%" stop-color="#37a85c" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#37a85c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+
+  <g transform="translate(220,80)" filter="url(#shadow)">
+    <path d="M284 78L425 49L585 120L694 210L775 325L812 433L765 578L650 687L501 736L371 706L281 626L233 524L180 433L155 296L191 192Z"
+          fill="#e5ebfa" stroke="#aeb9d8" stroke-width="7"/>
+    <path d="M371 628L446 582L542 585L606 638L578 714L488 741L386 711Z" fill="#dfe7f8" opacity="0.8"/>
+    <path d="M546 250L618 267L665 326L665 394L596 425L523 384L514 304Z" fill="#d8e2f8" opacity="0.75"/>
+
+    <g opacity="0.95">
+      <circle cx="505" cy="330" r="130" fill="url(#hot-critical)"/>
+      <circle cx="605" cy="410" r="125" fill="url(#hot-material)"/>
+      <circle cx="438" cy="238" r="115" fill="url(#hot-manageable)"/>
+      <circle cx="338" cy="410" r="118" fill="url(#hot-controlled)"/>
+      <circle cx="565" cy="530" r="118" fill="url(#hot-material)"/>
+      <circle cx="420" cy="540" r="108" fill="url(#hot-controlled)"/>
+    </g>
+
+    <g>
+      <circle cx="505" cy="330" r="13" fill="#c9301e" stroke="#fff" stroke-width="4"/>
+      <circle cx="605" cy="410" r="13" fill="#b45f06" stroke="#fff" stroke-width="4"/>
+      <circle cx="438" cy="238" r="13" fill="#2e3569" stroke="#fff" stroke-width="4"/>
+      <circle cx="338" cy="410" r="13" fill="#2f7d37" stroke="#fff" stroke-width="4"/>
+      <circle cx="565" cy="530" r="13" fill="#b45f06" stroke="#fff" stroke-width="4"/>
+      <circle cx="420" cy="540" r="13" fill="#2f7d37" stroke="#fff" stroke-width="4"/>
+    </g>
+  </g>
+
+  <g transform="translate(970,160)" font-family="Arial, Helvetica, sans-serif">
+    <text x="0" y="0" font-size="42" font-weight="700" fill="#1f2330">Programme heat map</text>
+    <text x="0" y="46" font-size="23" fill="#5a5f80">Host-city readiness and risk intensity</text>
+
+    <g transform="translate(0,120)" font-size="24" font-weight="700">
+      <g transform="translate(0,0)">
+        <circle cx="12" cy="12" r="10" fill="#c9301e"/>
+        <text x="36" y="19" fill="#c9301e">Critical intervention</text>
+      </g>
+      <g transform="translate(0,54)">
+        <circle cx="12" cy="12" r="10" fill="#b45f06"/>
+        <text x="36" y="19" fill="#b45f06">Material impact</text>
+      </g>
+      <g transform="translate(0,108)">
+        <circle cx="12" cy="12" r="10" fill="#2e3569"/>
+        <text x="36" y="19" fill="#2e3569">Manageable</text>
+      </g>
+      <g transform="translate(0,162)">
+        <circle cx="12" cy="12" r="10" fill="#2f7d37"/>
+        <text x="36" y="19" fill="#2f7d37">Controlled</text>
+      </g>
+    </g>
+
+    <g transform="translate(0,380)">
+      <rect x="0" y="0" width="530" height="180" rx="14" fill="#ffffff" stroke="#d6dae8"/>
+      <text x="24" y="44" font-size="24" font-weight="700" fill="#2e3569">Heat intensity overlay</text>
+      <text x="24" y="84" font-size="20" fill="#5a5f80">Brighter zones indicate denser open findings.</text>
+      <text x="24" y="116" font-size="20" fill="#5a5f80">Marker colour shows the worst current class.</text>
+      <text x="24" y="148" font-size="20" fill="#5a5f80">Aligned with the Overview dashboard colours.</text>
+    </g>
+  </g>
+</svg>

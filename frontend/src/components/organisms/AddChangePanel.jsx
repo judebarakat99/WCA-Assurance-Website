@@ -55,12 +55,16 @@ function Found({ result, onAdd, onClear }) {
               <input type="checkbox" checked={can && picked.has(i.key)} disabled={!can} onChange={() => toggle(i.key)} aria-label={`Add ${i.title}`} />
               <div className="rw-found-body">
                 <div className="rw-found-head">
-                  <StatusPill tone={tone}>{label}</StatusPill>
-                  <b>{i.title}</b>
-                  {i.requirementId && <span className="mono small">{i.requirementId}</span>}
-                  <StatusPill tone={TONE[i.confidence]}>{i.confidence} confidence</StatusPill>
+                  <div className="rw-found-titleline">
+                    <b>{i.title}</b>
+                    {i.requirementId && <span className="mono small">{i.requirementId}</span>}
+                  </div>
+                  <div className="rw-found-tags">
+                    <StatusPill tone={tone}>{label}</StatusPill>
+                    <StatusPill tone={TONE[i.confidence]}>{i.confidence} confidence</StatusPill>
+                  </div>
                 </div>
-                <div className="small">
+                <div className="small rw-found-detail">
                   {i.kind === "amendment" && (
                     <>
                       {i.oldCrit} → <b>{i.newCrit}</b>
@@ -93,7 +97,7 @@ function Found({ result, onAdd, onClear }) {
                     </span>
                   )}
                 </div>
-                <div className="muted fine">
+                <div className="muted fine rw-found-quote">
                   “{i.quote}” · page {i.page}
                 </div>
               </div>

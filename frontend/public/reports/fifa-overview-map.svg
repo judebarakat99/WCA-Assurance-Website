@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 860" role="img" aria-labelledby="title desc">
+  <title id="title">FIFA overview map snapshot</title>
+  <desc id="desc">Stylised Saudi Arabia map with stadium status color codes.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8f9fd" />
+      <stop offset="100%" stop-color="#edf0f8" />
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#94a0c3" flood-opacity="0.28" />
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="1400" height="860" fill="url(#bg)" />
+
+  <g transform="translate(160,90)" filter="url(#soft)">
+    <path d="M241 86 L347 62 L503 116 L624 210 L702 306 L741 420 L696 559 L572 665 L442 703 L327 676 L241 602 L198 510 L146 420 L128 302 L154 208 Z"
+          fill="#e3e9f7" stroke="#aeb8d5" stroke-width="6" />
+    <path d="M292 570 L352 524 L434 520 L492 568 L470 634 L392 660 L312 640 Z" fill="#d9e1f4" opacity="0.8" />
+    <path d="M522 246 L588 258 L628 308 L628 360 L560 384 L500 350 L486 290 Z" fill="#d9e1f4" opacity="0.7" />
+  </g>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#1f2330">
+    <text x="216" y="760">Host-city status markers</text>
+  </g>
+
+  <g transform="translate(260,180)">
+    <g>
+      <circle cx="240" cy="310" r="20" fill="#2f7d37" stroke="#ffffff" stroke-width="6" />
+      <text x="272" y="318" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" fill="#2f7d37">Controlled</text>
+    </g>
+    <g>
+      <circle cx="440" cy="222" r="20" fill="#2e3569" stroke="#ffffff" stroke-width="6" />
+      <text x="472" y="230" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" fill="#2e3569">Manageable</text>
+    </g>
+    <g>
+      <circle cx="562" cy="376" r="20" fill="#b45f06" stroke="#ffffff" stroke-width="6" />
+      <text x="594" y="384" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" fill="#b45f06">Material</text>
+    </g>
+    <g>
+      <circle cx="460" cy="470" r="20" fill="#c9301e" stroke="#ffffff" stroke-width="6" />
+      <text x="492" y="478" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" fill="#c9301e">Critical</text>
+    </g>
+  </g>
+
+  <g transform="translate(742,640)" font-family="Arial, Helvetica, sans-serif" font-size="23" fill="#5a5f80">
+    <text x="0" y="0">Color codes match the Overview map.</text>
+  </g>
+</svg>

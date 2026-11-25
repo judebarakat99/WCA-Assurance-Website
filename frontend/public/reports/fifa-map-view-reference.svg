@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 860" role="img" aria-labelledby="title desc">
+  <title id="title">FIFA assurance overview map snapshot</title>
+  <desc id="desc">Dashboard-like snapshot with left summary panel and Saudi Arabia map with city markers.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f6f8fd"/>
+      <stop offset="100%" stop-color="#eff3fb"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#6b7cae" flood-opacity="0.24"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="860" fill="url(#bg)"/>
+
+  <g filter="url(#cardShadow)">
+    <rect x="32" y="26" width="560" height="808" rx="18" fill="#ffffff"/>
+    <rect x="620" y="26" width="948" height="180" rx="22" fill="#ffffff"/>
+  </g>
+
+  <g font-family="Arial, Helvetica, sans-serif" fill="#1f2330">
+    <text x="58" y="76" font-size="18" font-weight="700">Where we stand</text>
+    <text x="58" y="52" font-size="10" font-weight="700" fill="#2e3569">FIFA ASSURANCE · SAUDI ARABIA 2034</text>
+
+    <g transform="translate(60,120)">
+      <circle cx="95" cy="95" r="84" fill="#f0f3fb"/>
+      <path d="M95 11 A84 84 0 0 1 95 179" fill="none" stroke="#d23828" stroke-width="24"/>
+      <text x="95" y="91" text-anchor="middle" font-size="24" font-weight="700" fill="#00134f">50%</text>
+      <text x="95" y="122" text-anchor="middle" font-size="16" font-weight="700" fill="#2e3569">ASSURED</text>
+    </g>
+
+    <text x="255" y="190" font-size="20" fill="#0a1b58">50% of 481 in-scope</text>
+    <text x="255" y="222" font-size="20" fill="#0a1b58">requirements across the 4</text>
+    <text x="255" y="254" font-size="20" fill="#0a1b58">stadiums due by 2027 are</text>
+    <text x="255" y="286" font-size="20" fill="#0a1b58">accepted by a reviewer.</text>
+
+    <rect x="58" y="540" width="500" height="138" rx="16" fill="#f9f2fb" stroke="#dfc8ea"/>
+    <text x="78" y="584" font-size="22" font-weight="700" fill="#9b44be">134 need you now →</text>
+    <text x="78" y="616" font-size="16" fill="#334377">Open the review queue</text>
+    <text x="78" y="648" font-size="18" font-weight="700" fill="#0a1b58">Most in Riyadh (60): show on map</text>
+
+    <rect x="58" y="706" width="500" height="108" rx="16" fill="#ffffff" stroke="#d6e0fb" stroke-dasharray="6 4"/>
+    <text x="78" y="754" font-size="18" font-weight="700" fill="#0a1b58">What if FIFA changes a requirement?</text>
+    <text x="78" y="782" font-size="14" fill="#52608f">Preview the impact on the map before applying it</text>
+  </g>
+
+  <g font-family="Arial, Helvetica, sans-serif" fill="#1f2330">
+    <text x="652" y="70" font-size="19" font-weight="700">Delivery timeline</text>
+    <text x="945" y="70" font-size="18" fill="#5f6da0">By 2027: 4 of 15 stadiums due complete</text>
+    <rect x="652" y="118" width="864" height="14" rx="7" fill="#efefef" stroke="#9ea7c2"/>
+    <rect x="652" y="118" width="130" height="14" rx="7" fill="#b15fc6"/>
+    <circle cx="782" cy="125" r="14" fill="#a24db8"/>
+  </g>
+
+  <g transform="translate(860,210)">
+    <path d="M140 70 L255 38 L332 52 L442 116 L528 216 L642 220 L656 318 L592 410 L610 524 L542 608 L436 636 L314 626 L180 562 L112 448 L70 350 L72 244 Z"
+          fill="#ffffff" stroke="#2f4a89" stroke-width="4"/>
+    <path d="M398 208 L560 214 L610 280 L604 430 L594 520 L512 564 L392 544 L316 472 L314 330 Z" fill="#f9dfdc"/>
+
+    <circle cx="446" cy="372" r="15" fill="#d23a2f" stroke="#ffffff" stroke-width="5"/>
+    <circle cx="300" cy="470" r="15" fill="#d23a2f" stroke="#ffffff" stroke-width="5"/>
+    <circle cx="560" cy="310" r="15" fill="#d23a2f" stroke="#ffffff" stroke-width="5"/>
+    <circle cx="98" cy="250" r="15" fill="#6a779f" stroke="#ffffff" stroke-width="5"/>
+    <circle cx="356" cy="624" r="15" fill="#6a779f" stroke="#ffffff" stroke-width="5"/>
+
+    <g font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#ffffff">
+      <text x="466" y="378">60</text>
+      <text x="318" y="476">39</text>
+      <text x="578" y="316">35</text>
+    </g>
+
+    <g font-family="Arial, Helvetica, sans-serif" fill="#0f1f55">
+      <rect x="404" y="404" width="192" height="74" rx="18" fill="#ffffff"/>
+      <text x="430" y="444" font-size="17" font-weight="700">Riyadh</text>
+      <text x="430" y="465" font-size="13" fill="#7082b2">53% assured</text>
+
+      <rect x="252" y="516" width="174" height="74" rx="18" fill="#ffffff"/>
+      <text x="276" y="556" font-size="17" font-weight="700">Jeddah</text>
+      <text x="276" y="577" font-size="13" fill="#7082b2">40% assured</text>
+
+      <rect x="546" y="320" width="214" height="74" rx="18" fill="#ffffff"/>
+      <text x="572" y="360" font-size="17" font-weight="700">Al Khobar</text>
+      <text x="572" y="381" font-size="13" fill="#7082b2">54% assured</text>
+
+      <rect x="40" y="258" width="186" height="74" rx="18" fill="#ffffff"/>
+      <text x="64" y="298" font-size="17" font-weight="700">NEOM</text>
+      <text x="64" y="319" font-size="13" fill="#7082b2">None due yet</text>
+
+      <rect x="262" y="642" width="170" height="74" rx="18" fill="#ffffff"/>
+      <text x="286" y="682" font-size="17" font-weight="700">Abha</text>
+      <text x="286" y="703" font-size="13" fill="#7082b2">None due yet</text>
+    </g>
+  </g>
+</svg>
