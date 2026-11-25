@@ -10,7 +10,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { facilityId } = await params;
   const s = FACILITY_REGISTER.stadiums.find((x) => x.id === facilityId);
-  return { title: `${s ? s.name : "Facility"} · Facility assessment · Compliance Assurance Suite` };
+  return { title: `${s ? s.name : "Facility"} · Facility assessment · Venue Compliance Hub` };
 }
 
 export default async function Page({ params }) {

@@ -13,7 +13,7 @@ import AppRuntime from "@/components/providers/AppRuntime";
 import { themeInitScript } from "@/lib/theme.mjs";
 
 export const metadata = {
-  title: "Compliance Assurance Suite",
+  title: "Venue Compliance Hub",
   description: "FIFA World Cup 2034 assurance demo",
 };
 

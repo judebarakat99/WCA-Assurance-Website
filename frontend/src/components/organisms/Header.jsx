@@ -101,7 +101,7 @@ export default function Header() {
           <div className="brand">
             <img className="logo" src={LOGO} alt="Saudi 2034" width="44" height="41" />
             <div className="brand-text">
-              <h1>Compliance Assurance Engine</h1>
+              <h1>Venue Compliance Hub</h1>
               <span className="sub">World Cup 2034</span>
             </div>
           </div>
