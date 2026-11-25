@@ -1,17 +1,22 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import DeliveryTimeline from "@/components/molecules/DeliveryTimeline";
+import ViewToggle from "@/components/molecules/ViewToggle";
 import AssuranceBriefing from "@/components/organisms/AssuranceBriefing";
 import AssuranceMap from "@/components/organisms/AssuranceMap";
 import ChangeImpactPanel from "@/components/organisms/ChangeImpactPanel";
 import PillarRail from "@/components/organisms/PillarRail";
+import PortfolioView from "@/components/organisms/PortfolioView";
 import PageTemplate from "@/components/templates/PageTemplate";
 import { assuranceMap } from "@/lib/domain/cityAssurance.mjs";
+import { portfolio } from "@/lib/domain/portfolio.mjs";
 import { changeImpact, withImpact } from "@/lib/domain/requirementChange.mjs";
 import { scenarioById } from "@/lib/domain/requirementVersions.mjs";
 import { reviewQueue } from "@/lib/domain/reviewQueue.mjs";
 import { getAssessments, hasSampleAssessments } from "@/lib/store/assessments";
+import { ensureIntake, intake } from "@/lib/store/intake";
 import { updateMap } from "@/lib/store/state";
 
 function ImpactLegend() {
@@ -73,8 +78,43 @@ const setYear = (year) => updateMap({ year });
 
 function AssuranceHome({ ui }) {
   const router = useRouter();
-  const { city: selected, pillar, year, recenter, change } = ui.map;
+  const { city: selected, pillar, year, recenter, change, view, stadium } = ui.map;
   const records = getAssessments();
+  // Progress checks (Intake) feed the portfolio's schedule and issues.
+  useEffect(ensureIntake, []);
+  // The view is mirrored in the address (?view=portfolio), so it survives a
+  // reload and can be linked.
+  useEffect(() => {
+    const wanted = new URLSearchParams(window.location.search).get("view") === "portfolio" ? "portfolio" : "map";
+    if (wanted !== ui.map.view) updateMap({ view: wanted });
+    // Read once on arrival; later changes go through setView.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const setView = (next) => {
+    updateMap({ view: next });
+    router.replace(next === "portfolio" ? "/?view=portfolio" : "/", { scroll: false });
+  };
+  if (view === "portfolio")
+    return (
+      <div className="ahome">
+        <PillarRail active={pillar} onChange={setPillar} />
+        <div className="astage">
+          <PortfolioView
+            data={portfolio(records, intake.checks, pillar)}
+            view={view}
+            onView={setView}
+            city={selected}
+            onCity={(city) => updateMap({ city, stadium: null })}
+            stadium={stadium}
+            onStadium={(id) => updateMap({ stadium: id })}
+            onShowOnMap={(r) => {
+              updateMap({ city: r.cityId });
+              setView("map");
+            }}
+          />
+        </div>
+      </div>
+    );
   const base = assuranceMap(records, pillar, year);
   const scenario = scenarioById(change);
   const map = scenario ? withImpact(base, changeImpact(scenario, records), pillar) : base;
@@ -104,6 +144,7 @@ function AssuranceHome({ ui }) {
             onSelect={setSelected}
           />
         )}
+        <ViewToggle view={view} onChange={setView} className="amap-toggle" />
         {scenario ? <ImpactLegend /> : <Legend />}
         <div className="abottom">
           <button
@@ -119,7 +160,7 @@ function AssuranceHome({ ui }) {
   );
 }
 
-/** Map-first home for FIFA assurance: host cities, pillars and the briefing. */
+/** Home for FIFA assurance: the map (host cities, pillars, briefing) or the national portfolio. */
 export default function AssuranceHomePage() {
   return (
     <PageTemplate label="FIFA assurance map" wide>

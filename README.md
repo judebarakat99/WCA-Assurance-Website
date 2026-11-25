@@ -46,7 +46,8 @@ alias (`frontend/jsconfig.json`). Components follow atomic design; routes stay
 thin.
 
 - `src/app/`: App Router routes only — `page.jsx` files with metadata, plus
-  `layout.jsx`. `/` is the assurance map, `/review` the review queue,
+  `layout.jsx`. `/` is the assurance map, with a toggle to the national
+  portfolio (`/?view=portfolio`), `/review` the review queue,
   `/intake` document intake and progress verification, `/compliance` the requirements (FIFA source library and facility register)
   and `/facilities/[facilityId]` a stadium's assessments.
 - `src/components/atoms/` → `molecules/` → `organisms/` → `templates/` →

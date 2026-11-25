@@ -167,3 +167,33 @@ export function buildCheck(stadium, report, plans) {
   result.steps = steps;
   return result;
 }
+
+/**
+ * Schedule slip in days from a check's plans (earned schedule): the date at
+ * which the plans had planned today's actual progress, against the report
+ * date. Positive means behind plan, negative ahead, null without plans.
+ */
+export function scheduleSlipDays(check) {
+  const packages = (check?.packages || []).filter((p) => p.activities?.length && p.budget);
+  if (!packages.length) return null;
+  const budget = packages.reduce((t, p) => t + p.budget, 0);
+  const plannedAt = (date) =>
+    packages.reduce((t, p) => {
+      const w = p.activities.reduce((s, a) => s + a.weight, 0);
+      const v = p.activities.reduce((s, a) => s + a.weight * plannedFraction(a.start, a.finish, date), 0) / w;
+      return t + (p.budget * 100 * v) / budget;
+    }, 0);
+  const iso = (n) => new Date(n * DAY).toISOString().slice(0, 10);
+  const all = packages.flatMap((p) => p.activities);
+  let lo = Math.min(...all.map((a) => day(a.start))) - 1;
+  let hi = Math.max(...all.map((a) => day(a.finish)));
+  const target = check.recalculated;
+  if (plannedAt(iso(hi)) < target) return day(check.as_of) - hi;
+  // Earliest day on which planned progress reaches the actual figure.
+  while (hi - lo > 1) {
+    const mid = Math.floor((lo + hi) / 2);
+    if (plannedAt(iso(mid)) >= target - 1e-9) hi = mid;
+    else lo = mid;
+  }
+  return day(check.as_of) - hi;
+}

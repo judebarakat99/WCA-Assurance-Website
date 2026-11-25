@@ -2,15 +2,23 @@
 // store. Assessments and requirement versions live in store/assessments.js.
 
 // Assurance map and review queue: selected city, requirement area, timeline
-// year, recenter count, and the change being previewed (a scenario id,
-// "pick" or null).
+// year, recenter count, the change being previewed (a scenario id, "pick" or
+// null), the home view ("map" or "portfolio") and the portfolio's selected stadium.
 export const ui = {
-  map: { city: null, pillar: null, year: 2034, recenter: 0, change: null },
+  map: { city: null, pillar: null, year: 2034, recenter: 0, change: null, view: "map", stadium: null },
 };
 
 /** Assurance map back to the whole country, all areas, every stadium. */
 export function resetMapUi() {
-  ui.map = { city: null, pillar: null, year: 2034, recenter: ui.map.recenter + 1, change: null };
+  ui.map = {
+    city: null,
+    pillar: null,
+    year: 2034,
+    recenter: ui.map.recenter + 1,
+    change: null,
+    view: "map",
+    stadium: null,
+  };
 }
 
 /** Change part of the assurance map's state and re-render. */
