@@ -1,26 +1,29 @@
-// Evidence page state: contractor documents, progress checks and the agent's
-// visible progress. Everything runs in the browser (lib/store/intakeLocal);
-// every change calls notify() so useProgramme() components re-render.
-import { assessDocument, PROGRAMME_OWNER } from "@/lib/domain/evidenceReader.mjs";
-import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
-import { addAlerts, clearAlerts, getAlerts } from "@/lib/store/alerts";
-import { getAssessments, recordEvidence } from "@/lib/store/assessments";
+// Document intake and progress checks, held by the backend. This module keeps
+// the latest copy for the Intake page, stadium pages and the review queue, and
+// calls notify() on every change so useProgramme() components re-render.
+// When the backend is not running (or has no Azure configuration) it switches
+// to the offline demo in intakeLocal.js, which has the same behaviour for the
+// bundled sample documents.
+import { assistantRequest } from "@/lib/assistant/api";
 import {
   localCheck,
   localClear,
   localDecide,
-  localFile,
+  localFileAndSync,
+  localIngest,
   localRemove,
   localSeed,
   localState,
-  localUpload,
 } from "@/lib/store/intakeLocal";
 import { notify } from "@/lib/store/state";
 
 export const MAX_UPLOAD = 10 * 1024 * 1024;
 
 export const intake = {
+  mode: null, // "online" (backend) or "offline" (bundled sample readings)
   loaded: false,
+  loading: false,
+  error: null,
   stadiums: [],
   elements: [],
   documents: [],
@@ -30,8 +33,15 @@ export const intake = {
   runs: {}, // stadium id -> { steps, shown } while a check's steps play back
   errors: {}, // stadium id -> last check error
   seeding: false,
-  busy: {}, // document id -> true while confirming or removing
+  busy: {}, // document id -> true while filing or removing
 };
+
+const post = (path, body) =>
+  assistantRequest(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body ?? {}),
+  });
 
 function apply(state) {
   Object.assign(intake, {
@@ -40,30 +50,66 @@ function apply(state) {
     documents: state.documents,
     checks: state.checks,
     loaded: true,
+    error: null,
   });
 }
 
-// Pacing for the agent's visible progress; instant with reduced motion.
-const reducedMotion = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+const offline = () => intake.mode === "offline";
+
+// Pacing for the agent's visible progress. Online, the stages run while the
+// backend works and its real steps play back once it answers; offline, the
+// same stages and steps play back from the bundled readings. Instant when the
+// system asks for reduced motion.
+const reducedMotion = () =>
+  typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, reducedMotion() ? 0 : ms));
 
 /** What the agent is doing with an uploaded file, in order. */
 export const UPLOAD_STAGES = ["Uploading", "Reading the text", "Identifying the document"];
 
-/** Load (or reload) everything. */
-export function refreshIntake() {
-  apply(localState());
-  notify();
+// Reload without the loading guard, so results appear as each file finishes.
+async function reload() {
+  apply(offline() ? localState() : await assistantRequest("/intake"));
 }
 
-/** Load once per page load. */
+// Online when the backend answers and has Azure configured; otherwise offline.
+async function detectMode() {
+  try {
+    const health = await assistantRequest("/health");
+    intake.mode = health?.azure_configured ? "online" : "offline";
+  } catch {
+    intake.mode = "offline";
+  }
+}
+
+/** Load (or reload) everything, from the backend or the offline demo. */
+export async function refreshIntake() {
+  if (intake.loading) return;
+  intake.loading = true;
+  notify();
+  try {
+    if (!intake.mode) await detectMode();
+    if (offline()) apply(localState());
+    else apply(await assistantRequest("/intake"));
+  } catch (error) {
+    if (error.offline) {
+      intake.mode = "offline";
+      apply(localState());
+    } else intake.error = error.message;
+  } finally {
+    intake.loading = false;
+    notify();
+  }
+}
+
+/** Load once per page load; later calls do nothing. */
 export function ensureIntake() {
-  if (!intake.loaded) refreshIntake();
+  if (!intake.loaded && !intake.loading && !intake.error) refreshIntake().then(() => intake.loaded && restoreDemoIntake());
 }
 
 let uploadSeq = 0;
-/** Upload files two at a time; the agent reads each and proposes how to file it. */
-export async function uploadFiles(files) {
+/** Upload files two at a time; the agent proposes how to file each one. */
+export async function uploadFiles(files, context = {}) {
   const queue = [...files].map((file) => ({ key: ++uploadSeq, name: file.name, file, error: null }));
   for (const item of queue) {
     if (item.file.size > MAX_UPLOAD) item.error = "Larger than 10 MB.";
@@ -76,17 +122,27 @@ export async function uploadFiles(files) {
       item.stage = n;
       notify();
     };
+    let request = null;
     try {
       stage(0);
+      if (!offline()) {
+        const form = new FormData();
+        form.append("file", item.file);
+        if (context.stadiumId) form.append("stadium_id", context.stadiumId);
+        if (context.purpose) form.append("purpose", context.purpose);
+        request = assistantRequest("/intake/documents", { method: "POST", body: form });
+        request.catch(() => {}); // awaited below; avoid an unhandled rejection meanwhile
+      }
       await wait(450);
       stage(1);
-      const text = /\.(txt|md)$/i.test(item.name) ? await item.file.text() : null;
       await wait(650);
       stage(2);
-      await wait(750);
-      localUpload(item.file, text);
+      if (offline()) {
+        await wait(750);
+        await localIngest(item.file, context);
+      } else await request;
       intake.uploads = intake.uploads.filter((u) => u.key !== item.key);
-      apply(localState());
+      await reload();
     } catch (error) {
       item.error = error.message;
     }
@@ -97,6 +153,7 @@ export async function uploadFiles(files) {
     while (pending.length) await send(pending.shift());
   });
   await Promise.all(workers);
+  await refreshIntake();
 }
 
 export function dismissUpload(key) {
@@ -109,51 +166,27 @@ async function withBusy(id, work) {
   notify();
   try {
     await work();
+    await refreshIntake();
+  } catch (error) {
+    intake.error = error.message;
   } finally {
     const { [id]: _done, ...rest } = intake.busy;
     intake.busy = rest;
-    refreshIntake();
+    notify();
   }
 }
 
-/** The agent's assessment of a document with the given details (defaults to its own). */
-export function assessment(doc, details = {}) {
-  const filed = intake.documents.filter((d) => d.status === "filed");
-  return assessDocument({ ...doc, ...details }, getAssessments(), filed);
-}
+/** File a document with the person's confirmed details. */
+export const fileDocument = (id, filing) =>
+  withBusy(id, async () =>
+    offline() ? localFileAndSync(id, filing) : post(`/intake/documents/${encodeURIComponent(id)}/file`, filing),
+  );
 
-/**
- * Confirm a document with the person's details: file it, record any evidence
- * it states against the register, raise the agent's alerts, and re-check the
- * stadium's progress claim when it is a progress report or plan.
- */
-export const fileDocument = (id, details) =>
-  withBusy(id, async () => {
-    const doc = intake.documents.find((d) => d.document_id === id);
-    const result = assessment(doc, details);
-    if (result.blocker) return;
-    localFile(id, details);
-    const stadium = result.stadium;
-    for (const m of result.matches)
-      recordEvidence(stadium.id, m.requirement, {
-        file: doc.name,
-        value: String(m.value),
-        note: `${details.evidenceType || "Evidence"} · ${m.stated}`,
-      });
-    addAlerts(
-      result.alerts.map((a) => ({ ...a, source: "agent", stadiumId: stadium.id, stadiumName: stadium.name, document: doc.name })),
-    );
-    if (details.kind === "progress-report" || details.kind === "detailed-plan") {
-      apply(localState());
-      const hasReport = intake.documents.some(
-        (d) => d.status === "filed" && !d.superseded && d.kind === "progress-report" && d.stadium_id === stadium.id,
-      );
-      if (hasReport) void runCheck(stadium.id);
-    }
-  });
-
-/** Remove a document. */
-export const removeDocument = (id) => withBusy(id, async () => localRemove(id));
+/** Remove a document from intake (and from Nabd's search). */
+export const removeDocument = (id) =>
+  withBusy(id, async () =>
+    offline() ? localRemove(id) : assistantRequest(`/documents/${encodeURIComponent(id)}`, { method: "DELETE" }),
+  );
 
 /**
  * Recalculate one stadium's progress from its filed plans. The agent's steps
@@ -167,35 +200,20 @@ export async function runCheck(stadiumId) {
   intake.runs = { ...intake.runs, [stadiumId]: run };
   notify();
   try {
-    await wait(600);
-    const check = localCheck(stadiumId);
+    let check;
+    if (offline()) {
+      await wait(600);
+      check = localCheck(stadiumId);
+    } else check = await post(`/intake/checks/${encodeURIComponent(stadiumId)}`);
     run.steps = check.steps;
     notify();
     for (let i = 1; i <= run.steps.length; i++) {
-      await wait(650);
+      await wait(offline() ? 650 : 320);
       run.shown = i;
       notify();
     }
     await wait(500);
     intake.checks = { ...intake.checks, [stadiumId]: check };
-    if (check.status === "overstated" || check.status === "evidence-missing") {
-      const message =
-        check.status === "overstated"
-          ? `${check.stadium_name} reports ${check.claimed}% progress; its detailed plans support ${check.recalculated}%.`
-          : `${check.stadium_name}'s progress claim cannot be fully checked: some reported packages have no plan on file.`;
-      if (!getAlerts().some((a) => a.status === "open" && a.message === message))
-        addAlerts([
-          {
-            source: "agent",
-            severity: check.status === "overstated" ? "High" : "Medium",
-            owner: PROGRAMME_OWNER,
-            stadiumId,
-            stadiumName: check.stadium_name,
-            title: "Progress claim not supported",
-            message,
-          },
-        ]);
-    }
   } catch (error) {
     intake.errors = { ...intake.errors, [stadiumId]: error.message };
   } finally {
@@ -216,30 +234,60 @@ export async function runAllChecks(onStart) {
 }
 
 /** A reviewer accepts or rejects the agent's finding. */
-export function decideCheck(stadiumId, decision, note = "") {
-  intake.checks = { ...intake.checks, [stadiumId]: localDecide(stadiumId, decision, note) };
+export async function decideCheck(stadiumId, decision, note = "") {
+  try {
+    intake.checks = {
+      ...intake.checks,
+      [stadiumId]: offline()
+        ? localDecide(stadiumId, decision, note)
+        : await post(`/intake/checks/${encodeURIComponent(stadiumId)}/decision`, { decision, note }),
+    };
+  } catch (error) {
+    intake.error = error.message;
+  }
   notify();
 }
 
-/** File and check the sample progress documents. */
-export function seedIntake() {
-  apply(localSeed());
+/** File the preloaded sample documents and check their stadiums. */
+export async function seedIntake() {
+  intake.seeding = true;
   notify();
+  try {
+    if (!intake.mode) await detectMode();
+    apply(offline() ? localSeed() : await post("/intake/seed"));
+  } catch (error) {
+    intake.error = error.message;
+  } finally {
+    intake.seeding = false;
+    notify();
+  }
 }
 
 /** With the map's sample data: file and check the sample documents, unless some are already there. */
 export async function loadSampleIntake() {
-  ensureIntake();
-  if (!intake.documents.length) seedIntake();
+  if (!intake.loaded) await refreshIntake();
+  if (!intake.documents.length && !intake.seeding) await seedIntake();
 }
 
-/** Remove every document, check and alert (part of Reset demo). */
+/**
+ * Load intake for the page. The Evidence page starts empty: nothing is filed
+ * automatically, so what a document does is clear from the moment it is dropped.
+ */
+export async function restoreDemoIntake() {
+  if (!intake.loaded) await refreshIntake();
+}
+
+/** Remove every intake document and check, online and offline (part of Reset demo). */
 export async function clearIntake() {
   localClear();
-  clearAlerts();
   intake.uploads = [];
   intake.errors = {};
-  if (intake.loaded) refreshIntake();
+  try {
+    if (intake.mode === "online") await assistantRequest("/intake", { method: "DELETE" });
+  } catch {
+    // Backend stopped since: the next refresh switches to offline.
+  }
+  if (intake.loaded) await refreshIntake();
 }
 
 // ---------------------------------------------------------------- selectors
@@ -261,8 +309,12 @@ export function checkableStadiums() {
 export const needsDecision = (check) =>
   !!check && !check.decision && (check.status === "overstated" || check.status === "evidence-missing");
 
-/** A document can be confirmed once the agent (or the person) has what it needs. */
-export const proposalReady = (d) => !assessment(d).blocker;
+/** A proposal is ready to file when the agent identified everything it needs. */
+export function proposalReady(d) {
+  if (!d.kind || d.kind === "other" || !d.stadium_id) return false;
+  if (d.kind === "detailed-plan" && !d.element) return false;
+  return d.confidence !== "low";
+}
 
 export const CHECK_STATUS = {
   overstated: { label: "Overstated", tone: "bad" },
@@ -271,16 +323,9 @@ export const CHECK_STATUS = {
   supported: { label: "Supported", tone: "good" },
 };
 
-/** Document types offered when confirming (evidence types file as kind "evidence"). */
-export const TYPE_OPTIONS = [
-  ["progress-report", "Progress report"],
-  ["detailed-plan", "Detailed plan"],
-  ["evidence:Drawing", "Drawing"],
-  ["evidence:Calculation", "Calculation"],
-  ["evidence:Test record", "Test record"],
-  ["evidence:Certificate", "Certificate"],
-  ["other", "Other"],
-];
-export const typeValue = (d) => (d.kind === "evidence" ? `evidence:${d.evidenceType || "Drawing"}` : d.kind || "other");
-export const typeLabel = (d) => TYPE_OPTIONS.find(([v]) => v === typeValue(d))?.[1] || "Other";
-export const stadiumName = (id) => FACILITY_REGISTER.stadiums.find((s) => s.id === id)?.name || "";
+export const KIND_LABEL = {
+  "progress-report": "Progress report",
+  "detailed-plan": "Detailed plan",
+  evidence: "Evidence document",
+  other: "Other",
+};

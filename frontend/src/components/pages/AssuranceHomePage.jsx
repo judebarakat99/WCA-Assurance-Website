@@ -106,7 +106,7 @@ function AssuranceHome({ ui }) {
             city={selected}
             onCity={(city) => updateMap({ city, stadium: null })}
             stadium={stadium}
-            onStadium={(id) => updateMap({ stadium: id })}
+            onStadium={(id) => router.push(`/facilities/${id}`)}
             onShowOnMap={(r) => {
               updateMap({ city: r.cityId });
               setView("map");

@@ -3,62 +3,9 @@
 import Link from "next/link";
 import StatusPill from "@/components/atoms/StatusPill";
 import { fmtN } from "@/lib/format";
-import {
-  FACILITY_REGISTER,
-  MATCH_LABEL,
-  STATUS_LABEL,
-  cityRecords,
-  registerSource,
-  registerSummary,
-} from "@/lib/domain/facilities.mjs";
+import { MATCH_LABEL, STATUS_LABEL, cityRecords } from "@/lib/domain/facilities.mjs";
 
 const STATUS_TONE = { "existing-refurbishment": "info", "under-construction": "warn", planned: "mute" };
-
-function SourceNote() {
-  const s = registerSource("alrajhi-wc2034-economy-2024-12");
-  return (
-    <p className="muted small">
-      <StatusPill tone="warn">Secondary source</StatusPill>{" "}
-      <a href={s.url} target="_blank" rel="noopener noreferrer">
-        {s.publisher}, {s.published}
-      </a>{" "}
-      · {s.basis} {s.limitations}
-    </p>
-  );
-}
-
-function Summary() {
-  const s = registerSummary();
-  const tiles = [
-    [s.stadiums, "stadiums"],
-    [s.cities, "host cities"],
-    [fmtN(s.seats), "seats (gross)"],
-    [fmtN(s.roomKeys), "room keys planned"],
-    [s.byStatus["existing-refurbishment"], "refurbishments"],
-    [s.byStatus["under-construction"], "under construction"],
-    [s.byStatus.planned, "planned new builds"],
-    [s.lastCompletion, "last stadium due"],
-  ];
-  return (
-    <>
-      <div className="mini-grid four mt">
-        {tiles.map(([n, label]) => (
-          <div key={label} className="mini">
-            <b>{n}</b>
-            <span>{label}</span>
-          </div>
-        ))}
-      </div>
-      <p className="muted small">
-        Other assets ·{" "}
-        {s.otherAssets
-          .map((a) => `${a.total} ${a.assetType.toLowerCase()}s${a.existing ? ` (${a.existing} existing, ${a.planned} planned)` : ""}`)
-          .join(" · ")}
-        . No per-site list yet.
-      </p>
-    </>
-  );
-}
 
 function CapacityCheck({ check }) {
   if (!check) return <span className="muted">No capacity rule</span>;
@@ -76,7 +23,7 @@ function CapacityCheck({ check }) {
 
 function CityTable({ city }) {
   return (
-    <details className="comp-detail" open={city.id === "riyadh"}>
+    <details className="comp-detail">
       <summary>
         <div>
           <span>{city.name}</span>
@@ -145,13 +92,8 @@ export default function FacilityRegister() {
         <div>
           <span className="eyebrow">Facility register</span>
           <h2 id="facility-register-title">Stadiums and host cities</h2>
-          <p>
-            Reviewed {FACILITY_REGISTER.reviewedOn} · {FACILITY_REGISTER.scopeNote}
-          </p>
         </div>
       </div>
-      <SourceNote />
-      <Summary />
       <p className="muted small">
         Open a stadium to see every FIFA requirement that applies to it and record evidence. Each stadium&apos;s highest match selects its FIFA capacity requirement. The check compares the declared capacity
         with that minimum; it becomes an assessment only when evidence (seating plan and match allocation) is reviewed.

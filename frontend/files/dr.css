@@ -1,0 +1,23 @@
+
+/* ---------- 3D design review in the register (Venue Compliance Hub) ---------- */
+.dr-card {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.dr-card h3 {
+  margin: 0;
+}
+.dr-card td small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+.dr-card td,
+.dr-card th {
+  vertical-align: top;
+}

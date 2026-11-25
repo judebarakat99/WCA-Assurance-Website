@@ -28,11 +28,11 @@ function Message({ m }) {
   );
 }
 
-// Documents come in through the Evidence page; Nabd can search all of them.
+// Documents come in through the Intake page; Nabd can search all of them.
 function DocumentsNote() {
   return (
     <p className="ai-reference">
-      Nabd can also answer from documents filed on the <Link href="/evidence">Evidence page</Link>.
+      Nabd can also answer from documents filed on the <Link href="/intake">Intake page</Link>.
     </p>
   );
 }
@@ -79,14 +79,14 @@ export default function AssistantPanel() {
         id="aiPanel"
         hidden={!open}
         role="dialog"
-        aria-label="Nabd assurance assistant"
+        aria-label="Nabd compliance assistant"
       >
         <header className="ai-head">
           <div>
             <b>
               Nabd <span className="ai-ar">نبض</span>
             </b>
-            <small>Assurance data &amp; documents</small>
+            <small>Compliance data &amp; documents</small>
           </div>
           <div className="ai-window-controls">
             <button
@@ -117,7 +117,7 @@ export default function AssistantPanel() {
           ))}
           {pending && (
             <div className="ai-msg a" role="status">
-              Nabd is checking assurance data and documents…
+              Nabd is checking compliance data and documents…
             </div>
           )}
         </div>
@@ -136,7 +136,7 @@ export default function AssistantPanel() {
             maxLength={4000}
             autoComplete="off"
             aria-label="Question"
-            placeholder="Ask Nabd about assurance or your documents…"
+            placeholder="Ask Nabd about compliance or your documents…"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
           />

@@ -82,6 +82,9 @@ function Detail({ facilityId, row, record }) {
           <button type="button" className="danger" onClick={() => reviewAssessment(facilityId, requirement, "non-compliant")}>
             Mark non-compliant
           </button>
+          <button type="button" onClick={() => reviewAssessment(facilityId, requirement, "partially-compliant")}>
+            Mark partially compliant
+          </button>
         </div>
       )}
       {record?.review && (
@@ -120,9 +123,7 @@ export default function AssessmentTable({ facilityId, title, rows, records }) {
                     <span className="mono">{row.requirement.id}</span>
                     <div>{row.requirement.title}</div>
                   </td>
-                  <td className={row.requirement.criterion.operator === "manual" ? "small" : "mono"}>
-                    {criterionLabel(row.requirement.criterion)}
-                  </td>
+                  <td className="mono">{criterionLabel(row.requirement.criterion)}</td>
                   <td>
                     <StatusPill tone={APPLICABILITY_TONE[row.applicability.value]}>
                       {APPLICABILITY[row.applicability.value]}
@@ -130,8 +131,13 @@ export default function AssessmentTable({ facilityId, title, rows, records }) {
                     <div className="muted fine">{row.applicability.reason}</div>
                   </td>
                   <td>
-                    {inScope ? <StatusPill tone={STATUS_TONE[status]}>{STATUS[status]}</StatusPill> : "–"}
-                    {record?.sample && <div className="muted fine">Sample data</div>}
+                    {inScope ? (
+                      <StatusPill tone={record?.partial ? "warn" : STATUS_TONE[status]}>
+                        {record?.partial ? "Partially compliant" : STATUS[status]}
+                      </StatusPill>
+                    ) : (
+                      "–"
+                    )}
                   </td>
                 </tr>
                 {inScope && (

@@ -1,9 +1,9 @@
 const BASE = (
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"
 ).replace(/\/$/, "");
-export async function assistantRequest(path, options = {}) {
+export async function assistantRequest(path, { timeoutMs = 180000, ...options } = {}) {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 180000);
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const response = await fetch(BASE + path, {
       ...options,
@@ -25,7 +25,7 @@ export async function assistantRequest(path, options = {}) {
       const offline = new Error(
         "Cannot reach the backend. Start it on port 8000 (see backend/README.md).",
       );
-      offline.offline = true;
+      offline.offline = true; // lets the Intake page fall back to its offline demo
       throw offline;
     }
     throw error;

@@ -1,6 +1,7 @@
 "use client";
 
 import PageHead from "@/components/molecules/PageHead";
+import RequirementTabs from "@/components/organisms/RequirementTabs";
 import PageTemplate from "@/components/templates/PageTemplate";
 
 /**
@@ -15,9 +16,10 @@ export default function CompliancePage({ reference }) {
           <PageHead
             chip="Requirements · FIFA sources and host facilities"
             title="Requirements"
-            lead="The FIFA venue requirements register every stadium is assessed against, chapter by chapter, with each check's criterion, section, status and the sites it applies to; and the stadiums and host cities in the programme."
+            wideLead
+            lead="The FIFA criteria every stadium is assessed against, each with its source document, section and version, and the stadiums and host cities they apply to."
           />
-          {reference}
+          <RequirementTabs reference={reference} />
         </>
       )}
     </PageTemplate>

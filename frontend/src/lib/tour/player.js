@@ -9,8 +9,8 @@ import { hasVoice, pickVoice } from "@/lib/tour/voice";
 export { ASSURANCE, ASSURANCE_FULL };
 
 const NAMES = new Map([
-  [ASSURANCE, "Assurance demo"],
-  [ASSURANCE_FULL, "Full assurance demo"],
+  [ASSURANCE, "Executive demo"],
+  [ASSURANCE_FULL, "Full demo"],
 ]);
 
 export const steps = () => tour.list || ASSURANCE;

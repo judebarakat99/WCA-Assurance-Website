@@ -9,7 +9,6 @@ import { TIMELINE } from "@/lib/domain/cityAssurance.mjs";
 import { ReopenedLink } from "@/components/organisms/ChangeImpactPanel";
 import { loadSampleAssessments, resetAssessments } from "@/lib/store/assessments";
 import { clearIntake, loadSampleIntake } from "@/lib/store/intake";
-import { updateMap } from "@/lib/store/state";
 
 const TONE_COLOR = { good: "var(--good)", warn: "var(--warn)", bad: "var(--bad)", mute: "var(--muted)" };
 
@@ -124,10 +123,10 @@ function Programme({ map, pillar, sample, reopened, onSelect }) {
         </div>
       )}
       <ReopenedLink count={reopened} />
-      <button type="button" className="abrief-change" onClick={() => updateMap({ change: "pick" })}>
+      <Link className="abrief-change" href="/compliance?tab=watch">
         <b>What if FIFA changes a requirement?</b>
         <span>Preview the impact on the map before applying it</span>
-      </button>
+      </Link>
       <SampleControl sample={sample} />
     </>
   );

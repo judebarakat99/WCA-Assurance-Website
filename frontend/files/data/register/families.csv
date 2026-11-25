@@ -1,0 +1,13 @@
+﻿id,name,short,chapter_page,description,default_owner,in_scope
+01,Pre-construction decisions,Pre-build,28,"Location, capacity, orientation, environmental and legacy decisions taken before construction.",Programme and planning lead,yes
+02,Safety and security,Safety,48,"Safe stadium fundamentals, structural and fire safety, operations room, surveillance, medical centre.",Safety and security lead,yes
+03,Orientation and parking,Orientation,54,"Signposting, public access and egress, parking, emergency access, helipad.",Transport and access lead,yes
+04,Playing area,Playing area,62,"Pitch dimensions and quality, natural and artificial turf, benches, advertising boards, access.",Pitch and turf lead,yes
+05,Players and match officials,Players,92,"Dressing rooms, tunnels, warm-up areas, medical room, doping control, offices.",Team facilities lead,yes
+06,Spectators,Spectators,106,"Comfort, seating, spectator areas, communication, disabled spectators, concessions, ticketing.",Spectator experience lead,yes
+07,Hospitality,Hospitality,128,"Corporate hospitality, VVIP and VIP areas, commercial rights.",Hospitality lead,yes
+08,Media,Media,146,"Accreditation, media tribune, media centre, press areas, photographers, television, studios, compound.",Media and broadcast lead,yes
+09,Lighting and power supply,"Lighting, power",164,"Power supply, event lighting, specifications, environmental impact, commissioning.",Electrical and lighting lead,yes
+10,Communications and additional areas,Comms,192,"Communications requirements, systems, rooms, telephones, additional areas, flagpoles.",ICT and systems lead,yes
+11,Futsal and beach soccer,"Futsal, beach",202,Futsal halls and beach soccer stadiums. No requirement in the 2034 stadium register applies.,Not applicable,no
+12,Temporary facilities,Temporary,276,"Event facilities, event experience, demountable structures, sustainability.",Overlay and event lead,yes

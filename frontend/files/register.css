@@ -1,0 +1,29 @@
+
+/* ---------- Requirement families (Venue Compliance Hub) ---------- */
+.arail-n {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+.arail button span {
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.fam {
+  margin-top: 8px;
+}
+.fam .filters {
+  align-items: center;
+  gap: 14px;
+}
+.fam .filters h3 {
+  font-size: 16px;
+}
+.fam .comp-detail .block {
+  margin-top: 0;
+}
+.fam .comp-detail .block > h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}

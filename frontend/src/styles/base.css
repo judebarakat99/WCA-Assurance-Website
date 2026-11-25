@@ -180,12 +180,14 @@ button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
-button.primary {
+button.primary,
+.btn.primary {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--accent-ink);
 }
-button.primary:hover {
+button.primary:hover,
+.btn.primary:hover {
   background: var(--brand-deep);
   border-color: var(--brand-deep);
   color: var(--accent-ink);

@@ -3,7 +3,6 @@
 // that applies to its highest match, and checks the declared capacity
 // against it. A declared check is not an assessment: evidence is still pending.
 import register from "../../../../data/facilities/register.json" with { type: "json" };
-import { resolveForStadium } from "@/lib/domain/fifa-catalogue.mjs";
 import { currentRequirement } from "@/lib/domain/requirementVersions.mjs";
 
 export const FACILITY_REGISTER = register;
@@ -23,18 +22,26 @@ export const STATUS_LABEL = {
   planned: "Planned",
 };
 
-// Capacity (STA-0004) has a threshold per match category; the stadium's highest
-// match selects it (40,000 up to the quarter-final, 60,000 semi-final, 80,000
-// opening match and final).
-const CAPACITY_ID = "STA-0004";
+// Minimum seats by highest match (FIFA 2034 hosting overview, page 3): checked against the
+// declared capacity. The register requirement is STA-0004, "Match category capacity allocation".
+const CAPACITY_MINIMUM = {
+  "opening-final": 80000,
+  "semi-final": 60000,
+  "third-place": 40000,
+  "quarter-final": 40000,
+  "round-of-16": 40000,
+  "round-of-32": 40000,
+};
+const CAPACITY_REQUIREMENT = "STA-0004";
 
-const requirementById = (id) => currentRequirement(id);
 const cityById = (id) => register.hostCities.find((c) => c.id === id);
 
-/** The capacity requirement as it applies to a stadium, with the threshold for its highest match. */
+/** The capacity rule that applies to a stadium, from its highest match. */
 export function capacityRequirement(stadium) {
-  const requirement = requirementById(CAPACITY_ID);
-  return requirement ? resolveForStadium(requirement, stadium) : null;
+  const base = currentRequirement(CAPACITY_REQUIREMENT);
+  if (!base) return null;
+  const minimum = CAPACITY_MINIMUM[stadium.highestMatch] ?? 40000;
+  return { ...base, criterion: { operator: "min", value: minimum, unit: "seats" }, condition: MATCH_LABEL[stadium.highestMatch] };
 }
 
 /**

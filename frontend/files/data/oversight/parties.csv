@@ -1,0 +1,61 @@
+﻿party_id,stadium_id,party,role
+king-fahad-sports-city:contractor,king-fahad-sports-city,Sahara Stadium Builders,contractor
+king-fahad-sports-city:pmc,king-fahad-sports-city,Horizon Programme Management,pmc
+king-fahad-sports-city:engineering,king-fahad-sports-city,Vertex Engineering,engineering
+king-fahad-sports-city:owner,king-fahad-sports-city,King Fahad asset owner,owner
+aramco:contractor,aramco,Najd Construction JV,contractor
+aramco:pmc,aramco,Keystone Project Services,pmc
+aramco:engineering,aramco,Aurum Design and Engineering,engineering
+aramco:owner,aramco,Aramco asset owner,owner
+prince-faisal-bin-fahad:contractor,prince-faisal-bin-fahad,Red Sea Contracting JV,contractor
+prince-faisal-bin-fahad:pmc,prince-faisal-bin-fahad,Horizon Programme Management,pmc
+prince-faisal-bin-fahad:engineering,prince-faisal-bin-fahad,Lattice Structural Consultants,engineering
+prince-faisal-bin-fahad:owner,prince-faisal-bin-fahad,Prince Faisal bin Fahad asset owner,owner
+jeddah-central-development:contractor,jeddah-central-development,Gulf Crescent Builders,contractor
+jeddah-central-development:pmc,jeddah-central-development,Summit PM Consultants,pmc
+jeddah-central-development:engineering,jeddah-central-development,Meridian Design Group,engineering
+jeddah-central-development:owner,jeddah-central-development,Jeddah Central Development asset owner,owner
+king-salman-international:contractor,king-salman-international,Al Noor Civil Works,contractor
+king-salman-international:pmc,king-salman-international,Horizon Programme Management,pmc
+king-salman-international:engineering,king-salman-international,Cobalt Engineering Partners,engineering
+king-salman-international:owner,king-salman-international,King Salman International asset owner,owner
+prince-mohammed-bin-salman:contractor,prince-mohammed-bin-salman,Falcon Peak Contractors,contractor
+prince-mohammed-bin-salman:pmc,prince-mohammed-bin-salman,Horizon Programme Management,pmc
+prince-mohammed-bin-salman:engineering,prince-mohammed-bin-salman,Pinnacle Infrastructure Design,engineering
+prince-mohammed-bin-salman:owner,prince-mohammed-bin-salman,Prince Mohammed bin Salman asset owner,owner
+new-murabba:contractor,new-murabba,Dune Ridge Construction,contractor
+new-murabba:pmc,new-murabba,Horizon Programme Management,pmc
+new-murabba:engineering,new-murabba,Orbit Stadium Design,engineering
+new-murabba:owner,new-murabba,New Murabba asset owner,owner
+roshn:contractor,roshn,Harbour Line Builders,contractor
+roshn:pmc,roshn,Horizon Programme Management,pmc
+roshn:engineering,roshn,Keystone Structures,engineering
+roshn:owner,roshn,ROSHN asset owner,owner
+south-riyadh:contractor,south-riyadh,Oasis Structures Co.,contractor
+south-riyadh:pmc,south-riyadh,Horizon Programme Management,pmc
+south-riyadh:engineering,south-riyadh,Delta Arc Engineering,engineering
+south-riyadh:owner,south-riyadh,South Riyadh asset owner,owner
+king-saud-university:contractor,king-saud-university,Granite Arc Contracting,contractor
+king-saud-university:pmc,king-saud-university,Horizon Programme Management,pmc
+king-saud-university:engineering,king-saud-university,Summit Design Partners,engineering
+king-saud-university:owner,king-saud-university,King Saud University asset owner,owner
+king-abdullah-sports-city:contractor,king-abdullah-sports-city,Meridian Works JV,contractor
+king-abdullah-sports-city:pmc,king-abdullah-sports-city,Summit PM Consultants,pmc
+king-abdullah-sports-city:engineering,king-abdullah-sports-city,Beacon Engineering Group,engineering
+king-abdullah-sports-city:owner,king-abdullah-sports-city,King Abdullah asset owner,owner
+qiddiya-coast:contractor,qiddiya-coast,Crescent Steel and Civil,contractor
+qiddiya-coast:pmc,qiddiya-coast,Summit PM Consultants,pmc
+qiddiya-coast:engineering,qiddiya-coast,Anchor Design Studio,engineering
+qiddiya-coast:owner,qiddiya-coast,Qiddiya Coast asset owner,owner
+king-abdullah-economic-city:contractor,king-abdullah-economic-city,Sahara Stadium Builders,contractor
+king-abdullah-economic-city:pmc,king-abdullah-economic-city,Summit PM Consultants,pmc
+king-abdullah-economic-city:engineering,king-abdullah-economic-city,Prism Technical Consultants,engineering
+king-abdullah-economic-city:owner,king-abdullah-economic-city,King Abdullah Economic City asset owner,owner
+king-khalid-university:contractor,king-khalid-university,Najd Construction JV,contractor
+king-khalid-university:pmc,king-khalid-university,Atlas Delivery Partners,pmc
+king-khalid-university:engineering,king-khalid-university,Verge Building Services,engineering
+king-khalid-university:owner,king-khalid-university,King Khalid University asset owner,owner
+neom:contractor,neom,Red Sea Contracting JV,contractor
+neom:pmc,neom,Northstar Programme Office,pmc
+neom:engineering,neom,Stratum Engineering,engineering
+neom:owner,neom,NEOM asset owner,owner

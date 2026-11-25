@@ -195,7 +195,6 @@ export default function ProgressFinding({ check }) {
         </div>
       </div>
       <p className="pf-summary">{check.summary}</p>
-      
       <p className="muted small">
         Claim source: {check.report.name}, p. {check.report.page} · “{check.report.quote}”
         {check.stale && (

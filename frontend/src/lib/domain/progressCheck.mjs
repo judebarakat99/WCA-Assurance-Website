@@ -1,6 +1,7 @@
-// Progress verification arithmetic and result: recalculates a stadium's
-// progress from the readings of its contractor's detailed plans and compares it
-// with the progress report's claim. Runs in the browser.
+// Progress verification arithmetic and result, mirroring the backend
+// (backend/app/progress_calc.py and the result assembly in app/intake.py).
+// Used by the offline demo, which reads bundled sample readings instead of
+// asking the model; the backend remains the reference.
 
 export const TOLERANCE = 5;
 
@@ -153,6 +154,7 @@ export function buildCheck(stadium, report, plans) {
     report: { document_id: report.document.document_id, name: report.document.name, page: r.overall_page, quote: r.overall_quote },
     packages,
     checked_at: new Date().toISOString().slice(0, 19) + "+00:00",
+    offline: true,
   };
   step(
     "Compared with the claim",
@@ -161,36 +163,29 @@ export function buildCheck(stadium, report, plans) {
   );
   result.summary = summary(result);
   result.summary_checked = true;
-  step("Wrote the finding", "Every figure in the finding comes from the calculation.");
+  step("Wrote the finding", "Summarised the result and the gap against the claim.");
   result.steps = steps;
   return result;
 }
 
-/**
- * Schedule slip in days from a check's plans (earned schedule): the date at
- * which the plans had planned today's actual progress, against the report
- * date. Positive means behind plan, negative ahead, null without plans.
- */
+/** Schedule slip in days from a check's plans using earned schedule. */
 export function scheduleSlipDays(check) {
   const packages = (check?.packages || []).filter((p) => p.activities?.length && p.budget);
   if (!packages.length) return null;
-  const budget = packages.reduce((t, p) => t + p.budget, 0);
-  const plannedAt = (date) =>
-    packages.reduce((t, p) => {
-      const w = p.activities.reduce((s, a) => s + a.weight, 0);
-      const v = p.activities.reduce((s, a) => s + a.weight * plannedFraction(a.start, a.finish, date), 0) / w;
-      return t + (p.budget * 100 * v) / budget;
-    }, 0);
-  const iso = (n) => new Date(n * DAY).toISOString().slice(0, 10);
-  const all = packages.flatMap((p) => p.activities);
-  let lo = Math.min(...all.map((a) => day(a.start))) - 1;
-  let hi = Math.max(...all.map((a) => day(a.finish)));
-  const target = check.recalculated;
-  if (plannedAt(iso(hi)) < target) return day(check.as_of) - hi;
-  // Earliest day on which planned progress reaches the actual figure.
+  const budget = packages.reduce((total, pack) => total + pack.budget, 0);
+  const plannedAt = (date) => packages.reduce((total, pack) => {
+    const weight = pack.activities.reduce((sum, activity) => sum + activity.weight, 0);
+    const progress = pack.activities.reduce((sum, activity) => sum + activity.weight * plannedFraction(activity.start, activity.finish, date), 0) / weight;
+    return total + (pack.budget * 100 * progress) / budget;
+  }, 0);
+  const iso = (number) => new Date(number * DAY).toISOString().slice(0, 10);
+  const activities = packages.flatMap((pack) => pack.activities);
+  let lo = Math.min(...activities.map((activity) => day(activity.start))) - 1;
+  let hi = Math.max(...activities.map((activity) => day(activity.finish)));
+  if (plannedAt(iso(hi)) < check.recalculated) return day(check.as_of) - hi;
   while (hi - lo > 1) {
     const mid = Math.floor((lo + hi) / 2);
-    if (plannedAt(iso(mid)) >= target - 1e-9) hi = mid;
+    if (plannedAt(iso(mid)) >= check.recalculated - 1e-9) hi = mid;
     else lo = mid;
   }
   return day(check.as_of) - hi;

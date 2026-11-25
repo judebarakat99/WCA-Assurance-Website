@@ -42,12 +42,10 @@ test("every record is sourced and uses known categories", () => {
 
 test("match category selects the matching FIFA capacity requirement", () => {
   const byId = Object.fromEntries(FACILITY_REGISTER.stadiums.map((s) => [s.id, s]));
-  const cap = (id) => capacityRequirement(byId[id]);
-  assert.equal(cap("king-salman-international").id, "STA-0004");
-  assert.equal(cap("king-salman-international").criterion.value, 80000);
-  assert.equal(cap("king-fahad-sports-city").criterion.value, 60000);
-  assert.equal(cap("prince-mohammed-bin-salman").criterion.value, 40000);
-  assert.equal(cap("aramco").criterion.value, 40000);
+  assert.equal(capacityRequirement(byId["king-salman-international"]).id, "F34-ST-CAP-03");
+  assert.equal(capacityRequirement(byId["king-fahad-sports-city"]).id, "F34-ST-CAP-02");
+  assert.equal(capacityRequirement(byId["prince-mohammed-bin-salman"]).id, "F34-ST-CAP-01");
+  assert.equal(capacityRequirement(byId["aramco"]).id, "F34-ST-CAP-01");
   const ks = declaredCapacityCheck(byId["king-salman-international"]);
   assert.equal(ks.minimum, 80000);
   assert.equal(ks.margin, 12760);
@@ -68,7 +66,7 @@ test("every stadium has a host city", () => {
 test("register view shows every stadium, its requirement and pending evidence", () => {
   const html = renderToStaticMarkup(<FacilityRegister />);
   for (const s of FACILITY_REGISTER.stadiums) assert.ok(html.includes(s.name), s.name);
-  assert.ok(html.includes("STA-0004"));
+  assert.ok(html.includes("F34-ST-CAP-03"));
   assert.ok(html.includes("Evidence pending"));
   assert.ok(html.includes("Secondary source"));
   assert.ok(!html.includes("Compliant"));

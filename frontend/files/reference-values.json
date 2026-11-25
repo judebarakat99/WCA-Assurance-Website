@@ -1,0 +1,618 @@
+{
+ "STA-0001": {
+  "value": "Whole site boundary surveyed; title or lease covers 100% of the stadium and precinct",
+  "basis": "target"
+ },
+ "STA-0002": {
+  "value": "Approved master plan showing every functional zone and its circulation",
+  "basis": "target"
+ },
+ "STA-0003": {
+  "value": "Gross and net seat counts reconcile to within 1% of the approved bowl design",
+  "basis": "target"
+ },
+ "STA-0005": {
+  "value": "Pitch long axis north to south, within 15 degrees of true north; no direct sun glare on cameras or players",
+  "basis": "target"
+ },
+ "STA-0006": {
+  "value": "Sightline C-value of at least 60 mm (90 mm recommended, 120 mm optimum)",
+  "basis": "book"
+ },
+ "STA-0008": {
+  "value": "Step-free route from every entrance to every accessible seating area; lifts fit a wheelchair and companion",
+  "basis": "target"
+ },
+ "STA-0009": {
+  "value": "Concourse flow modelled at 100% capacity with no bottleneck",
+  "basis": "target"
+ },
+ "STA-0010": {
+  "value": "Gates sized to admit the full crowd within 2 hours of opening",
+  "basis": "target"
+ },
+ "STA-0011": {
+  "value": "Queue space outside every gate sized for the peak 15 minutes of arrivals, clear of public roads",
+  "basis": "target"
+ },
+ "STA-0012": {
+  "value": "Bowl emptied in 8 minutes; place of safety reached in 15 minutes",
+  "basis": "target"
+ },
+ "STA-0013": {
+  "value": "Directional signs at every decision point from the precinct edge to every seat",
+  "basis": "target"
+ },
+ "STA-0014": {
+  "value": "Per 1,000 spectators: women 28 toilets and 14 sinks; men 3 toilets, 15 urinals and 6 sinks",
+  "basis": "book"
+ },
+ "STA-0016": {
+  "value": "At least one prayer room per concourse level, with ablution facilities, and a family area in each sector",
+  "basis": "target"
+ },
+ "STA-0017": {
+  "value": "Register listing every asset as permanent or temporary, agreed with the authority",
+  "basis": "target"
+ },
+ "STA-0019": {
+  "value": "Markings to the IFAB Laws of the Game; surface levelness surveyed and signed off",
+  "basis": "target"
+ },
+ "STA-0021": {
+  "value": "Turf and rootzone specification agreed with FIFA; agronomic test report before the first match",
+  "basis": "target"
+ },
+ "STA-0022": {
+  "value": "Pitch base built to the approved specification; compaction and level tests passed",
+  "basis": "target"
+ },
+ "STA-0023": {
+  "value": "Drains at least 50 mm of rain per hour without surface ponding",
+  "basis": "target"
+ },
+ "STA-0024": {
+  "value": "Even irrigation over the whole pitch; water tested for salinity and suitability",
+  "basis": "target"
+ },
+ "STA-0025": {
+  "value": "Shade study showing the pitch gets enough daylight to keep natural grass healthy",
+  "basis": "target"
+ },
+ "STA-0026": {
+  "value": "Direct vehicle access to the pitch for mowing and spraying equipment",
+  "basis": "target"
+ },
+ "STA-0027": {
+  "value": "Protection and recovery plan for non-football events; pitch back in play within 14 days",
+  "basis": "target"
+ },
+ "STA-0031": {
+  "value": "Goals, nets and flags to the Laws of the Game, with fixed sockets and a spare set on site",
+  "basis": "target"
+ },
+ "STA-0032": {
+  "value": "Step-free stretcher and ambulance route from the touchline to the medical area",
+  "basis": "target"
+ },
+ "STA-0033": {
+  "value": "Positions behind the goal lines and along the touchlines, clear of advertising boards and sightlines",
+  "basis": "target"
+ },
+ "STA-0036": {
+  "value": "Secure, non-slip, shock-absorbing route from arrival point to dressing rooms and pitch",
+  "basis": "book"
+ },
+ "STA-0037": {
+  "value": "Indoor exercise room with direct access to the dressing rooms",
+  "basis": "target"
+ },
+ "STA-0041": {
+  "value": "Positions beside the tunnel exit, in view of broadcast cameras, off the players' route",
+  "basis": "target"
+ },
+ "STA-0044": {
+  "value": "Secure kit storage reached through double-width doors",
+  "basis": "book"
+ },
+ "STA-0045": {
+  "value": "Staging area for both teams, match officials and mascots behind the tunnel, without crossing",
+  "basis": "target"
+ },
+ "STA-0046": {
+  "value": "Recovery area with hot and cold plunge pools, treatment tables and refreshments for each team",
+  "basis": "target"
+ },
+ "STA-0048": {
+  "value": "Outer perimeter checks vehicles and people before anyone reaches a ticket gate",
+  "basis": "book"
+ },
+ "STA-0049": {
+  "value": "Ticket and security checks at the inner perimeter, before the turnstiles",
+  "basis": "book"
+ },
+ "STA-0050": {
+  "value": "Staffed operations room with a view of the pitch and all stands, linked to police, medical and fire services",
+  "basis": "book"
+ },
+ "STA-0051": {
+  "value": "100% coverage of spectator areas and entrances; footage kept for at least 30 days",
+  "basis": "target"
+ },
+ "STA-0052": {
+  "value": "Every back-of-house zone covered by accreditation checks, with entries logged",
+  "basis": "target"
+ },
+ "STA-0053": {
+  "value": "Stewards at every gate, stair and block; at least 1 per 250 spectators",
+  "basis": "target"
+ },
+ "STA-0054": {
+  "value": "Evacuation of the full crowd modelled, with times, assumptions and exits documented",
+  "basis": "target"
+ },
+ "STA-0055": {
+  "value": "Emergency lighting and public address run on back-up power for at least 3 hours",
+  "basis": "book"
+ },
+ "STA-0056": {
+  "value": "Detection and suppression throughout, tested and certified by the civil defence authority",
+  "basis": "target"
+ },
+ "STA-0057": {
+  "value": "At least two separate ambulance routes to the pitch and the medical centres, kept clear on match day",
+  "basis": "target"
+ },
+ "STA-0058": {
+  "value": "At least one spectators' medical centre per sector, with at least four sectors",
+  "basis": "book"
+ },
+ "STA-0059": {
+  "value": "Live counts at every gate and a density view of the concourses in the control room",
+  "basis": "target"
+ },
+ "STA-0060": {
+  "value": "Rated barriers on every vehicle approach to the outer perimeter",
+  "basis": "target"
+ },
+ "STA-0061": {
+  "value": "Written incident command structure and roles, exercised before the first match",
+  "basis": "target"
+ },
+ "STA-0062": {
+  "value": "Evacuation routes and refuge areas for spectators with disabilities, with lifts on back-up power",
+  "basis": "target"
+ },
+ "STA-0063": {
+  "value": "On the halfway line in the main stand, at least 2 m × 2 m per camera, out of the direct sun",
+  "basis": "book"
+ },
+ "STA-0064": {
+  "value": "Platform opposite the main camera, at least 2 m × 2 m, clear of spectator sightlines",
+  "basis": "target"
+ },
+ "STA-0065": {
+  "value": "Positions behind each goal line, 2 m × 2 m, with cable routes to the compound",
+  "basis": "target"
+ },
+ "STA-0067": {
+  "value": "Studio positions with a view of the pitch, with power, data and lighting supplies",
+  "basis": "target"
+ },
+ "STA-0069": {
+  "value": "Vehicle route from the road to the compound at least 4 m wide and 4.5 m high",
+  "basis": "target"
+ },
+ "STA-0070": {
+  "value": "Two independent power feeds to the compound, with back-up for at least 3 hours",
+  "basis": "target"
+ },
+ "STA-0071": {
+  "value": "Two physically separate fibre routes from the stadium to the outside",
+  "basis": "target"
+ },
+ "STA-0072": {
+  "value": "Covered, desked seats with power and data for the journalists the tournament allocates",
+  "basis": "target"
+ },
+ "STA-0073": {
+  "value": "Workroom beside the media tribune with desks, power, Wi-Fi and refreshments",
+  "basis": "target"
+ },
+ "STA-0074": {
+  "value": "Working room with power and data, and direct access to the pitchside positions",
+  "basis": "target"
+ },
+ "STA-0075": {
+  "value": "Podium, microphones, translation booth and camera platform, linked to the broadcast feed",
+  "basis": "target"
+ },
+ "STA-0076": {
+  "value": "Camera and audio positions along the mixed zone, with power and data at each",
+  "basis": "target"
+ },
+ "STA-0077": {
+  "value": "VAR room and goal-line technology cabling powered and tested before the first match",
+  "basis": "target"
+ },
+ "STA-0078": {
+  "value": "Separate arrival route, drop-off and entrance for VIP and VVIP guests, with secure parking",
+  "basis": "target"
+ },
+ "STA-0079": {
+  "value": "VVIP lounge and suite with a private entrance, toilets and a view of the pitch",
+  "basis": "target"
+ },
+ "STA-0080": {
+  "value": "Circulation separate from general spectators; no shared stair or lift",
+  "basis": "target"
+ },
+ "STA-0081": {
+  "value": "Kitchens meeting local food-safety law, with delivery access away from spectators",
+  "basis": "target"
+ },
+ "STA-0082": {
+  "value": "Premium seats with a sightline C-value of at least 90 mm",
+  "basis": "target"
+ },
+ "STA-0083": {
+  "value": "8% of seats for the opening match, semi-finals and final, 5% otherwise; at least 30% in skyboxes",
+  "basis": "book"
+ },
+ "STA-0084": {
+  "value": "Step-free access to every hospitality area, with accessible toilets",
+  "basis": "target"
+ },
+ "STA-0085": {
+  "value": "Defined activation areas outside the gates, with power, water and rigging points",
+  "basis": "target"
+ },
+ "STA-0086": {
+  "value": "Two independent supplies, each able to carry the full match-day load",
+  "basis": "target"
+ },
+ "STA-0088": {
+  "value": "Dressing rooms and media areas air-conditioned, each with its own control unit",
+  "basis": "book"
+ },
+ "STA-0089": {
+  "value": "Drinking water to every outlet with a reserve for a full match day; separate non-potable supply for the pitch",
+  "basis": "target"
+ },
+ "STA-0090": {
+  "value": "Drainage sized for peak match-day flows with no overflow to the public network",
+  "basis": "target"
+ },
+ "STA-0091": {
+  "value": "Wi-Fi in all media and back-of-house areas; mobile coverage across the bowl",
+  "basis": "target"
+ },
+ "STA-0092": {
+  "value": "Building, security and lighting systems on one managed network with documented interfaces",
+  "basis": "target"
+ },
+ "STA-0095": {
+  "value": "Lighting presets (training, match, broadcast, emergency) set and tested from the control room",
+  "basis": "target"
+ },
+ "STA-0096": {
+  "value": "Central monitoring of power, cooling and water, with alarms to the control room",
+  "basis": "target"
+ },
+ "STA-0097": {
+  "value": "Operational networks segregated from guest and media networks; penetration test passed",
+  "basis": "target"
+ },
+ "STA-0098": {
+  "value": "One control room with live feeds from CCTV, gates, power and fire, staffed on match days",
+  "basis": "book"
+ },
+ "STA-0099": {
+  "value": "Every system tested together under full match-day load, with sign-off",
+  "basis": "target"
+ },
+ "TRA-0100": {
+  "value": "Drive of at most 20 minutes from the paired team hotel",
+  "basis": "book"
+ },
+ "TRA-0101": {
+  "value": "Exclusive use of the site for the whole tournament period, confirmed in writing",
+  "basis": "target"
+ },
+ "TRA-0102": {
+  "value": "At least one pitch at each training site",
+  "basis": "book"
+ },
+ "TRA-0103": {
+  "value": "Natural grass to elite-match standard, with an agronomy report",
+  "basis": "target"
+ },
+ "TRA-0104": {
+  "value": "105 m × 68 m, the same as the match pitch",
+  "basis": "book"
+ },
+ "TRA-0105": {
+  "value": "Drains at least 50 mm of rain per hour; even irrigation over the whole pitch",
+  "basis": "target"
+ },
+ "TRA-0106": {
+  "value": "Machinery access gate at least 3 m wide",
+  "basis": "target"
+ },
+ "TRA-0107": {
+  "value": "Ambulance can reach the pitch edge within 2 minutes",
+  "basis": "target"
+ },
+ "TRA-0108": {
+  "value": "Non-slip, shock-absorbing surface on every route from the building to the pitch",
+  "basis": "book"
+ },
+ "TRA-0109": {
+  "value": "Training floodlighting to FIFA's training-site specification, with glare tested",
+  "basis": "target"
+ },
+ "TRA-0110": {
+  "value": "Covered benches for both teams beside the pitch",
+  "basis": "target"
+ },
+ "TRA-0111": {
+  "value": "Ball-stop fencing at least 5 m high behind both goals",
+  "basis": "target"
+ },
+ "TRA-0112": {
+  "value": "Perimeter fence at least 2.5 m high, screened so training cannot be seen from outside",
+  "basis": "target"
+ },
+ "TRA-0114": {
+  "value": "Stand or viewing area for at least 50 guests, with accessible spaces",
+  "basis": "target"
+ },
+ "TRA-0115": {
+  "value": "Second pitch or indoor area available if the main pitch cannot be used",
+  "basis": "target"
+ },
+ "TRA-0116": {
+  "value": "At least two player dressing room areas",
+  "basis": "book"
+ },
+ "TRA-0117": {
+  "value": "Two coaches' dressing rooms, one beside each player room",
+  "basis": "target"
+ },
+ "TRA-0120": {
+  "value": "Seats and lockers for up to 26 players in each room",
+  "basis": "target"
+ },
+ "TRA-0121": {
+  "value": "Seats and lockers for 4 coaches in each room",
+  "basis": "target"
+ },
+ "TRA-0125": {
+  "value": "Own toilet and shower for each coaches' room",
+  "basis": "target"
+ },
+ "TRA-0126": {
+  "value": "One locker per player, each with a power and USB charging point",
+  "basis": "target"
+ },
+ "TRA-0127": {
+  "value": "Indoor gym and warm-up area of at least 100 m²",
+  "basis": "target"
+ },
+ "TRA-0128": {
+  "value": "Treatment room of at least 50 m² with direct emergency access",
+  "basis": "target"
+ },
+ "TRA-0129": {
+  "value": "Massage tables and hot and cold plunge pools in each team area",
+  "basis": "target"
+ },
+ "TRA-0130": {
+  "value": "Medical room reachable by ambulance along a step-free route",
+  "basis": "target"
+ },
+ "TRA-0131": {
+  "value": "Briefing room seating the full squad, with a screen and power",
+  "basis": "target"
+ },
+ "TRA-0132": {
+  "value": "Lounge with a nutrition counter and kitchenette for 26 players",
+  "basis": "target"
+ },
+ "TRA-0133": {
+  "value": "Interview area with a backdrop, power and a separate entrance for media",
+  "basis": "target"
+ },
+ "TRA-0134": {
+  "value": "Laundry and drying capacity for two training kits per player per day",
+  "basis": "target"
+ },
+ "TRA-0135": {
+  "value": "Office for team staff and equipment storage of at least 20 m²",
+  "basis": "target"
+ },
+ "TRA-0136": {
+  "value": "Prayer room and an accessible toilet and shower in the building",
+  "basis": "target"
+ },
+ "TRA-0137": {
+  "value": "Air-conditioned dressing and treatment rooms; chilled water at the pitch edge",
+  "basis": "target"
+ },
+ "FAN-0138": {
+  "value": "Site approved by the civil defence authority, with a stated maximum occupancy",
+  "basis": "target"
+ },
+ "FAN-0139": {
+  "value": "Capacity set from the net usable area at a stated density, and signed off",
+  "basis": "target"
+ },
+ "FAN-0140": {
+  "value": "Screened entrances and exits sized to clear the site in 15 minutes",
+  "basis": "target"
+ },
+ "FAN-0141": {
+  "value": "At least two LED screens, with sound reaching the whole viewing area",
+  "basis": "target"
+ },
+ "FAN-0142": {
+  "value": "Back-up power for at least 3 hours for lighting, screens and safety systems",
+  "basis": "target"
+ },
+ "FAN-0143": {
+  "value": "Engineer's certificate for every stage, tower and tent, with a wind-load check",
+  "basis": "target"
+ },
+ "FAN-0144": {
+  "value": "First-aid post and ambulance on site throughout opening hours; one post per 5,000 visitors",
+  "basis": "target"
+ },
+ "FAN-0145": {
+  "value": "Crowd management plan with steward and police roles, exercised before opening",
+  "basis": "target"
+ },
+ "FAN-0146": {
+  "value": "Same ratios as stadiums: women 28 toilets and 14 sinks; men 3 toilets, 15 urinals and 6 sinks per 1,000",
+  "basis": "target"
+ },
+ "FAN-0147": {
+  "value": "One food or drink point per 250 visitors, with a safe water supply",
+  "basis": "target"
+ },
+ "FAN-0148": {
+  "value": "Step-free walking route from the nearest transport stop, clear of vehicle traffic",
+  "basis": "target"
+ },
+ "FAN-0149": {
+  "value": "Shade over at least 30% of the viewing area, with free drinking water",
+  "basis": "target"
+ },
+ "FAN-0150": {
+  "value": "Waste collected and the site cleared within 2 hours of closing",
+  "basis": "target"
+ },
+ "FAN-0151": {
+  "value": "Two fibre links and mobile coverage for broadcast and operations",
+  "basis": "target"
+ },
+ "IBC-0152": {
+  "value": "Floor area sized to the broadcast and media allocation, signed off by FIFA",
+  "basis": "target"
+ },
+ "IBC-0153": {
+  "value": "Two physically separate fibre routes into the IBC",
+  "basis": "target"
+ },
+ "IBC-0154": {
+  "value": "Back-up power for at least 3 hours, with UPS for broadcast systems",
+  "basis": "target"
+ },
+ "IBC-0155": {
+  "value": "Cooling with N+1 redundancy so one unit can fail without loss",
+  "basis": "target"
+ },
+ "IBC-0156": {
+  "value": "Accredited access, with a separate secure loading route",
+  "basis": "target"
+ },
+ "IBC-0157": {
+  "value": "Loading dock for two large trucks at once; fit-out signed off before move-in",
+  "basis": "target"
+ },
+ "IBC-0158": {
+  "value": "Referees' base with a dressing room of at least 24 m², plus treatment and briefing space",
+  "basis": "target"
+ },
+ "IBC-0159": {
+  "value": "Loading dock and service road kept apart from the spectator routes",
+  "basis": "target"
+ },
+ "IBC-0160": {
+  "value": "Accreditation centre able to process the whole workforce before the first match",
+  "basis": "target"
+ },
+ "IBC-0161": {
+  "value": "Rest area, water and meals for every shift; toilets for the workforce",
+  "basis": "target"
+ },
+ "IBC-0162": {
+  "value": "Drop-off and shuttle points within 500 m of every gate",
+  "basis": "target"
+ },
+ "IBC-0163": {
+  "value": "Branding and signs installed to the FIFA style guide by the final acceptance date",
+  "basis": "target"
+ },
+ "IBC-0164": {
+  "value": "Programme with dates, contractors and loads for every temporary structure",
+  "basis": "target"
+ },
+ "IBC-0165": {
+  "value": "Plan restoring every area to its pre-event condition, with a budget",
+  "basis": "target"
+ },
+ "ASS-0166": {
+  "value": "Every applicable FIFA clause checked, with deviations listed and approved",
+  "basis": "target"
+ },
+ "ASS-0167": {
+  "value": "Building, fire and civil defence permits issued for every phase",
+  "basis": "target"
+ },
+ "ASS-0168": {
+  "value": "Inspection record for each work package with no open major defect",
+  "basis": "target"
+ },
+ "ASS-0169": {
+  "value": "Certificate from an independent structural engineer for the bowl, roof and temporary structures",
+  "basis": "target"
+ },
+ "ASS-0170": {
+  "value": "Pitch passes surface hardness, traction and evenness tests before the first match",
+  "basis": "target"
+ },
+ "ASS-0171": {
+  "value": "Class V: 3,500 lux horizontal; more than 2,000 lux vertical for fixed cameras; maintenance factor 0.7",
+  "basis": "book"
+ },
+ "ASS-0172": {
+  "value": "Audit by an accessibility specialist with no unresolved critical finding",
+  "basis": "target"
+ },
+ "ASS-0173": {
+  "value": "Full exercise with police, medical and fire services, with a written report",
+  "basis": "target"
+ },
+ "ASS-0174": {
+  "value": "Mains cut-off test: back-up takes over and runs for at least 3 hours",
+  "basis": "book"
+ },
+ "ASS-0175": {
+  "value": "Full signal chain from camera to compound tested live with the broadcaster",
+  "basis": "target"
+ },
+ "ASS-0176": {
+  "value": "Penetration test passed with no unresolved high-risk finding",
+  "basis": "target"
+ },
+ "ASS-0177": {
+  "value": "At least one full-scale test event before the tournament",
+  "basis": "target"
+ },
+ "ASS-0178": {
+  "value": "No open critical or major defect at final acceptance",
+  "basis": "target"
+ },
+ "ASS-0179": {
+  "value": "Manuals issued and staff trained before the first match",
+  "basis": "target"
+ },
+ "ASS-0180": {
+  "value": "Handover pack with as-built drawings, warranties and a 12-month maintenance plan",
+  "basis": "target"
+ },
+ "ASS-0181": {
+  "value": "Register of every accepted deviation, signed by FIFA",
+  "basis": "target"
+ }
+}

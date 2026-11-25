@@ -1,9 +1,9 @@
 // Assurance roll-up for the map: stadium → city → country, optionally for one
-// requirement category ("pillar"). Assured = reviewer-accepted compliant out of
+// requirement family ("pillar"). Assured = reviewer-accepted compliant out of
 // requirements in scope; coverage = anything assessed beyond unassessed.
 import { STATUS, stadiumRequirements } from "@/lib/domain/assessment.mjs";
 import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
-import { CHAPTERS } from "@/lib/domain/fifa-catalogue.mjs";
+import { FAMILIES } from "@/lib/register/data.mjs";
 
 const EMPTY = () => ({ inScope: 0, ...Object.fromEntries(Object.keys(STATUS).map((s) => [s, 0])) });
 
@@ -23,7 +23,7 @@ function finish(t) {
   };
 }
 
-/** Status counts for one stadium (category: null for every pillar). */
+/** Status counts for one stadium (category: null for every family). */
 export function stadiumAssurance(stadium, records, category = null) {
   const t = EMPTY();
   for (const row of stadiumRequirements(stadium)) {
@@ -77,8 +77,16 @@ export function assuranceMap(records, category = null, year = null) {
   };
 }
 
-/** Requirement chapters, in book order, as filters ("pillars"); id null is everything. */
+/** The requirement families that apply to stadiums (the chapters of the FIFA stadium book), in book order. */
 export const PILLARS = [
-  { id: null, label: "All requirements", short: "All", number: null },
-  ...CHAPTERS.map((c) => ({ id: c.name, label: c.name, short: c.short, number: c.id })),
+  { id: null, label: "All requirements" },
+  ...FAMILIES.filter((f) => f.forStadiums).map((f) => ({
+    id: f.name,
+    label: `${f.id} · ${f.name}`,
+    number: f.id,
+    short: f.short,
+  })),
 ];
+
+/** Nothing is left to show as "coming soon": the families cover the whole book. */
+export const UPCOMING_PILLARS = [];

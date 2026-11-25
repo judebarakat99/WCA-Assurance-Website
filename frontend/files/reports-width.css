@@ -1,0 +1,8 @@
+
+/* ---------- Reports page width (Venue Compliance Hub) ---------- */
+/* The Reports page keeps the same column as the Evidence page, centred, whatever the page template does. */
+.rp-page {
+  width: 100%;
+  max-width: 966px;
+  margin-inline: auto;
+}

@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import StatusPill from "@/components/atoms/StatusPill";
 import { CHECK_STATUS, ensureIntake, intake } from "@/lib/store/intake";
 
-/** A stadium's latest progress check, linking to the full finding on the Evidence page. Hidden when there is none. */
+/** A stadium's latest progress check, linking to the full finding on the Intake page. Hidden when there is none. */
 export default function ProgressClaim({ stadiumId }) {
   useEffect(ensureIntake, []);
   const check = intake.checks[stadiumId];
@@ -23,7 +23,7 @@ export default function ProgressClaim({ stadiumId }) {
       <StatusPill tone={s.tone}>{s.label}</StatusPill>
       {check.stale && <StatusPill tone="warn">New evidence since last check</StatusPill>}
       {check.decision && <span className="muted small">Finding {check.decision}</span>}
-      <Link className="btnlink" href={`/evidence?tab=onfile&stadium=${encodeURIComponent(stadiumId)}`}>
+      <Link className="btnlink" href={`/evidence?tab=checks&stadium=${encodeURIComponent(stadiumId)}`}>
         View finding →
       </Link>
     </div>

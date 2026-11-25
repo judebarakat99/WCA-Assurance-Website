@@ -1,15 +1,20 @@
-// Evidence documents and progress checks, kept in this browser. Documents are
-// read by the in-browser agent (lib/domain/evidenceReader): text files and the
-// sample documents are read in full; other files are identified from their name.
-import progressReadings from "../../../../data/progress/offline-readings.json" with { type: "json" };
-import evidenceReadings from "../../../../data/evidence/readings.json" with { type: "json" };
-import { readDocument } from "@/lib/domain/evidenceReader.mjs";
+// Offline demo of document intake, used when the backend is not running.
+// It has the backend's API shape, but reads the sample documents from bundled
+// readings (data/progress/offline-readings.json, exported from the backend
+// pipeline) instead of asking the model; only those files can be added.
+// State is kept in this browser.
+import readings from "../../../../data/progress/offline-readings.json" with { type: "json" };
 import { ELEMENTS, buildCheck } from "@/lib/domain/progressCheck.mjs";
-import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
+import { stadiumApplicability } from "@/lib/domain/assessment.mjs";
+import { FACILITY_REGISTER, capacityRequirement } from "@/lib/domain/facilities.mjs";
+import { currentRequirement } from "@/lib/domain/requirementVersions.mjs";
+import { analyseDocument } from "@/lib/intake/evidenceAgent.mjs";
+import { readDocument } from "@/lib/intake/readDocument.mjs";
+import { clearAlerts, raiseAlerts, removeAlertsFor } from "@/lib/store/alerts";
+import { getAssessments, recordEvidence } from "@/lib/store/assessments";
 
-const KEY = "wca-evidence-v1";
-const PROGRESS = new Map(progressReadings.files.map((f) => [f.name, f]));
-const EVIDENCE = new Map(evidenceReadings.files.map((f) => [f.name, f]));
+const KEY = "wca-intake-offline-v1";
+const FILES = new Map(readings.files.map((f) => [f.name, f]));
 const CITY = Object.fromEntries(FACILITY_REGISTER.hostCities.map((c) => [c.id, c.name]));
 const STADIUMS = FACILITY_REGISTER.stadiums.map((s) => ({ id: s.id, name: s.name, city: CITY[s.cityId] }));
 
@@ -35,18 +40,15 @@ function save() {
 }
 
 const now = () => new Date().toISOString().slice(0, 19) + "+00:00";
-const progressOf = (doc) => doc.reading?.progress || null;
+const reading = (doc) => FILES.get(doc.name).extraction;
 const current = (stadiumId) =>
   load().documents.filter((d) => d.status === "filed" && !d.superseded && d.stadium_id === stadiumId);
 
-// Within a stadium (and scope element, for plans) only the newest report or plan counts.
+// Within a stadium (and scope element, for plans) only the newest filed document counts.
 function resupersede() {
   const groups = new Map();
   for (const d of load().documents.filter((x) => x.status === "filed")) {
-    const key =
-      d.kind === "progress-report" || d.kind === "detailed-plan"
-        ? [d.kind, d.stadium_id, d.kind === "detailed-plan" ? d.element : ""].join("|")
-        : d.document_id;
+    const key = [d.kind, d.stadium_id, d.kind === "detailed-plan" ? d.element : d.kind === "evidence" ? (d.requirement_ids || []).join(",") : ""].join("|");
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(d);
   }
@@ -78,38 +80,22 @@ export function localState() {
   };
 }
 
-/**
- * Add a document; the agent reads it and proposes how to file it.
- * text: the file's text when it could be read in the browser (TXT, Markdown).
- */
-export function localUpload(file, text = null) {
-  const existing = load().documents.find((d) => d.name === file.name);
+/** Add a sample document; the proposal is the backend pipeline's own reading of it. */
+export function localUpload(file) {
+  const sample = FILES.get(file.name);
+  if (!sample || sample.size !== file.size)
+    throw new Error("This document could not be read. Use a progress report or detailed plan as a PDF, TXT or Markdown file.");
+  const existing = load().documents.find((d) => d.name === sample.name);
   if (existing) return { ...existing, duplicate: true };
-  const progress = PROGRESS.get(file.name);
-  const evidence = EVIDENCE.get(file.name);
-  const sampleText = evidence ? evidence.pages.map((p) => p.text).join("\n") : null;
-  const reading = readDocument({
-    name: file.name,
-    text: sampleText ?? text,
-    pages: progress?.pages ?? evidence?.pages.length ?? 1,
-    progress: progress && { proposal: progress.proposal, extraction: progress.extraction },
-  });
   const row = {
-    document_id: `doc:${file.name}`,
-    kind: reading.kind,
-    evidenceType: reading.evidenceType,
-    stadium_id: reading.stadium_id,
-    element: reading.element,
-    as_of: reading.as_of,
-    revision: reading.revision,
-    title: reading.title,
+    document_id: `offline:${sample.name}`,
+    ...sample.proposal,
     status: "proposed",
     superseded: 0,
     filed_at: null,
-    name: file.name,
-    pages: reading.pages,
+    name: sample.name,
+    pages: sample.pages,
     created_at: now(),
-    reading,
   };
   db.documents.unshift(row);
   save();
@@ -118,10 +104,9 @@ export function localUpload(file, text = null) {
 
 export function localFile(id, filing) {
   const d = load().documents.find((x) => x.document_id === id);
-  if (!d) throw new Error("Document not found");
+  if (!d) throw new Error("Document not found in intake");
   Object.assign(d, filing, {
     element: filing.kind === "detailed-plan" ? filing.element : null,
-    evidenceType: filing.kind === "evidence" ? filing.evidenceType : null,
     status: "filed",
     filed_at: now(),
   });
@@ -131,6 +116,7 @@ export function localFile(id, filing) {
 
 export function localRemove(id) {
   load().documents = db.documents.filter((d) => d.document_id !== id);
+  removeAlertsFor(id);
   resupersede();
   save();
 }
@@ -139,12 +125,11 @@ export function localCheck(stadiumId) {
   const stadium = STADIUMS.find((s) => s.id === stadiumId);
   const docs = current(stadiumId);
   const report = docs.find((d) => d.kind === "progress-report");
-  if (report && !progressOf(report)) throw new Error(`The progress report for ${stadium.name} could not be read, so its claim cannot be checked.`);
-  const plans = docs.filter((d) => d.kind === "detailed-plan" && progressOf(d));
+  const plans = docs.filter((d) => d.kind === "detailed-plan");
   const result = buildCheck(
     stadium,
-    report && { document: report, reading: progressOf(report) },
-    plans.map((d) => ({ document: d, reading: progressOf(d) })),
+    report && { document: report, reading: reading(report) },
+    plans.map((d) => ({ document: d, reading: reading(d) })),
   );
   load().checks[stadiumId] = result;
   save();
@@ -159,10 +144,10 @@ export function localDecide(stadiumId, decision, note) {
   return checks()[stadiumId];
 }
 
-/** File and check the preloaded sample progress documents. */
+/** File and check the preloaded sample documents (as the backend's seed does). */
 export function localSeed() {
   const stadiums = [];
-  for (const f of progressReadings.files.filter((x) => x.folder === "preloaded")) {
+  for (const f of readings.files.filter((x) => x.folder === "preloaded")) {
     const row = localUpload({ name: f.name, size: f.size });
     localFile(row.document_id, {
       kind: f.proposal.kind,
@@ -179,5 +164,120 @@ export function localSeed() {
 
 export function localClear() {
   db = { documents: [], checks: {} };
+  clearAlerts();
+  save();
+}
+
+// ---------------------------------------------------------------- evidence documents
+// Any other document is read here (PDFs through lib/intake/pdfText) and analysed by the evidence agent in
+// lib/intake/evidenceAgent. The proposal carries what the agent found. Nothing is recorded until the person
+// confirms: filing then records the document as evidence in the register (lib/store/assessments) and raises the
+// agent's alerts for the owners.
+let docSeq = 0;
+const MAX_TEXT = 120000; // characters of text kept with a proposal, so the agent can read it again for another stadium
+
+function keepText(pages) {
+  let room = MAX_TEXT;
+  const out = [];
+  for (const p of pages || []) {
+    if (room <= 0) break;
+    const text = p.text.slice(0, room);
+    room -= text.length;
+    out.push({ n: p.n, text });
+  }
+  return out;
+}
+
+/** Add a document: the bundled sample documents as before, anything else through the evidence agent. */
+export async function localIngest(file, context = {}) {
+  const sample = FILES.get(file.name);
+  if (sample && sample.size === file.size) return localUpload(file);
+  const existing = load().documents.find((d) => d.name === file.name && d.size === file.size);
+  if (existing) return { ...existing, duplicate: true };
+  const read = await readDocument(file);
+  const result = analyseDocument({ name: file.name, size: file.size, ...read }, getAssessments(), new Date(), {
+    stadiumId: context.stadiumId || undefined,
+  });
+  const row = {
+    document_id: `local:${Date.now().toString(36)}-${++docSeq}`,
+    kind: result.kind,
+    stadium_id: result.stadium_id,
+    element: null,
+    as_of: result.as_of,
+    revision: result.revision,
+    confidence: result.confidence,
+    evidence_quote: result.evidence_quote,
+    evidence_page: result.evidence_page,
+    requirement_ids: result.requirement_ids,
+    analysis: result.analysis,
+    text_pages: keepText(read.pages),
+    status: "proposed",
+    superseded: 0,
+    filed_at: null,
+    name: file.name,
+    size: file.size,
+    pages: read.pageCount || 1,
+    created_at: now(),
+  };
+  db.documents.unshift(row);
+  save();
+  return row;
+}
+
+/** Read a proposed evidence document again for the stadium the person chose. */
+export function localReanalyse(id, stadiumId) {
+  const d = load().documents.find((x) => x.document_id === id);
+  if (!d || d.status !== "proposed" || !d.text_pages) return null;
+  const result = analyseDocument(
+    { name: d.name, size: d.size, pages: d.text_pages, readable: d.analysis?.readable !== false },
+    getAssessments(),
+    new Date(),
+    { stadiumId },
+  );
+  Object.assign(d, {
+    kind: result.kind,
+    stadium_id: result.stadium_id,
+    as_of: result.as_of ?? d.as_of,
+    revision: result.revision ?? d.revision,
+    confidence: result.confidence,
+    evidence_quote: result.evidence_quote,
+    evidence_page: result.evidence_page,
+    requirement_ids: result.requirement_ids,
+    analysis: result.analysis,
+  });
+  save();
+  return d;
+}
+
+/** Record a filed document as evidence against each requirement it was matched to. Returns their ids. */
+function syncEvidenceToRegister(doc) {
+  const stadium = FACILITY_REGISTER.stadiums.find((s) => s.id === doc.stadium_id);
+  if (!stadium) return [];
+  const done = [];
+  for (const match of doc.analysis?.matches || []) {
+    if (!match.record) continue; // mentioned by name only: shown, not recorded
+    const base = currentRequirement(match.requirement_id);
+    if (!base || stadiumApplicability(stadium, base).value === "not-applicable") continue;
+    // the capacity rule depends on the stadium's highest match
+    const requirement = base.id === "STA-0004" ? capacityRequirement(stadium) || base : base;
+    recordEvidence(stadium.id, requirement, {
+      file: doc.name,
+      value: match.value ?? "",
+      note: `Filed from the Evidence page${doc.revision ? `, revision ${doc.revision}` : ""}`,
+    });
+    done.push(match.requirement_id);
+  }
+  return done;
+}
+
+/** File a document. An evidence document is also recorded in the register, and its alerts go to the owners. */
+export function localFileAndSync(id, filing) {
+  localFile(id, filing);
+  const d = load().documents.find((x) => x.document_id === id);
+  if (d && d.kind === "evidence" && d.analysis) {
+    d.registered = syncEvidenceToRegister(d);
+    raiseAlerts(d.analysis.alerts, { id: d.document_id, name: d.name, stadium_id: d.stadium_id });
+  }
+  if (d) delete d.text_pages;
   save();
 }

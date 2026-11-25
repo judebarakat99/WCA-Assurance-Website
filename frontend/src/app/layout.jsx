@@ -14,7 +14,7 @@ import { themeInitScript } from "@/lib/theme.mjs";
 
 export const metadata = {
   title: "Venue Compliance Hub",
-  description: "FIFA World Cup 2034 assurance demo",
+  description: "Stadium and venue compliance for Saudi Arabia 2034",
 };
 
 export const viewport = {

@@ -1,0 +1,303 @@
+
+/* ---------- Requirement watch: impact map (Venue Compliance Hub) ---------- */
+.rw-crit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-top: 6px;
+}
+.rw-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: var(--sunk);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 13px;
+}
+.rw-chip.on {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.rw-impact {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.rw-side {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+.rw-tiles2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.rw-tiles2 .mini {
+  padding: 10px 12px;
+}
+.rw-tiles2 .mini b {
+  font-size: 22px;
+}
+.rw-rows-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.rw-rows-head h4 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.rw-rows {
+  list-style: none;
+  margin: 0 0 6px;
+  padding: 0 4px 0 0;
+  display: grid;
+  gap: 6px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.rw-rows li {
+  display: grid;
+  gap: 4px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.rw-row-main {
+  display: grid;
+  gap: 1px;
+}
+.rw-row-main a {
+  font-weight: 600;
+}
+.rw-row-side {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+}
+
+/* the map */
+.im-wrap {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.im-map {
+  position: relative;
+  aspect-ratio: 1.4 / 1;
+  min-height: 300px;
+  background: var(--sunk);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.im-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.im-region {
+  fill: var(--map-land, var(--surface));
+  stroke: var(--map-coast, var(--line));
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.im-region[data-tone="bad"] {
+  fill: color-mix(in srgb, var(--bad) 28%, var(--map-land, var(--surface)));
+}
+.im-region[data-tone="warn"] {
+  fill: color-mix(in srgb, var(--warn) 28%, var(--map-land, var(--surface)));
+}
+.im-region[data-tone="good"] {
+  fill: color-mix(in srgb, var(--good) 24%, var(--map-land, var(--surface)));
+}
+.im-region[data-tone="mute"] {
+  fill: color-mix(in srgb, var(--muted) 14%, var(--map-land, var(--surface)));
+}
+.im-map.zoomed .im-region[data-tone="bad"] {
+  fill: color-mix(in srgb, var(--bad) 10%, var(--map-land, var(--surface)));
+}
+.im-map.zoomed .im-region[data-tone="warn"] {
+  fill: color-mix(in srgb, var(--warn) 10%, var(--map-land, var(--surface)));
+}
+.im-map.zoomed .im-region[data-tone="good"] {
+  fill: color-mix(in srgb, var(--good) 8%, var(--map-land, var(--surface)));
+}
+.im-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  --t: var(--muted);
+}
+.im-pin[data-tone="bad"] {
+  --t: var(--bad);
+}
+.im-pin[data-tone="warn"] {
+  --t: var(--warn);
+}
+.im-pin[data-tone="good"] {
+  --t: var(--good);
+}
+.im-glow {
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  background: var(--t);
+  opacity: 0.22;
+}
+.im-dot {
+  position: relative;
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--t);
+  border: 2px solid var(--surface);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+.im-stad .im-dot {
+  width: 14px;
+  height: 14px;
+}
+.im-pin:hover .im-dot,
+.im-pin:focus-visible .im-dot {
+  outline: 2px solid var(--accent);
+}
+.im-badge {
+  position: absolute;
+  top: -10px;
+  right: -14px;
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--bad);
+  color: #fff;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+}
+.im-label {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 9px);
+  transform: translateX(-50%);
+  padding: 2px 7px;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.25;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  border-radius: 6px;
+  pointer-events: none;
+}
+.im-label small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+.im-card {
+  position: absolute;
+  z-index: 4;
+  transform: translate(-50%, calc(-100% - 22px));
+  display: grid;
+  gap: 2px;
+  min-width: 190px;
+  max-width: 260px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  pointer-events: none;
+}
+.im-card b {
+  font-size: 13px;
+}
+.im-card .muted {
+  color: var(--muted);
+}
+.im-card .bad {
+  color: var(--bad);
+  font-weight: 600;
+}
+.im-card .warn {
+  color: var(--warn);
+  font-weight: 600;
+}
+.im-title {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  display: grid;
+  padding: 6px 10px;
+  font-size: 12px;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.im-title span {
+  color: var(--muted);
+  font-size: 11px;
+}
+.im-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 16px;
+  margin: 0;
+  padding: 0 2px;
+  list-style: none;
+  font-size: 12px;
+  color: var(--ink);
+}
+.im-legend i {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 4px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.im-legend i[data-tone="bad"] {
+  background: var(--bad);
+}
+.im-legend i[data-tone="warn"] {
+  background: var(--warn);
+}
+.im-legend i[data-tone="good"] {
+  background: var(--good);
+}
+.im-recenter {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+@media (max-width: 900px) {
+  .rw-impact {
+    grid-template-columns: 1fr;
+  }
+}

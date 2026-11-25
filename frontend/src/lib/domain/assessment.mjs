@@ -1,10 +1,11 @@
 // Assessment model: one assessment per facility × requirement × version.
-// This module is pure: it decides which catalogue requirements apply to a
+// This module is pure: it decides which register requirements apply to a
 // facility, evaluates submitted values against a criterion, and summarises a
-// facility's assessments. The records themselves live in lib/store/assessments.
+// facility's assessments. The seed records come from the compliance register
+// (data/register); changes made in the app live in lib/store/assessments.
 import { currentRequirements } from "@/lib/domain/requirementVersions.mjs";
-import { FACILITY_REGISTER, MATCH_LABEL, capacityRequirement } from "@/lib/domain/facilities.mjs";
-import { resolveForStadium } from "@/lib/domain/fifa-catalogue.mjs";
+import { complianceRow } from "@/lib/register/data.mjs";
+import { recordsFromRegister } from "@/lib/register/records.mjs";
 
 export const APPLICABILITY = {
   applicable: "Applies",
@@ -12,8 +13,10 @@ export const APPLICABILITY = {
   "not-applicable": "Not applicable",
 };
 
+// "Partially compliant" is stored as non-compliant with partial: true, so every count of
+// fulfilled and not fulfilled requirements adds up the same way on every page.
 export const STATUS = {
-  unassessed: "Unassessed",
+  unassessed: "Not assessed",
   declared: "Declared",
   "evidence-submitted": "Evidence submitted",
   compliant: "Compliant",
@@ -24,32 +27,28 @@ export const assessmentKey = (facilityId, requirement) => `${facilityId}::${requ
 
 /**
  * Whether a requirement applies to a stadium, and why.
- * - Checks for other sites (training sites, fan festivals, IBC) do not apply.
- * - A check with a numerical book criterion applies.
- * - A working target applies provisionally: its threshold is still to be
- *   confirmed against the 2034 contract clause.
- * - Capacity (STA-0004): the threshold follows the stadium's highest match.
+ * - Requirements for other asset types (training sites, fan festivals, the IBC) do not apply.
+ * - The register can mark a requirement not applicable to one stadium.
+ * - Requirements with a stated threshold apply; the rest are provisional until the 2034 clause is confirmed.
  */
 export function stadiumApplicability(stadium, requirement) {
-  if (requirement.assetType !== "Stadium")
-    return { value: "not-applicable", reason: `${requirement.assetType} check` };
-  if (requirement.criterion.tiers || requirement.id === "STA-0004")
-    return { value: "applicable", reason: `Highest match: ${MATCH_LABEL[stadium.highestMatch]}` };
-  if (requirement.status === "WT")
-    return { value: "provisional", reason: "Working target · threshold to be confirmed (2034 clause)" };
-  return { value: "applicable", reason: "FIFA stadium book criterion" };
+  if (!requirement.appliesTo.includes("stadium"))
+    return { value: "not-applicable", reason: `${requirement.assetType} requirement` };
+  const row = complianceRow(stadium.id, requirement.id);
+  if (row?.status === "Not applicable")
+    return { value: "not-applicable", reason: row.comments || "Not applicable to this stadium" };
+  return requirement.applicability === "applicable"
+    ? { value: "applicable", reason: "FIFA guidance with a stated threshold" }
+    : { value: "provisional", reason: "2034 clause to be confirmed; FIFA published guidance" };
 }
 
 /** Current requirements (after any applied changes) with their applicability for one stadium. */
 export function stadiumRequirements(stadium, requirements = currentRequirements()) {
-  return requirements.map((raw) => {
-    const requirement = resolveForStadium(raw, stadium);
-    return {
-      requirement,
-      key: assessmentKey(stadium.id, requirement),
-      applicability: stadiumApplicability(stadium, raw),
-    };
-  });
+  return requirements.map((requirement) => ({
+    requirement,
+    key: assessmentKey(stadium.id, requirement),
+    applicability: stadiumApplicability(stadium, requirement),
+  }));
 }
 
 const NUMERIC = {
@@ -65,8 +64,8 @@ const NUMERIC = {
 /**
  * Check a submitted value against a criterion.
  * Returns "pass" | "fail" for numeric criteria, or "needs-review" when the
- * criterion is qualitative (classification, manual, protocol, …) or the value
- * is not a number. A pass or fail is still subject to reviewer decision.
+ * criterion is qualitative or the value is not a number. A pass or fail is
+ * still subject to reviewer decision.
  */
 export function evaluate(criterion, value) {
   const test = NUMERIC[criterion.operator];
@@ -81,30 +80,8 @@ export function evaluate(criterion, value) {
   return test(n, criterion.value) ? "pass" : "fail";
 }
 
-/** Seed assessments derived from the register: declared capacities. */
-export function seedAssessments() {
-  const records = {};
-  for (const stadium of FACILITY_REGISTER.stadiums) {
-    const requirement = capacityRequirement(stadium);
-    if (!requirement) continue;
-    records[assessmentKey(stadium.id, requirement)] = {
-      facilityId: stadium.id,
-      requirementId: requirement.id,
-      requirementVersion: requirement.version,
-      status: "declared",
-      declared: {
-        value: stadium.grossCapacity,
-        check: evaluate(requirement.criterion, stadium.grossCapacity),
-        sourceId: stadium.sourceId,
-        page: stadium.page,
-      },
-      evidence: [],
-      review: null,
-      history: [{ on: FACILITY_REGISTER.reviewedOn, action: "Declared capacity recorded from the facility register" }],
-    };
-  }
-  return records;
-}
+/** The records in the compliance register: what every page shows before anything is changed. */
+export const seedAssessments = recordsFromRegister;
 
 /** Counts for a facility: what applies and how far assessment has got. */
 export function facilitySummary(rows, records) {
@@ -118,6 +95,7 @@ export function facilitySummary(rows, records) {
     provisional: inScope.filter((r) => r.applicability.value === "provisional").length,
     assessed,
     coverage: inScope.length ? assessed / inScope.length : 0,
+    partial: inScope.filter((r) => status(r) === "non-compliant" && records[r.key]?.partial).length,
     byStatus: Object.fromEntries(Object.keys(STATUS).map((s) => [s, count(s)])),
   };
 }

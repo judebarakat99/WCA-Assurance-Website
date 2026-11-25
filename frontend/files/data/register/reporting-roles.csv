@@ -1,0 +1,5 @@
+﻿role,label,report,due_day,sections
+contractor,Main contractor,Monthly progress report,7,Progress summary|Detailed plans|Risk register|HSE statistics|Earned value|Photographic record
+pmc,Project management consultant,PMC monthly report,10,Progress verification|Cost and change control|Milestone forecast|Risk register|Quality and inspections
+engineering,Engineering firm,Design and engineering status report,12,Design status|Drawing register|Design change log|FIFA requirement mapping|Open design queries
+owner,Asset owner,Asset owner statement,15,Funding and approvals|Land and permits|Stakeholder status|Operations readiness plan

@@ -25,8 +25,7 @@ const n = (x, one, many = `${one}s`) => `${x} ${x === 1 ? one : many}`;
 
 // What the demo decided, so stepping back and forth does not decide twice.
 const demo = { item: null, before: null, applied: null };
-const CHANGE = "CHG-MIXED-ZONE-250";
-const AREA = "Playing area";
+const CHANGE = "CHG-LUX-2000";
 
 /** The first item awaiting review in the demo city whose evidence meets its criterion. */
 function pickItem() {
@@ -98,14 +97,14 @@ const OPENING = [
     },
   },
   {
-    title: "One chapter at a time",
+    title: "One requirement area at a time",
     run: () => {
-      home({ city: CITY, pillar: AREA });
+      home({ city: CITY, pillar: "Lighting" });
       return ".arail";
     },
     say: () => {
-      const c = city(now(AREA));
-      return `The rail narrows everything to one of the eleven chapters of the FIFA stadium book. For the playing area, ${c.name} is at ${pct(c.assurance.assured)} percent. Most checks are marked provisional: they are working targets until the 2034 contract clause confirms their thresholds.`;
+      const c = city(now("Lighting"));
+      return `The rail narrows everything to one requirement area. For lighting, ${c.name} is at ${pct(c.assurance.assured)} percent. Lighting criteria are marked provisional: they follow FIFA's 2020 lighting guide until the 2034 tournament requirements are published.`;
     },
   },
   {
@@ -166,7 +165,7 @@ const CHANGE_STEPS = [
       const impact = demo.applied || changeImpact(scenario, getAssessments());
       const hit = impact.byCity.filter((c) => c.reopened).length;
       const failing = impact.rows.filter((r) => r.flipped && r.outcome === "rechecked").length;
-      return `Requirements change. Suppose FIFA enlarged the mixed zone, where players meet the media, from ${spoken(impact.before.criterion)} to ${spoken(impact.after.criterion)}. This is a hypothetical change, not an announced one. Before anything is applied, the map shows what it would do: ${n(impact.counts.reopened, "compliant item")} would reopen, in ${n(hit, "city", "cities")}, and ${n(failing, "item")} already in review would now fail.`;
+      return `Requirements change. Suppose FIFA raised the lighting for 8K broadcast, from ${spoken(impact.before.criterion)} to ${spoken(impact.after.criterion)}. This is a hypothetical change, not an announced one. Before anything is applied, the map shows what it would do: ${n(impact.counts.reopened, "compliant item")} would reopen, in ${n(hit, "city", "cities")}, and ${n(failing, "item")} already in review would now fail.`;
     },
   },
   {
@@ -213,7 +212,7 @@ const DEEPER = [
       go("compliance");
       return ".page-head";
     },
-    say: "The requirements come from the venue requirements register: 181 checks in the eleven chapters of the FIFA stadium book, 123 of them for stadiums. Each keeps its chapter, section, criterion, status and version. When a check changes, the new version is what evidence is checked against.",
+    say: "The requirements come from FIFA's own documents. Each one keeps its source section and page, its criterion and its version. When FIFA publishes a new version, that version is what new evidence is checked against.",
   },
 ];
 

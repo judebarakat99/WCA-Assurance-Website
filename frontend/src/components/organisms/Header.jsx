@@ -7,17 +7,17 @@ import ThemeToggle from "@/components/atoms/ThemeToggle";
 import { publicAssetUrl } from "@/lib/assets.mjs";
 import { resetMapUi, rerender } from "@/lib/store/state";
 import { resetAssessments } from "@/lib/store/assessments";
-import { clearIntake } from "@/lib/store/intake";
+import { clearIntake, restoreDemoIntake } from "@/lib/store/intake";
 import { startTour, ASSURANCE, ASSURANCE_FULL } from "@/lib/tour/player";
 import { toast } from "@/lib/ui/toast";
 
 // Primary sections. `also` lists other paths that belong to a section.
 const TABS = [
   { href: "/", label: "Overview" },
-  { href: "/review", label: "Review queue" },
+  { href: "/review", label: "Review Queue" },
   { href: "/compliance", label: "Requirements", also: ["/facilities"] },
   { href: "/evidence", label: "Evidence" },
-  { href: "/progress", label: "Project progress" },
+  { href: "/project-progress", label: "Project Progress" },
   { href: "/reports", label: "Reports" },
 ];
 
@@ -33,10 +33,9 @@ function activeTab(pathname) {
 function resetDemo() {
   resetAssessments();
   resetMapUi();
-  void clearIntake();
-  window.WNSTwin?.reset(); // the 3D design review on King Salman International's page
+  void clearIntake().then(restoreDemoIntake);
   rerender();
-  toast("Demo reset. Assessments, applied changes and intake documents cleared.");
+  toast("Demo reset to its starting state.");
 }
 
 // Close open header menus on an outside click, a menu item click or Escape.
@@ -105,7 +104,7 @@ export default function Header() {
             <img className="logo" src={LOGO} alt="Saudi 2034" width="44" height="41" />
             <div className="brand-text">
               <h1>Venue Compliance Hub</h1>
-              <span className="sub">World Cup 2034</span>
+              <span className="sub">Saudi Arabia 2034</span>
             </div>
           </div>
           <nav className="tabs" id="tabs" aria-label="Views">
@@ -126,10 +125,10 @@ export default function Header() {
               <div className="pop r">
                 <small>Guided</small>
                 <button type="button" id="execStart" className="tourbtn" onClick={() => startTour(ASSURANCE)}>
-                  Assurance demo · 4 min
+                  Executive demo · 4 min
                 </button>
                 <button type="button" id="tourStart" onClick={() => startTour(ASSURANCE_FULL)}>
-                  Full assurance demo
+                  Full demo
                 </button>
                 <hr />
                 <ResetButton />

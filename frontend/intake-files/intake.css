@@ -1,0 +1,41 @@
+
+/* ---------- Evidence agent and alerts (Venue Compliance Hub) ---------- */
+.ea {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: var(--sunk);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.ea-head {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ea-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.ea-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+.ea-steps summary {
+  cursor: pointer;
+}
+.al-row.al-done {
+  opacity: 0.65;
+}
+.al-row .rq-what > div {
+  margin-bottom: 2px;
+}

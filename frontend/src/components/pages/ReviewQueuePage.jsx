@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import StatusPill from "@/components/atoms/StatusPill";
 import PageHead from "@/components/molecules/PageHead";
 import PageTemplate from "@/components/templates/PageTemplate";
@@ -11,12 +11,12 @@ import { PILLARS, TIMELINE } from "@/lib/domain/cityAssurance.mjs";
 import { criterionLabel } from "@/lib/domain/fifa-catalogue.mjs";
 import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
 import { QUEUE_REASON, queueCounts, reviewQueue } from "@/lib/domain/reviewQueue.mjs";
-import { getAssessments, hasSampleAssessments, loadSampleAssessments, reviewAssessment } from "@/lib/store/assessments";
-import { CHECK_STATUS, decideCheck, ensureIntake, intake, loadSampleIntake, needsDecision } from "@/lib/store/intake";
+import { getAssessments, reviewAssessment } from "@/lib/store/assessments";
+import { CHECK_STATUS, decideCheck, ensureIntake, intake, needsDecision } from "@/lib/store/intake";
 import { updateMap } from "@/lib/store/state";
+import { getDemoEvidence, subscribeDemoEvidence } from "@/lib/store/demoEvidence";
 
-const REASON_TONE = { fail: "bad", "needs-review": "warn", pass: "good", "non-compliant": "bad" };
-const CHECK_LABEL = { pass: "meets criterion", fail: "below criterion", "needs-review": "needs reviewer" };
+const REASON_TONE = { fail: "bad", "needs-review": "warn", pass: "good", "non-compliant": "bad", "partially-compliant": "warn" };
 // Every year on the map's timeline except the last, which means "any year".
 const DUE_YEARS = Array.from({ length: TIMELINE.to - TIMELINE.from }, (_, i) => TIMELINE.from + i);
 const COMPLETIONS = new Set(FACILITY_REGISTER.stadiums.map((s) => s.completionYear));
@@ -34,9 +34,10 @@ const STATUS_OPTIONS = [
 const fromYear = (y) => (y && y < TIMELINE.to ? y : null);
 const shared = (m) => ({ city: m.city, area: m.pillar, year: fromYear(m.year) });
 
-function queryOf({ city, area, year, status }) {
+function queryOf({ city, stadium, area, year, status }) {
   const q = new URLSearchParams();
   if (city) q.set("city", city);
+  if (stadium) q.set("stadium", stadium);
   if (area) q.set("area", area);
   if (year) q.set("year", String(year));
   if (status) q.set("status", status);
@@ -49,11 +50,12 @@ function useFilters(ui) {
   const path = usePathname();
   const url = {
     city: params.get("city"),
+    stadium: params.get("stadium"),
     area: params.get("area"),
     year: fromYear(Number(params.get("year")) || null),
   };
-  const linked = params.has("city") || params.has("area") || params.has("year");
-  const current = linked ? url : shared(ui.map);
+  const linked = params.has("city") || params.has("stadium") || params.has("area") || params.has("year");
+  const current = linked ? url : { ...shared(ui.map), stadium: null };
   const status = params.get("status") || null;
   const query = queryOf({ ...current, status });
 
@@ -74,8 +76,8 @@ function useFilters(ui) {
     router.replace(q ? `${path}?${q}` : path, { scroll: false });
   };
   const set = (name, value) => write({ ...current, status, [name]: name === "year" ? Number(value) || null : value || null });
-  const clear = () => write({ city: null, area: null, year: null, status: null });
-  return [{ cityId: current.city, category: current.area, year: current.year, status }, set, clear];
+  const clear = () => write({ city: null, stadium: null, area: null, year: null, status: null });
+  return [{ cityId: current.city, stadiumId: current.stadium, category: current.area, year: current.year, status }, set, clear];
 }
 
 function Filters({ filters, set }) {
@@ -88,6 +90,17 @@ function Filters({ filters, set }) {
           {FACILITY_REGISTER.hostCities.map((c) => (
             <option key={c.id} value={c.id}>
               {c.name}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label className="f">
+        Stadium
+        <select value={filters.stadiumId || ""} onChange={(e) => set("stadium", e.target.value)}>
+          <option value="">All stadiums</option>
+          {FACILITY_REGISTER.stadiums.map((stadium) => (
+            <option key={stadium.id} value={stadium.id}>
+              {stadium.name}
             </option>
           ))}
         </select>
@@ -154,12 +167,6 @@ function Item({ item }) {
               <StatusPill tone="bad">Reopened by {item.reopenedBy}</StatusPill>
             </>
           )}
-          {item.applicability.value === "provisional" && (
-            <>
-              {" "}
-              <StatusPill tone="warn">Provisional</StatusPill>
-            </>
-          )}
         </div>
         <div className="muted small">
           Criterion <span className="mono">{criterionLabel(requirement.criterion)}</span>
@@ -170,13 +177,11 @@ function Item({ item }) {
               {evidence.value !== "" && evidence.value != null && <> · value {evidence.value}</>} · {evidence.on}
             </>
           )}
-          {record.sample && " · sample data"}
         </div>
         <div>
-          <StatusPill tone={REASON_TONE[reason]}>{QUEUE_REASON[reason]}</StatusPill>
-          {evidence && reason !== "non-compliant" && (
-            <span className="muted fine"> automatic check: {CHECK_LABEL[evidence.check]}</span>
-          )}
+          <StatusPill className="rq-status" tone={REASON_TONE[reason]}>
+            {QUEUE_REASON[reason]}
+          </StatusPill>
         </div>
       </div>
       <div className="rq-act">
@@ -190,8 +195,11 @@ function Item({ item }) {
             </button>
           </>
         ) : (
-          <Link className="btnlink" href={`/facilities/${stadium.id}`}>
-            Record new evidence →
+          <Link
+            className="btn primary"
+            href={`/evidence?stadium=${encodeURIComponent(stadium.id)}&purpose=${encodeURIComponent(`${requirement.id} · ${requirement.title}`)}`}
+          >
+            Record new evidence
           </Link>
         )}
       </div>
@@ -199,7 +207,7 @@ function Item({ item }) {
   );
 }
 
-// Progress claims the agent flagged, awaiting a reviewer (from the Evidence page).
+// Progress claims the agent flagged, awaiting a reviewer (from the Intake page).
 // They follow the city and due-year filters and show only under "Everything".
 function progressClaims(filters) {
   if (filters.status) return [];
@@ -208,6 +216,7 @@ function progressClaims(filters) {
     return (
       needsDecision(c) &&
       stadium &&
+      (!filters.stadiumId || stadium.id === filters.stadiumId) &&
       (!filters.cityId || stadium.cityId === filters.cityId) &&
       (!filters.year || stadium.completionYear <= filters.year)
     );
@@ -239,7 +248,7 @@ function ProgressClaims({ claims }) {
               <div className="muted small">{c.summary}</div>
               <div>
                 <StatusPill tone={CHECK_STATUS[c.status].tone}>{CHECK_STATUS[c.status].label}</StatusPill>{" "}
-                <Link className="small" href={`/evidence?tab=onfile&stadium=${encodeURIComponent(c.stadium_id)}`}>
+                <Link className="small" href={`/intake?stadium=${encodeURIComponent(c.stadium_id)}`}>
                   View finding →
                 </Link>
               </div>
@@ -260,9 +269,33 @@ function ProgressClaims({ claims }) {
   );
 }
 
-function Queue({ ui }) {
+function DemoEvidenceCard({ evidence }) {
+  if (!evidence) return null;
+  const stadium = FACILITY_REGISTER.stadiums.find((item) => item.id === evidence.stadium);
+  return (
+    <li className="rq-item">
+      <div className="rq-where">
+        <span className="rq-new">★ New</span>{" "}
+        {stadium ? <Link href={`/facilities/${stadium.id}`}><b>{stadium.name}</b></Link> : <b>{evidence.stadium}</b>}
+        <span className="muted small">Evidence confirmed in this session</span>
+      </div>
+      <div className="rq-what">
+        <div><b>{evidence.name}</b></div>
+        <div className="muted small">{evidence.purpose}</div>
+        <div><StatusPill tone="good">Confirmed</StatusPill></div>
+      </div>
+      <div className="rq-act">
+        {stadium && <Link className="small" href={`/facilities/${stadium.id}`}>Open stadium →</Link>}
+      </div>
+    </li>
+  );
+}
+
+function Queue({ ui, readiness = false }) {
   const [filters, set, clear] = useFilters(ui);
+  const [demoEvidence, setDemoEvidence] = useState(() => getDemoEvidence());
   useEffect(ensureIntake, []);
+  useEffect(() => subscribeDemoEvidence(setDemoEvidence), []);
   const claims = progressClaims(filters);
   const allClaims = progressClaims({});
   const records = getAssessments();
@@ -274,13 +307,14 @@ function Queue({ ui }) {
     [c.total + claims.length, filtered ? `shown of ${all.total + allClaims.length}` : "need attention", ""],
     [c["evidence-submitted"], "awaiting review", c["evidence-submitted"] ? "warn" : ""],
     [c.fail, "evidence below criterion", c.fail ? "bad" : ""],
-    [c["non-compliant"], "non-compliant, awaiting new evidence", c["non-compliant"] ? "bad" : ""],
+    [c["non-compliant"], "not fulfilled, awaiting new evidence", c["non-compliant"] ? "bad" : ""],
   ];
   return (
     <>
       <PageHead
-        chip="FIFA assurance · Review queue"
-        title="Review queue"
+        chip={readiness ? "Compliance · Readiness gates" : "Compliance · Review queue"}
+        title={readiness ? "Readiness Gates" : "Review queue"}
+        wideLead
         lead="Everything that needs a person, across all stadiums: submitted evidence waiting for a decision, and non-compliant items waiting for new evidence. Earliest stadiums come first; within a stadium, evidence that fails its check comes first."
       />
       <div className="mini-grid four">
@@ -292,6 +326,7 @@ function Queue({ ui }) {
         ))}
       </div>
       <Filters filters={filters} set={set} />
+      {demoEvidence && <ol className="rq-list"><DemoEvidenceCard evidence={demoEvidence} /></ol>}
       <ProgressClaims claims={claims} />
       {items.length ? (
         <ol className="rq-list">
@@ -307,22 +342,8 @@ function Queue({ ui }) {
               <button type="button" className="linkish" onClick={clear}>
                 Clear filters
               </button>
-            ) : hasSampleAssessments() ? (
-              "Every submitted item has a decision."
             ) : (
-              <>
-                Only declared capacities are recorded so far.{" "}
-                <button
-                  type="button"
-                  className="linkish"
-                  onClick={() => {
-                    loadSampleAssessments();
-                    void loadSampleIntake();
-                  }}
-                >
-                  Load sample data
-                </button>
-              </>
+              "Every submitted item has a decision."
             )}
           </p>
         </div>
@@ -332,12 +353,12 @@ function Queue({ ui }) {
 }
 
 /** Cross-stadium queue of assessments awaiting a decision or remediation. */
-export default function ReviewQueuePage() {
+export default function ReviewQueuePage({ readiness = false }) {
   return (
-    <PageTemplate label="Review queue">
+    <PageTemplate label={readiness ? "Readiness Gates" : "Review queue"}>
       {({ ui }) => (
         <Suspense fallback={null}>
-          <Queue ui={ui} />
+          <Queue ui={ui} readiness={readiness} />
         </Suspense>
       )}
     </PageTemplate>
