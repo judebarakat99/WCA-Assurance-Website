@@ -562,7 +562,8 @@ tr:last-child td {
   background: var(--surface);
   border: 1px solid var(--accent);
   border-radius: 20px;
-  box-shadow: 0 20px 56px -14px color-mix(in srgb, var(--shadow-color) 38%, transparent);
+  box-shadow: 0 20px 56px -14px
+    color-mix(in srgb, var(--shadow-color) 38%, transparent);
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
@@ -898,8 +899,6 @@ body.touring .ai-panel {
   flex-wrap: wrap;
   padding: 10px 16px;
   border-top: 1px solid var(--line);
-  max-height: 85px;
-  overflow-y: auto;
 }
 .ai-chipq {
   background: var(--sunk);
@@ -1058,8 +1057,14 @@ body.touring .ai-panel {
     padding: 12px;
     max-width: 100%;
   }
+  /* One row that scrolls sideways, so the messages keep the height. */
   .ai-chips {
-    max-height: 70px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .ai-chipq {
+    flex: none;
   }
   .ai-head {
     padding: 12px;
