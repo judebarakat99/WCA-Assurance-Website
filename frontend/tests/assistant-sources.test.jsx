@@ -4,8 +4,6 @@ import { renderToStaticMarkup } from "react-dom/server";
 import AssistantSource from "@/components/molecules/AssistantSource";
 
 const sourceHtml = (source) => renderToStaticMarkup(<AssistantSource source={source} />);
-import { buildAssistantContext } from "@/lib/assistant/context.js";
-import { loadSampleAssessments, resetAssessments } from "@/lib/store/assessments";
 
 test("forecast source renders named facts instead of raw JSON", () => {
   const html = sourceHtml({
@@ -58,16 +56,4 @@ test("source content is escaped and documents retain page references", () => {
   assert.ok(!html.includes("<img"));
   assert.ok(html.includes("&lt;img"));
   assert.ok(html.includes("&amp; text"));
-});
-test("the snapshot carries assurance roll-ups for every stadium", () => {
-  globalThis.localStorage = { getItem: () => null, setItem: () => {} };
-  resetAssessments();
-  loadSampleAssessments();
-  const snapshot = buildAssistantContext();
-  assert.equal(snapshot.source, "browser-demo");
-  assert.equal(snapshot.venues.length, 15);
-  assert.ok(snapshot.summary.assured > 0 && snapshot.summary.assured < 1);
-  assert.ok(snapshot.summary.review_queue.total > 0);
-  for (const v of snapshot.venues) assert.ok(v.assurance.in_scope > 0, v.id);
-  assert.ok(JSON.stringify(snapshot).length < 100000);
 });

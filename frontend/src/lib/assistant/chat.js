@@ -1,22 +1,24 @@
-// Nabd assistant conversation state (in the shared `ai` store) and actions.
+// Nabd assistant conversation state (in the shared `ai` store) and actions. Nabd answers in the browser, from the
+// same programme data the pages use (lib/assistant/localChat); the reply is revealed a few words at a time.
 import { ai, notify } from "@/lib/store/state";
-import { buildAssistantContext } from "@/lib/assistant/context";
-import { assistantRequest } from "@/lib/assistant/api";
 import { localAnswer } from "@/lib/assistant/localChat";
 
 export const QUICK_QUESTIONS = [
   "What is the latest compliance status?",
   "Which stadium has the lowest assured share?",
   "What is outstanding at King Salman International Stadium?",
-  "What are the lighting requirements for a stadium?",
-  "What evidence is needed for lighting?",
+  "Which stadiums are behind schedule?",
+  "Where is the budget overrunning?",
   "How many items are waiting for review?",
 ];
 
 const GREETING =
-  "Hi, I'm Nabd. Ask me about stadium compliance, the review queue, requirement changes or your reference documents. Answers include supporting references.";
+  "Hi, I'm Nabd. Ask me about stadium compliance, the review queue, project progress and cost, requirement changes or the documents on file. Answers include supporting references.";
 
 const MAX_QUESTION = 4000;
+
+const reducedMotion = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /** Open or close the assistant panel; the first open adds the greeting. */
 export function setAssistantOpen(open) {
@@ -25,39 +27,41 @@ export function setAssistantOpen(open) {
   notify();
 }
 
-/** Ask Nabd a question: opens the panel, sends the assurance snapshot and recent history. */
+/** Reveal an answer a few words at a time; its sources appear once the text is complete. */
+async function reveal(answer) {
+  const message = { who: "a", text: "", streaming: true };
+  ai.msgs.push(message);
+  ai.pending = false;
+  const words = answer.reply.split(/(\s+)/);
+  if (!reducedMotion()) {
+    const step = Math.max(2, Math.ceil(words.length / 60)); // about 60 updates, however long the answer
+    for (let i = 0; i < words.length; i += step) {
+      message.text = words.slice(0, i + step).join("");
+      notify();
+      await wait(28);
+    }
+  }
+  Object.assign(message, { text: answer.reply, sources: answer.sources, warnings: answer.warnings, streaming: false });
+  notify();
+}
+
+/** Ask Nabd a question: opens the panel, then answers from the programme data. */
 export async function aiAsk(question) {
   const q = String(question || "").trim();
-  if (!q || ai.pending) return;
+  if (!q || ai.pending || ai.msgs.some((m) => m.streaming)) return;
   if (q.length > MAX_QUESTION) {
     ai.msgs.push({ who: "a", text: "Please keep your question under 4,000 characters.", error: true });
     notify();
     return;
   }
   if (!ai.open) setAssistantOpen(true);
-  const history = ai.msgs
-    .filter((m) => !m.error && !m.greeting)
-    .slice(-12)
-    .map((m) => ({ role: m.who === "u" ? "user" : "assistant", content: m.text.slice(0, 6000) }));
   ai.msgs.push({ who: "u", text: q });
   ai.pending = true;
   notify();
   try {
-    const result = await assistantRequest("/chat", {
-      timeoutMs: 25000,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: q, history, context: buildAssistantContext() }),
-    });
-    ai.msgs.push({ who: "a", text: result.reply, sources: result.sources, warnings: result.warnings });
+    await reveal(await localAnswer(q));
   } catch (error) {
-    // The service did not answer (not running, timed out or refused): answer from the programme data instead.
-    try {
-      const local = await localAnswer(q);
-      ai.msgs.push({ who: "a", text: local.reply, sources: local.sources, warnings: local.warnings });
-    } catch {
-      ai.msgs.push({ who: "a", text: error.message, error: true });
-    }
+    ai.msgs.push({ who: "a", text: error.message || "I could not answer that just now.", error: true });
   } finally {
     ai.pending = false;
     notify();

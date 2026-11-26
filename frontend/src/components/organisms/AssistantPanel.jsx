@@ -10,7 +10,7 @@ import { useProgramme } from "@/lib/store/useProgramme";
 function Message({ m }) {
   return (
     <div className={`ai-msg ${m.who}`} role={m.error ? "alert" : undefined}>
-      <div className="ai-answer">{m.text}</div>
+      <div className={`ai-answer${m.streaming ? " streaming" : ""}`}>{m.text}</div>
       {m.sources?.length > 0 && (
         <div className="ai-sources">
           <p className="ai-sources-label">Supporting sources</p>
@@ -28,7 +28,7 @@ function Message({ m }) {
   );
 }
 
-// Documents come in through the Evidence page; Nabd can search all of them.
+// Documents come in through the Evidence page; Nabd can list them and what they recorded.
 function DocumentsNote() {
   return (
     <p className="ai-reference">
@@ -37,7 +37,6 @@ function DocumentsNote() {
   );
 }
 
-
 /** Nabd: floating button and chat panel, available on every page. */
 export default function AssistantPanel() {
   useProgramme(); // re-render when the conversation changes
@@ -45,14 +44,17 @@ export default function AssistantPanel() {
   const [question, setQuestion] = useState("");
   const inputRef = useRef(null);
   const msgsRef = useRef(null);
-  const { open, msgs, pending } = ai;
+  const { open, msgs } = ai;
+  // Busy while Nabd works out an answer and while the answer is still appearing.
+  const pending = ai.pending || msgs.some((m) => m.streaming);
+  const shown = msgs.at(-1)?.text.length || 0;
 
   useEffect(() => {
     if (open) inputRef.current?.focus();
   }, [open]);
   useEffect(() => {
     if (msgsRef.current) msgsRef.current.scrollTop = msgsRef.current.scrollHeight;
-  }, [msgs.length, pending]);
+  }, [msgs.length, pending, shown]);
 
   function submit(e) {
     e.preventDefault();
@@ -115,7 +117,7 @@ export default function AssistantPanel() {
           {msgs.map((m, k) => (
             <Message key={k} m={m} />
           ))}
-          {pending && (
+          {ai.pending && (
             <div className="ai-msg a" role="status">
               Nabd is checking compliance data and documents…
             </div>

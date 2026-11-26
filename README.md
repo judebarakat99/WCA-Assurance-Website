@@ -12,8 +12,8 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000. No environment variables are required. Nabd needs
-the backend; the Evidence page runs entirely in the browser on the bundled
+Open http://localhost:3000. No environment variables are required, and the
+whole site, Nabd included, runs in the browser. The Evidence page uses the bundled
 sample documents (see `data/progress/README.md` and `data/evidence/README.md`).
 The requirements, and the compliance status every page starts from, come from the
 register CSVs in `data/register/` (built into the app by `npm run register:build`,
@@ -73,8 +73,10 @@ thin.
   state for the map, queue, tour and assistant), exposed to React through
   `useProgramme()` (`useSyncExternalStore`).
 - `src/lib/tour/`: guided demo steps, player, voice selection and highlight.
-- `src/lib/assistant/`: Nabd chat state, API client and the assurance snapshot
-  sent with each question.
+- `src/lib/assistant/`: Nabd's chat state (`chat.js`) and its answers
+  (`localChat.js`), worked out in the browser from the same stores the pages
+  use: status, stadiums, requirements, the review queue, requirement changes,
+  project progress and cost, progress claims, owners and documents.
 - `src/lib/register/`: the compliance register (built from `data/register/*.csv`)
   and its CSV extracts; every page reads requirements and the starting
   statuses from here.
@@ -89,10 +91,8 @@ thin.
   writers (docx, JSZip, pdf-lib, loaded on first export) render it, entirely in
   the browser.
 
-## Azure-backed assistant
+## Azure-backed assistant (backend)
 
-See [backend/README.md](backend/README.md) for Poetry installation, local API
-startup, document upload limits, and the data flow. Run the backend on port 8000
-alongside Next.js on port 3000. The chatbot no longer substitutes canned answers
-when the backend is unavailable; it displays an actionable error instead.
-`NEXT_PUBLIC_API_BASE_URL` is the public backend URL only, never an API key.
+`backend/` holds an Azure OpenAI version of Nabd with document search (see
+[backend/README.md](backend/README.md)). The frontend does not call it: Nabd
+answers in the browser, so the demo needs no Azure credits.
