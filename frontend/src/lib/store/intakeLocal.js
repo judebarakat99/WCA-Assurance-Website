@@ -1,13 +1,12 @@
-// Offline demo of document intake, used when the backend is not running.
-// It has the backend's API shape, but reads the sample documents from bundled
-// readings (data/progress/offline-readings.json, exported from the backend
-// pipeline) instead of asking the model; only those files can be added.
-// State is kept in this browser.
+// Contractor documents, kept in this browser. Sample progress reports and plans
+// are read from their bundled readings (data/progress/offline-readings.json);
+// any other document goes through the evidence agent (lib/intake/evidenceAgent).
 import readings from "../../../../data/progress/offline-readings.json" with { type: "json" };
 import { ELEMENTS, buildCheck } from "@/lib/domain/progressCheck.mjs";
 import { stadiumApplicability } from "@/lib/domain/assessment.mjs";
 import { FACILITY_REGISTER, capacityRequirement } from "@/lib/domain/facilities.mjs";
 import { currentRequirement } from "@/lib/domain/requirementVersions.mjs";
+import { EVIDENCE_PAGE_NOTE } from "@/lib/domain/reviewQueue.mjs";
 import { analyseDocument } from "@/lib/intake/evidenceAgent.mjs";
 import { readDocument } from "@/lib/intake/readDocument.mjs";
 import { clearAlerts, raiseAlerts, removeAlertsFor } from "@/lib/store/alerts";
@@ -80,7 +79,7 @@ export function localState() {
   };
 }
 
-/** Add a sample document; the proposal is the backend pipeline's own reading of it. */
+/** Add a sample progress report or plan, from its bundled reading. */
 export function localUpload(file) {
   const sample = FILES.get(file.name);
   if (!sample || sample.size !== file.size)
@@ -144,7 +143,7 @@ export function localDecide(stadiumId, decision, note) {
   return checks()[stadiumId];
 }
 
-/** File and check the preloaded sample documents (as the backend's seed does). */
+/** File and check the preloaded sample documents. */
 export function localSeed() {
   const stadiums = [];
   for (const f of readings.files.filter((x) => x.folder === "preloaded")) {
@@ -263,7 +262,7 @@ function syncEvidenceToRegister(doc) {
     recordEvidence(stadium.id, requirement, {
       file: doc.name,
       value: match.value ?? "",
-      note: `Filed from the Evidence page${doc.revision ? `, revision ${doc.revision}` : ""}`,
+      note: `${EVIDENCE_PAGE_NOTE}${doc.revision ? `, revision ${doc.revision}` : ""}`,
     });
     done.push(match.requirement_id);
   }

@@ -25,7 +25,7 @@ function Done({ done }) {
           <b>Owners notified.</b> {plural(done.count, "alert")} sent to {list(done.owners)}.
         </div>
         <div className="ev-banner-links">
-          <Link href="/evidence?tab=alerts">See the alerts →</Link>
+          <Link href="/reports">Owner reports →</Link>
         </div>
       </div>
     );

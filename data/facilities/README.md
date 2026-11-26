@@ -44,7 +44,7 @@ Known source issues:
 ## How it links to the FIFA catalogue
 
 Each stadium's `highestMatch` selects its threshold for the capacity check
-`STA-0004` in `data/fifa/catalogue.json`: opening and final 80,000 seats,
+`STA-0004` in `data/register/requirements.csv`: opening and final 80,000 seats,
 semi-final 60,000, every other match 40,000. The register compares the declared
 gross capacity with that minimum.
 

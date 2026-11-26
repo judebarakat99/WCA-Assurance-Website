@@ -4,35 +4,33 @@ import { assuranceMap, assuranceTone, stadiumAssurance } from "@/lib/domain/city
 import { seedAssessments } from "@/lib/domain/assessment.mjs";
 import { sampleAssessments } from "@/lib/domain/sampleAssessments.mjs";
 import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
+import { complianceRows } from "@/lib/register/data.mjs";
 import regions from "../../data/geo/sa-regions.geo.json" with { type: "json" };
 
-test("declared-only data rolls up with nothing reviewed and a neutral tone", () => {
+test("the register rolls up by city: every stadium in scope, and the counts add up", () => {
   const map = assuranceMap(seedAssessments());
   assert.equal(map.cities.length, 5);
-  assert.equal(map.programme.compliant, 0);
-  assert.equal(map.programme.declared, 15);
-  assert.equal(map.tone, "mute");
-  assert.ok(map.cities.every((c) => c.tone === "mute" && c.coordinates.length === 2));
+  assert.ok(map.cities.every((c) => c.coordinates.length === 2));
   const total = map.cities.reduce((a, c) => a + c.assurance.inScope, 0);
   assert.equal(total, map.programme.inScope);
+  const notApplicable = complianceRows().filter((r) => r.status === "Not applicable").length;
+  assert.equal(map.programme.inScope, 15 * 123 - notApplicable);
+  assert.ok(map.programme.compliant > 0 && map.programme["non-compliant"] > 0);
 });
 
-test("pillar filter narrows the scope to one category", () => {
+test("pillar filter narrows the scope to one chapter", () => {
   const records = seedAssessments();
   const all = assuranceMap(records).programme.inScope;
-  const capacity = assuranceMap(records, "Capacity").programme;
-  assert.equal(capacity.inScope, 15); // one applicable capacity rule per stadium
-  assert.equal(capacity.declared, 15);
-  assert.ok(assuranceMap(records, "Lighting").programme.inScope < all);
+  const pre = assuranceMap(records, "Pre-construction decisions").programme.inScope;
+  const lighting = assuranceMap(records, "Lighting and power supply").programme.inScope;
+  assert.ok(pre > 0 && lighting > 0 && pre + lighting < all);
+  assert.ok(pre <= 15 * 11 && lighting <= 15 * 7); // 11 and 7 stadium checks in those chapters
 });
 
-test("sample assessments are labelled, deterministic and vary by stadium progress", () => {
+test("the demo data is the register, deterministic, and further along for stadiums due earlier", () => {
   const a = sampleAssessments();
-  const b = sampleAssessments();
-  assert.deepEqual(a, b);
-  const sample = Object.values(a).filter((r) => r.sample);
-  assert.ok(sample.length > 100);
-  assert.ok(sample.every((r) => r.evidence.at(-1).file.startsWith("sample_")));
+  assert.deepEqual(a, sampleAssessments());
+  assert.deepEqual(a, seedAssessments());
   const early = FACILITY_REGISTER.stadiums.find((s) => s.id === "king-fahad-sports-city"); // due 2026
   const late = FACILITY_REGISTER.stadiums.find((s) => s.id === "neom"); // due 2032
   assert.ok(stadiumAssurance(early, a).coverage > stadiumAssurance(late, a).coverage);
@@ -44,7 +42,10 @@ test("timeline counts only stadiums due complete by the chosen year", () => {
   assert.equal(all.due, 15);
   const y2026 = assuranceMap(records, null, 2026);
   assert.equal(y2026.due, 2); // King Fahad Sports City and Aramco
-  assert.equal(y2026.cities.reduce((n, c) => n + c.stadiums.length, 0), 15); // all still listed
+  assert.equal(
+    y2026.cities.reduce((n, c) => n + c.stadiums.length, 0),
+    15,
+  ); // all still listed
   assert.equal(y2026.cities.find((c) => c.id === "neom").dueCount, 0);
   assert.ok(y2026.programme.inScope < all.programme.inScope);
   assert.equal(assuranceMap(records, null, 2029).due, 6);

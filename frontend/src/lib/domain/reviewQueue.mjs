@@ -3,7 +3,8 @@
 //  - evidence submitted, waiting for a reviewer's decision;
 //  - not fulfilled (non-compliant or partially compliant), waiting for the facility to
 //    remediate and resubmit.
-// Ordered by delivery date (earliest stadium first), then by what the
+// Evidence just confirmed on the Evidence page comes first. Then ordered by
+// delivery date (earliest stadium first), then by what the
 // evidence suggests: a failed check is most likely to end non-compliant.
 import { stadiumRequirements } from "@/lib/domain/assessment.mjs";
 import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
@@ -20,6 +21,13 @@ export const QUEUE_REASON = {
   "non-compliant": "Non-compliant; waiting for new evidence",
   "partially-compliant": "Partially compliant; waiting for remedial evidence",
 };
+
+/** Evidence notes written when a document is confirmed on the Evidence page (lib/store/intakeLocal). */
+export const EVIDENCE_PAGE_NOTE = "Filed from the Evidence page";
+
+/** Submitted evidence that came from a document confirmed on the Evidence page: shown first, marked new. */
+const isNew = (record) =>
+  record.status === "evidence-submitted" && String(record.evidence.at(-1)?.note || "").startsWith(EVIDENCE_PAGE_NOTE);
 
 /** Why an item is in the queue: "fail" | "needs-review" | "pass" | "non-compliant" | "partially-compliant". */
 function reasonOf(record) {
@@ -58,11 +66,13 @@ export function reviewQueue(records, { cityId = null, stadiumId = null, category
         evidence: record.evidence.at(-1) || null,
         reason,
         reopenedBy: record.status === "evidence-submitted" ? record.reopenedBy || null : null,
+        isNew: isNew(record),
       });
     }
   }
   items.sort(
     (a, b) =>
+      b.isNew - a.isNew ||
       a.stadium.completionYear - b.stadium.completionYear ||
       RANK[a.reason] - RANK[b.reason] ||
       a.stadium.name.localeCompare(b.stadium.name) ||
@@ -73,8 +83,9 @@ export function reviewQueue(records, { cityId = null, stadiumId = null, category
 
 /** Counts by kind for a list of queue items. "non-compliant" includes the partially compliant ones. */
 export function queueCounts(items) {
-  const c = { total: items.length, "evidence-submitted": 0, "non-compliant": 0, partial: 0, fail: 0 };
+  const c = { total: items.length, "evidence-submitted": 0, "non-compliant": 0, partial: 0, fail: 0, new: 0 };
   for (const i of items) {
+    if (i.isNew) c.new++;
     c[i.record.status]++;
     if (i.record.partial) c.partial++;
     if (i.reason === "fail") c.fail++;

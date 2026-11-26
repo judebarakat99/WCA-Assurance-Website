@@ -2,7 +2,7 @@
 // Seed records are what every page shows until someone records evidence or a review; those changes
 // live in lib/store/assessments and can be exported with exportComplianceCsv().
 import { FACILITY_REGISTER, capacityRequirement } from "@/lib/domain/facilities.mjs";
-import { CSV_STATUS, REQUIREMENTS, complianceRow, complianceRows } from "@/lib/register/data.mjs";
+import { CSV_STATUS, REQUIREMENTS, complianceRow, complianceRows, familyById } from "@/lib/register/data.mjs";
 import { toCsv } from "@/lib/register/csv.mjs";
 
 const keyOf = (stadiumId, id, version = 1) => `${stadiumId}::${id}@v${version}`;
@@ -97,6 +97,36 @@ export function complianceCsv(records, requirementVersions = (id) => 1) {
     });
   }
   return toCsv(COMPLIANCE_FIELDS, out);
+}
+
+const SITE = { stadium: "Stadium", "training-site": "Training site", "fan-festival": "Fan festival", ibc: "IBC" };
+const SYMBOL = { min: ">=", max: "<=", eq: "=", gt: ">", gte: ">=", lt: "<", lte: "<=" };
+function criterionText(c) {
+  if (c.operator === "manual") return c.description;
+  if (c.operator === "range") return `${c.minimum}-${c.maximum} ${c.unit}`.trim();
+  return `${SYMBOL[c.operator]} ${c.value} ${c.unit}`.trim();
+}
+
+export const REQUIREMENT_FIELDS = [
+  "id", "chapter", "chapter_name", "section", "requirement", "criterion", "applies_to", "status", "source_page", "evidence_requested", "clause_2034",
+];
+
+/** The requirement register as CSV text: one row per check, as the Requirements page lists them. */
+export function requirementsCsv() {
+  const rows = REQUIREMENTS.map((r) => ({
+    id: r.id,
+    chapter: r.familyId,
+    chapter_name: familyById(r.familyId)?.name || "",
+    section: r.section,
+    requirement: r.title,
+    criterion: criterionText(r.criterion),
+    applies_to: SITE[r.appliesTo] || r.appliesTo,
+    status: r.applicability === "applicable" ? "Book" : "Working target",
+    source_page: r.pdfPage,
+    evidence_requested: r.evidenceRequested,
+    clause_2034: r.clause2034,
+  }));
+  return toCsv(REQUIREMENT_FIELDS, rows);
 }
 
 export { complianceRow };

@@ -54,12 +54,12 @@ test("the change steps preview first, then apply once and fill the queue", async
   ASSURANCE[0].run();
   const preview = ASSURANCE.findIndex((s) => s.title === "When FIFA changes the rules");
   for (const st of ASSURANCE.slice(1, preview + 1)) st.run();
-  assert.equal(ui.map.change, "CHG-LUX-2000");
+  assert.equal(ui.map.change, "CHG-PRESS-500");
   assert.equal(getAppliedChanges().length, 0); // preview applies nothing
   assert.match(say(ASSURANCE[preview]), /would reopen/);
   const apply = ASSURANCE[preview + 1];
   apply.run();
-  assert.equal(currentRequirement("FL-A-EV-AVG").version, 2);
+  assert.equal(currentRequirement("STA-0042").version, 2);
   const reopened = reviewQueue(getAssessments(), { status: "reopened" }).length;
   assert.ok(reopened > 0);
   assert.match(say(apply), new RegExp(`${reopened} items?`));

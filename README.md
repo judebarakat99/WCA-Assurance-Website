@@ -15,6 +15,9 @@ npm run dev
 Open http://localhost:3000. No environment variables are required. Nabd needs
 the backend; the Evidence page runs entirely in the browser on the bundled
 sample documents (see `data/progress/README.md` and `data/evidence/README.md`).
+The requirements, and the compliance status every page starts from, come from the
+register CSVs in `data/register/` (built into the app by `npm run register:build`,
+which also runs before `dev` and `build`).
 "Load sample data" on the map loads sample assessments and files and checks the
 sample documents.
 
@@ -49,9 +52,9 @@ thin.
 - `src/app/`: App Router routes only — `page.jsx` files with metadata, plus
   `layout.jsx`. `/` is the assurance map, with a toggle to the national
   portfolio (`/?view=portfolio`), `/review` the review queue,
-  `/evidence` contractor documents (evidence checked against the register,
-  progress verification and owner alerts), `/progress` project progress
-  (delivery Gantt, schedule and cost performance), `/reports` report
+  `/evidence` contractor documents (add, agent checks, confirm; evidence joins
+  the review queue), `/project-progress` project progress (delivery Gantt,
+  schedule, cost performance and progress-check findings), `/reports` report
   export (Word, Excel, PDF), `/compliance` the requirements (FIFA source library and facility register)
   and `/facilities/[facilityId]` a stadium's assessments.
 - `src/components/atoms/` → `molecules/` → `organisms/` → `templates/` →
@@ -72,39 +75,19 @@ thin.
 - `src/lib/tour/`: guided demo steps, player, voice selection and highlight.
 - `src/lib/assistant/`: Nabd chat state, API client and the assurance snapshot
   sent with each question.
+- `src/lib/register/`: the compliance register (built from `data/register/*.csv`)
+  and its CSV extracts; every page reads requirements and the starting
+  statuses from here.
 - `src/lib/store/intake.js` (with `intakeLocal.js`): documents, progress checks
-  and filing, all in the browser; `alerts.js`: owner alerts;
-  `src/lib/domain/evidenceReader.mjs` reads a document and checks it against
-  the register.
+  and filing, all in the browser; `src/lib/intake/` reads PDFs and runs the
+  evidence agent; `alerts.js`: owner alerts.
 - `src/lib/domain/delivery.mjs`: project progress per stadium (earned schedule
   and earned value) from the sample `data/progress/programme.json`, using a
   checked progress report's recalculated figure where there is one.
-- `src/lib/domain/report.mjs` builds one format-neutral report model; the preview
-  and `src/lib/export/` (docx, exceljs, jsPDF + AutoTable, loaded on first export)
-  render it, entirely in the browser.
-- `src/lib/runtime.js`: view-key routing for the tour.
-- `src/styles/`: `tokens.css` (Saudi 2034 brand, light and dark), `base.css`
-  (elements, layout, controls) and `components.css` (component styles; class
-  names are shared with the tour's selectors).
-- Map: MapLibre GL JS (BSD-3-Clause, no account or API key) draws
-  `data/geo/sa-regions.geo.json` (geoBoundaries / OpenStreetMap, ODbL; the map
-  shows the required credit). No basemap tiles are loaded.
-- Fonts: Barlow (brand typeface) from `@fontsource/barlow`; IBM Plex Mono in
-  `public/fonts/` (SIL Open Font License).
-- `public/scripts/stadium-twin.js`, `public/vendor/`: the 3D model of King Salman
-  International Stadium (design review and critical areas), Three.js r128 and
-  OrbitControls (licenses retained), loaded only on that stadium's page.
-  `src/lib/domain/stadiumAreas.mjs` maps the register's 123 stadium checks to
-  the model's areas.
-- `public/Assets/`: the Saudi 2034 logo, and `places/` photos for the map's
-  hover cards (Wikimedia Commons, CC BY / CC BY-SA, credited on each card;
-  sources in `src/lib/placePhotos.json`). Stadiums without a free photo show
-  their host city's photo, labelled; NEOM has none.
-- `tests/`: Vitest + React Testing Library (`npm test`).
-- `data/`: the FIFA catalogue and change scenarios, the facility register,
-  region boundaries and the sample contractor documents (each folder has a
-  README).
-- `Archive/`: historical standalone HTML snapshots.
+- `src/lib/reports/` builds one format-neutral report model from the same
+  stores (`data.js`, `model.mjs`); the preview and the Word, Excel and PDF
+  writers (docx, JSZip, pdf-lib, loaded on first export) render it, entirely in
+  the browser.
 
 ## Azure-backed assistant
 

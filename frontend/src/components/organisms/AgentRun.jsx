@@ -4,8 +4,8 @@ import { intake } from "@/lib/store/intake";
 
 /**
  * A progress check while it runs: the agent's steps appear one at a time,
- * the current one with a spinner. Before the first step arrives (waiting on
- * the backend) it shows what the agent is working through.
+ * the current one with a spinner. Before the first step arrives it shows
+ * what the agent is working through.
  */
 export default function AgentRun({ stadium }) {
   const run = intake.runs[stadium.id];

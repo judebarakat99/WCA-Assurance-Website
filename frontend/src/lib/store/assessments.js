@@ -2,7 +2,7 @@
 // browser. Changes call notify() so components using useProgramme() re-render.
 import { assessmentKey, evaluate } from "@/lib/domain/assessment.mjs";
 import { changeImpact, changedRecords } from "@/lib/domain/requirementChange.mjs";
-import { appliedChanges, scenarioById, setAppliedChanges } from "@/lib/domain/requirementVersions.mjs";
+import { appliedChanges, currentRequirements, scenarioById, setAppliedChanges } from "@/lib/domain/requirementVersions.mjs";
 import { sampleAssessments } from "@/lib/domain/sampleAssessments.mjs";
 import { notify } from "@/lib/store/state";
 
@@ -13,17 +13,22 @@ let records = null;
 
 const today = () => new Date().toISOString().slice(0, 10);
 
+// Stored records and changes for requirements that are no longer in the register (an earlier version of it)
+// are dropped on load, so every page counts the same requirements.
 function load() {
+  const known = new Set(currentRequirements().map((r) => r.id));
   // Requirement versions first: record keys depend on them.
   try {
-    setAppliedChanges(JSON.parse(localStorage.getItem(CHANGES_KEY) || "[]"));
+    const changes = JSON.parse(localStorage.getItem(CHANGES_KEY) || "[]");
+    setAppliedChanges(changes.filter((c) => known.has(c.requirementId)));
   } catch {
     setAppliedChanges([]);
   }
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) {
-      records = JSON.parse(raw);
+    const kept = raw ? Object.entries(JSON.parse(raw)).filter(([, a]) => known.has(a.requirementId)) : [];
+    if (kept.length) {
+      records = Object.fromEntries(kept);
       return;
     }
   } catch {}

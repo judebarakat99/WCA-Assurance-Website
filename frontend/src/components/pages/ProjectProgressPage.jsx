@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 import StatusPill from "@/components/atoms/StatusPill";
 import PageHead from "@/components/molecules/PageHead";
+import AgentRun from "@/components/organisms/AgentRun";
 import CostPerformance from "@/components/organisms/CostPerformance";
+import ProgressFinding from "@/components/organisms/ProgressFinding";
 import ProgressGantt, { GanttTable, Legend, fmtD, slipLabel } from "@/components/organisms/ProgressGantt";
 import PageTemplate from "@/components/templates/PageTemplate";
 import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
@@ -106,7 +109,7 @@ function Evidence({ d }) {
                   Reported {r.reported}% · recalculated {r.actual}%
                 </small>
               </span>
-              <Link className="small" href={`/evidence?tab=onfile&stadium=${encodeURIComponent(r.id)}`}>
+              <Link className="small" href={`/project-progress?stadium=${encodeURIComponent(r.id)}#finding`}>
                 Finding
               </Link>
             </li>
@@ -116,6 +119,15 @@ function Evidence({ d }) {
       )}
     </section>
   );
+}
+
+/** The progress finding for the stadium in the link (?stadium=), or the agent's steps while its check runs. */
+function Finding() {
+  const id = useSearchParams().get("stadium");
+  const stadium = intake.stadiums.find((s) => s.id === id);
+  if (!stadium) return null;
+  if (intake.runs[id]) return <AgentRun stadium={stadium} />;
+  return intake.checks[id] ? <ProgressFinding check={intake.checks[id]} /> : null;
 }
 
 function ProjectProgress() {
@@ -199,5 +211,16 @@ function ProjectProgress() {
 }
 
 export default function ProjectProgressPage() {
-  return <PageTemplate label="Project progress">{() => <ProjectProgress />}</PageTemplate>;
+  return (
+    <PageTemplate label="Project progress">
+      {() => (
+        <>
+          <ProjectProgress />
+          <Suspense fallback={null}>
+            <Finding />
+          </Suspense>
+        </>
+      )}
+    </PageTemplate>
+  );
 }

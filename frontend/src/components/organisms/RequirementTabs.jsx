@@ -15,12 +15,14 @@ function Tabs({ reference }) {
   const { pending } = watchCounts();
   const fromUrl = params.get("change");
   // The open change is kept here as well as in the address, so a click opens it at once and the back button still works.
-  const [change, setChange] = useState(fromUrl);
-  useEffect(() => setChange(fromUrl), [fromUrl]);
+  // A click sets it here (for the address it is about to write); otherwise it follows the address. On arrival it
+  // starts empty, so a change left in the address is not reopened.
+  const [local, setLocal] = useState({ url: fromUrl, value: null });
+  const change = local.url === fromUrl ? local.value : fromUrl;
+  const setChange = (value) => setLocal({ url: value, value });
   // Arriving on the page starts the watch empty, and drops an open change left in the address.
   useEffect(() => {
     resetShown();
-    setChange(null);
     if (params.get("change")) router.replace(`${path}?tab=${tab}`, { scroll: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -37,10 +39,22 @@ function Tabs({ reference }) {
   return (
     <>
       <div className="ev-tabs" role="tablist" aria-label="Requirements">
-        <button type="button" role="tab" aria-selected={tab === "library"} className={tab === "library" ? "on" : undefined} onClick={() => switchTab("library")}>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "library"}
+          className={tab === "library" ? "on" : undefined}
+          onClick={() => switchTab("library")}
+        >
           Requirement library
         </button>
-        <button type="button" role="tab" aria-selected={tab === "watch"} className={tab === "watch" ? "on" : undefined} onClick={() => switchTab("watch")}>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={tab === "watch"}
+          className={tab === "watch" ? "on" : undefined}
+          onClick={() => switchTab("watch")}
+        >
           Requirement watch
           <span className="ev-count">{pending}</span>
         </button>

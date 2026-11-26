@@ -4,6 +4,7 @@ import { useState } from "react";
 import StatusPill from "@/components/atoms/StatusPill";
 import Breadcrumbs from "@/components/molecules/Breadcrumbs";
 import PageHead from "@/components/molecules/PageHead";
+import StatTiles from "@/components/molecules/StatTiles";
 import FamilyAssessments from "@/components/organisms/FamilyAssessments";
 import DesignReviewSection from "@/components/organisms/DesignReviewSection";
 import PageTemplate from "@/components/templates/PageTemplate";
@@ -13,29 +14,24 @@ import { FACILITY_REGISTER, MATCH_LABEL, STATUS_LABEL } from "@/lib/domain/facil
 import { getAssessments } from "@/lib/store/assessments";
 
 function Summary({ summary: s }) {
-  const tiles = [
-    [s.inScope, "requirements in scope", ""],
-    [s.applicable, "apply now", ""],
-    [s.provisional, "provisional", "warn"],
-    [`${pct(s.coverage)}%`, "assessed", s.coverage < 0.5 ? "warn" : "good"],
-    [s.byStatus.unassessed, "declared only", ""],
-    [s.byStatus["evidence-submitted"], "awaiting review", s.byStatus["evidence-submitted"] ? "warn" : ""],
-    [s.byStatus.compliant, "compliant", "good"],
-    [
-      s.byStatus["non-compliant"],
-      "non-compliant",
-      s.byStatus["non-compliant"] ? "bad" : "",
-    ],
-  ];
   return (
-    <div className="mini-grid eight">
-      {tiles.map(([n, label, tone]) => (
-        <div key={label} className={`mini ${tone}`.trim()}>
-          <b>{n}</b>
-          <span>{label}</span>
-        </div>
-      ))}
-    </div>
+    <StatTiles
+      columns="eight"
+      tiles={[
+        { value: s.inScope, label: "requirements in scope" },
+        { value: s.applicable, label: "apply now" },
+        { value: s.provisional, label: "provisional", tone: "warn" },
+        { value: `${pct(s.coverage)}%`, label: "assessed", tone: s.coverage < 0.5 ? "warn" : "good" },
+        { value: s.byStatus.unassessed, label: "declared only" },
+        {
+          value: s.byStatus["evidence-submitted"],
+          label: "awaiting review",
+          tone: s.byStatus["evidence-submitted"] ? "warn" : "",
+        },
+        { value: s.byStatus.compliant, label: "compliant", tone: "good" },
+        { value: s.byStatus["non-compliant"], label: "non-compliant", tone: s.byStatus["non-compliant"] ? "bad" : "" },
+      ]}
+    />
   );
 }
 

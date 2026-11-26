@@ -32,14 +32,14 @@ const CAPACITY_MINIMUM = {
   "round-of-16": 40000,
   "round-of-32": 40000,
 };
-const CAPACITY_REQUIREMENT = "STA-0004";
+export const CAPACITY_REQUIREMENT = "STA-0004";
 
 const cityById = (id) => register.hostCities.find((c) => c.id === id);
 
 /** The capacity rule that applies to a stadium, from its highest match. */
-export function capacityRequirement(stadium) {
-  const base = currentRequirement(CAPACITY_REQUIREMENT);
+export function capacityRequirement(stadium, base = currentRequirement(CAPACITY_REQUIREMENT)) {
   if (!base) return null;
+  if (base.criterion.operator !== "manual") return base; // a requirement change set one figure for every stadium
   const minimum = CAPACITY_MINIMUM[stadium.highestMatch] ?? 40000;
   return { ...base, criterion: { operator: "min", value: minimum, unit: "seats" }, condition: MATCH_LABEL[stadium.highestMatch] };
 }

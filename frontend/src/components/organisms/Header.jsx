@@ -7,7 +7,7 @@ import ThemeToggle from "@/components/atoms/ThemeToggle";
 import { publicAssetUrl } from "@/lib/assets.mjs";
 import { resetMapUi, rerender } from "@/lib/store/state";
 import { resetAssessments } from "@/lib/store/assessments";
-import { clearIntake, restoreDemoIntake } from "@/lib/store/intake";
+import { clearIntake } from "@/lib/store/intake";
 import { startTour, ASSURANCE, ASSURANCE_FULL } from "@/lib/tour/player";
 import { toast } from "@/lib/ui/toast";
 
@@ -33,7 +33,7 @@ function activeTab(pathname) {
 function resetDemo() {
   resetAssessments();
   resetMapUi();
-  void clearIntake().then(restoreDemoIntake);
+  void clearIntake();
   rerender();
   toast("Demo reset to its starting state.");
 }

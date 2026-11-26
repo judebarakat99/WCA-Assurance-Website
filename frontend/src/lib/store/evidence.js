@@ -1,12 +1,12 @@
 // The Evidence page's logic: what confirming a document would do (shown before the button is pressed), what it
-// does, and the verification that follows. The pages read and the actions change the same stores as everything
+// does, and the progress check that follows for reports and plans. The pages read and the actions change the same stores as everything
 // else (intake, assessments, alerts), so every page shows the result.
 import { assessmentKey } from "@/lib/domain/assessment.mjs";
 import { FACILITY_REGISTER } from "@/lib/domain/facilities.mjs";
 import { currentRequirement } from "@/lib/domain/requirementVersions.mjs";
 import { getAlerts } from "@/lib/store/alerts";
 import { getAssessments } from "@/lib/store/assessments";
-import { checkableStadiums, filedDocuments, fileDocument, intake, proposedDocuments, refreshIntake, runCheck } from "@/lib/store/intake";
+import { checkableStadiums, filedDocuments, fileDocument, intake, refreshIntake, runCheck } from "@/lib/store/intake";
 import { localReanalyse } from "@/lib/store/intakeLocal";
 import { notify } from "@/lib/store/state";
 
@@ -21,20 +21,6 @@ export function statusLabel(record) {
   if (record.status === "compliant") return "Compliant";
   return "Not assessed";
 }
-
-/** A sample document that the backend's pipeline (or its bundled readings) understands: progress reports and plans. */
-export const isSample = (doc) => String(doc.document_id).startsWith("offline:");
-/** Without the backend, any other file can only be read as evidence, so that is what it can be filed as. */
-export const isLocalOnly = (doc) => String(doc.document_id).startsWith("local:");
-
-/** The document types a person can choose for a proposal. */
-export function typeOptions(doc) {
-  if (isLocalOnly(doc)) return [["evidence", "Evidence document"], ["other", "Other"]];
-  return [["progress-report", "Progress report"], ["detailed-plan", "Detailed plan"], ["other", "Other"]];
-}
-
-export const primaryLabel = (kind) =>
-  ({ evidence: "Record as evidence", "progress-report": "File as progress report", "detailed-plan": "File as detailed plan" })[kind] || "Choose a type";
 
 /**
  * What confirming would do, in plain lines, before anything happens.
@@ -105,27 +91,14 @@ export async function confirmDocument(doc, filing) {
   }
   if ((filing.kind === "progress-report" || filing.kind === "detailed-plan") && checkableStadiums().some((s) => s.id === filing.stadium_id)) {
     result.checkStarted = true;
-    runCheck(filing.stadium_id); // runs in the background; the Progress checks tab shows the agent's steps
+    runCheck(filing.stadium_id); // runs in the background; Project progress shows the finding
   }
   return result;
 }
 
 /** The agent reads an evidence document again for the stadium the person chose. */
 export async function reanalyse(docId, stadiumId) {
-  if (intake.mode === "offline" || String(docId).startsWith("local:")) {
-    localReanalyse(docId, stadiumId);
-    await refreshIntake();
-  }
+  localReanalyse(docId, stadiumId);
+  await refreshIntake();
   notify();
-}
-
-/** Counts for the page's tabs. alerts: open alerts raised from documents. */
-export function evidenceCounts() {
-  return {
-    toConfirm: proposedDocuments().length,
-    onFile: filedDocuments().length,
-    alerts: getAlerts().filter((a) => a.status === "open").length,
-    checks: new Set([...Object.keys(intake.checks), ...checkableStadiums().map((x) => x.id)]).size,
-    checkable: checkableStadiums().length,
-  };
 }

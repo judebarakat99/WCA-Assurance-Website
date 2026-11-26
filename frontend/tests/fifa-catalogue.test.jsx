@@ -1,79 +1,69 @@
 import { test } from "vitest";
 import assert from "node:assert/strict";
-import { FIFA_CATALOGUE, fifaRequirementRecords, criterionLabel } from "@/lib/domain/fifa-catalogue.mjs";
 import { renderToStaticMarkup } from "react-dom/server";
 import FifaLibrary from "@/components/organisms/FifaLibrary";
+import { capacityRequirement } from "@/lib/domain/facilities.mjs";
+import { FIFA_CATALOGUE, criterionLabel, fifaRequirementRecords } from "@/lib/domain/fifa-catalogue.mjs";
+import { parseCsv } from "@/lib/register/csv.mjs";
+import { requirementsCsv } from "@/lib/register/records.mjs";
 
-const fifaLibrary = () => renderToStaticMarkup(<FifaLibrary />);
+const byId = () => Object.fromEntries(fifaRequirementRecords().map((r) => [r.id, r]));
+const chapterCounts = () =>
+  FIFA_CATALOGUE.families
+    .map((f) => fifaRequirementRecords().filter((r) => r.familyId === f.id).length)
+    .filter(Boolean);
 
-test("catalogue references resolve to official sources and explicit applicability", () => {
+test("the register reconciles: 181 checks in 11 chapters, 123 for stadiums", () => {
   const records = fifaRequirementRecords();
-  assert.equal(new Set(records.map((r) => r.id)).size, records.length);
-  for (const record of records) {
-    assert.ok(record.source);
-    assert.equal(new URL(record.source.url).hostname, "digitalhub.fifa.com");
-    assert.equal(record.pdfPage, record.printedPage + 1);
-    assert.ok(record.condition);
-    assert.equal(record.applicabilityReview, "pending");
-    assert.equal(record.status, undefined);
+  assert.equal(records.length, 181);
+  assert.equal(new Set(records.map((r) => r.id)).size, 181);
+  assert.deepEqual(chapterCounts(), [13, 16, 12, 23, 34, 15, 8, 20, 9, 8, 23]);
+  const sites = {};
+  for (const r of records) sites[r.assetType] = (sites[r.assetType] || 0) + 1;
+  assert.deepEqual(sites, { Stadium: 123, "Training site": 38, "Fan festival": 14, IBC: 6 });
+  for (const r of records) {
+    assert.ok(
+      FIFA_CATALOGUE.families.some((f) => f.id === r.familyId),
+      r.id,
+    );
+    assert.ok(["applicable", "provisional"].includes(r.applicability), r.id);
+    assert.ok(r.sectionId.startsWith(`${Number(r.familyId)}.`), r.id);
+    assert.ok(criterionLabel(r.criterion), r.id);
   }
 });
 
-test("lighting separates horizontal, vertical and training thresholds", () => {
-  const byId = Object.fromEntries(fifaRequirementRecords().map((r) => [r.id, r]));
-  assert.equal(byId["FL-A-EH-AVG"].criterion.value, 2500);
-  assert.deepEqual(byId["FL-A-EH-AVG"].planes, ["Eh"]);
-  assert.equal(byId["FL-A-EV-AVG"].criterion.value, 1500);
-  assert.deepEqual(byId["FL-A-EV-AVG"].planes, ["Ev0", "Ev90", "Ev180", "Ev270"]);
-  assert.equal(byId["FL-T1-EH-AVG"].criterion.value, 750);
-  assert.equal(byId["FL-A-EV-U2"].criterion.value, 0.6);
-  assert.equal(criterionLabel(byId["FL-A-EH-AVG"].criterion), "> 2500 lux");
-  assert.equal(criterionLabel(byId["FL-A-FF-MAX"].criterion), "< 1 percent");
-  assert.ok(byId["FL-A-CRI"].reviewIssues.some((issue) => issue.id === "cri-boundary"));
-  assert.ok(byId["FL-T1-EV-U2"].reviewIssues.some((issue) => issue.id === "training-u2-label"));
-  assert.equal(byId["FL-A-LED"].authority, "recommendation");
+test("book criteria keep their thresholds; working targets keep their wording", () => {
+  const r = byId();
+  assert.equal(criterionLabel(r["STA-0034"].criterion), "≥ 80 m²");
+  assert.equal(criterionLabel(r["STA-0068"].criterion), "≥ 4,000 m²");
+  assert.equal(criterionLabel(r["STA-0015"].criterion), "≤ 250 seats per point of sale");
+  assert.equal(criterionLabel(r["STA-0007"].criterion), "0.5–1 % of seats");
+  assert.equal(r["STA-0053"].applicability, "provisional");
+  assert.match(criterionLabel(r["STA-0053"].criterion), /1 per 250 spectators/);
 });
 
-test("lighting references remain connected and pending facility assessment", () => {
-  const records = fifaRequirementRecords();
-  const ids = new Set(records.map((r) => r.id));
-  for (const record of records.filter((r) => r.profileId)) {
-    assert.ok(FIFA_CATALOGUE.lightingProfiles.some((p) => p.id === record.profileId));
-    assert.ok(record.evidence.length);
-    assert.ok(record.evidence.every(Boolean));
-    assert.ok(record.reviewIssues.every(Boolean));
-    assert.ok(criterionLabel(record.criterion));
-    if (record.basisRequirementId) assert.ok(ids.has(record.basisRequirementId));
-  }
-  const missing = FIFA_CATALOGUE.sources.find((s) => s.id === "fifa-wc2034-full-hosting-package");
-  assert.equal(missing.url, null);
-  assert.equal(missing.reviewStatus, "awaiting-partner-source");
-  const html = fifaLibrary();
-  assert.ok(html.includes("Source inventory"));
-  assert.ok(html.includes("Evidence and interpretation review"));
-  assert.ok(html.includes("&gt; 2500 lux"));
-  assert.ok(!html.includes('href="null'));
-  assert.ok(!html.includes("undefined"));
+test("capacity resolves to the stadium's highest match", () => {
+  assert.equal(capacityRequirement({ highestMatch: "opening-final" }).criterion.value, 80000);
+  assert.equal(capacityRequirement({ highestMatch: "semi-final" }).criterion.value, 60000);
+  assert.equal(capacityRequirement({ highestMatch: "round-of-16" }).criterion.value, 40000);
+  assert.equal(capacityRequirement({ highestMatch: "round-of-16" }).id, "STA-0004");
 });
 
-test("match allocation and training-site type retain distinct criteria", () => {
-  const byId = Object.fromEntries(FIFA_CATALOGUE.requirements.map((r) => [r.id, r]));
-  assert.equal(byId["F34-ST-CAP-01"].criterion.value, 40000);
-  assert.match(byId["F34-ST-CAP-01"].condition, /excluding opening/);
-  assert.equal(byId["F34-ST-CAP-02"].criterion.value, 60000);
-  assert.equal(byId["F34-ST-CAP-03"].criterion.value, 80000);
-  assert.equal(byId["F34-TR-PITCH-01"].criterion.value, 1);
-  assert.equal(byId["F34-TR-PITCH-02"].criterion.value, 2);
-  assert.equal(byId["F34-TR-TRAVEL-01"].criterion.operator, "max");
+test("the Requirements page lists every chapter and check, collapsible, with the CSV download", () => {
+  const html = renderToStaticMarkup(<FifaLibrary />);
+  for (const f of FIFA_CATALOGUE.families.filter((x) => fifaRequirementRecords().some((r) => r.familyId === x.id)))
+    assert.ok(html.includes(f.name), f.name);
+  for (const r of fifaRequirementRecords()) assert.ok(html.includes(r.id), r.id);
+  assert.ok(html.includes("181 checks in 11 chapters"));
+  assert.ok(html.includes("Expand all") && html.includes("Collapse all"));
+  assert.ok(html.includes("Download requirements (CSV)"));
 });
 
-test("library displays the shared catalogue with page citations and review status", () => {
-  const html = fifaLibrary();
-  for (const record of fifaRequirementRecords()) {
-    assert.ok(html.includes(record.id));
-    assert.ok(html.includes(record.sourceUrl));
-  }
-  assert.ok(html.includes(`${FIFA_CATALOGUE.requirements.length} criteria`));
-  assert.ok(html.includes("Applicability pending"));
-  assert.ok(!html.includes("Verified"));
+test("the requirements CSV has one row per check, in the register's order", () => {
+  const rows = parseCsv(requirementsCsv());
+  assert.equal(rows.length, 181);
+  const cap = rows.find((r) => r.id === "STA-0034");
+  assert.equal(cap.criterion, ">= 80 m²");
+  assert.equal(cap.status, "Book");
+  assert.equal(cap.applies_to, "Stadium");
 });

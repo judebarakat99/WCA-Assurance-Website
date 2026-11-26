@@ -25,7 +25,7 @@ const n = (x, one, many = `${one}s`) => `${x} ${x === 1 ? one : many}`;
 
 // What the demo decided, so stepping back and forth does not decide twice.
 const demo = { item: null, before: null, applied: null };
-const CHANGE = "CHG-LUX-2000";
+const CHANGE = "CHG-PRESS-500";
 
 /** The first item awaiting review in the demo city whose evidence meets its criterion. */
 function pickItem() {
@@ -165,7 +165,7 @@ const CHANGE_STEPS = [
       const impact = demo.applied || changeImpact(scenario, getAssessments());
       const hit = impact.byCity.filter((c) => c.reopened).length;
       const failing = impact.rows.filter((r) => r.flipped && r.outcome === "rechecked").length;
-      return `Requirements change. Suppose FIFA raised the lighting for 8K broadcast, from ${spoken(impact.before.criterion)} to ${spoken(impact.after.criterion)}. This is a hypothetical change, not an announced one. Before anything is applied, the map shows what it would do: ${n(impact.counts.reopened, "compliant item")} would reopen, in ${n(hit, "city", "cities")}, and ${n(failing, "item")} already in review would now fail.`;
+      return `Requirements change. Suppose FIFA enlarged the press conference room, from ${spoken(impact.before.criterion)} to ${spoken(impact.after.criterion)}. This is a hypothetical change, not an announced one. Before anything is applied, the map shows what it would do: ${n(impact.counts.reopened, "compliant item")} would reopen, in ${n(hit, "city", "cities")}, and ${n(failing, "item")} already in review would now fail.`;
     },
   },
   {

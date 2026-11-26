@@ -3,6 +3,7 @@
 // facility, evaluates submitted values against a criterion, and summarises a
 // facility's assessments. The seed records come from the compliance register
 // (data/register); changes made in the app live in lib/store/assessments.
+import { CAPACITY_REQUIREMENT, capacityRequirement } from "@/lib/domain/facilities.mjs";
 import { currentRequirements } from "@/lib/domain/requirementVersions.mjs";
 import { complianceRow } from "@/lib/register/data.mjs";
 import { recordsFromRegister } from "@/lib/register/records.mjs";
@@ -42,13 +43,17 @@ export function stadiumApplicability(stadium, requirement) {
     : { value: "provisional", reason: "2034 clause to be confirmed; FIFA published guidance" };
 }
 
-/** Current requirements (after any applied changes) with their applicability for one stadium. */
+/** Current requirements (after any applied changes), resolved and with their applicability for one stadium. */
 export function stadiumRequirements(stadium, requirements = currentRequirements()) {
-  return requirements.map((requirement) => ({
-    requirement,
-    key: assessmentKey(stadium.id, requirement),
-    applicability: stadiumApplicability(stadium, requirement),
-  }));
+  return requirements.map((raw) => {
+    // Capacity (STA-0004): the threshold follows the stadium's highest match, as in the facility register.
+    const requirement = raw.id === CAPACITY_REQUIREMENT ? capacityRequirement(stadium, raw) : raw;
+    return {
+      requirement,
+      key: assessmentKey(stadium.id, requirement),
+      applicability: stadiumApplicability(stadium, requirement),
+    };
+  });
 }
 
 const NUMERIC = {

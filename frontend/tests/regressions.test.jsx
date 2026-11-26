@@ -8,9 +8,7 @@ test("public image URLs are safe for HTTP preload headers, including a Pages bas
   assert.throws(() => validateHeaderValue("Link", `<${raw}>; rel=preload`));
   for (const base of ["", "/WCA-Assurance-Website"]) {
     const url = publicAssetUrl(raw, base);
-    assert.doesNotThrow(() =>
-      validateHeaderValue("Link", `<${url}>; rel=preload`),
-    );
+    assert.doesNotThrow(() => validateHeaderValue("Link", `<${url}>; rel=preload`));
     assert.equal(decodeURI(url), base + raw);
   }
 });
